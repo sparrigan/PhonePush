@@ -64,6 +64,10 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
+        
+
+        
         //Instantiate objects
         aRec = accelRecorder(tb: tb)
         

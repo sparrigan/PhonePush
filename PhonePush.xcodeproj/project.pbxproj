@@ -20,6 +20,8 @@
 		CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296CE1AD97D69007117AD /* graphPlotter.swift */; };
 		CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296D01AD97DE7007117AD /* graphQstns.swift */; };
 		CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE25B1AD769900061F500 /* graphSort.swift */; };
+		CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */; };
+		CEEE24E91AD9E420002E5F00 /* arnie.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEEE24E81AD9E420002E5F00 /* arnie.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		CEA296CE1AD97D69007117AD /* graphPlotter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphPlotter.swift; sourceTree = "<group>"; };
 		CEA296D01AD97DE7007117AD /* graphQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphQstns.swift; sourceTree = "<group>"; };
 		CEDDE25B1AD769900061F500 /* graphSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphSort.swift; sourceTree = "<group>"; };
+		CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
+		CEEE24E81AD9E420002E5F00 /* arnie.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arnie.jpg; sourceTree = "<group>"; };
 		E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,8 +120,10 @@
 			children = (
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
 				CE463E361AADEE3C00427689 /* ViewController.swift */,
+				CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */,
 				CEA296CE1AD97D69007117AD /* graphPlotter.swift */,
 				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
+				CEEE24E81AD9E420002E5F00 /* arnie.jpg */,
 				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
 				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
 				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
@@ -241,6 +247,7 @@
 				CE463E3A1AADEE3C00427689 /* Main.storyboard in Resources */,
 				CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */,
 				CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */,
+				CEEE24E91AD9E420002E5F00 /* arnie.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +304,7 @@
 				CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */,
 				CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */,
 				CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */,
+				CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */,
 				CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */,
 				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
 			);

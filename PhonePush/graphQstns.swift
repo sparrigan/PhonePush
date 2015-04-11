@@ -22,6 +22,8 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     var ansTxt3 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     var submitButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
     
+    var popViewController : PopUpViewControllerSwift!
+    
     override init() {
         
         super.init(nibName: nil, bundle: nil)
@@ -133,6 +135,20 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     
     
     func checkAns() {
+        
+        //let imageview = UIImageView(frame: CGRectMake(200,200,400,300))
+        let image1 = UIImage(named: "arnie.jpg")
+        //imageview.image = image1
+        //self.view.addSubview(imageview)
+        
+        self.popViewController = PopUpViewControllerSwift()
+        self.popViewController.title = "This is a popup view"
+        self.popViewController.showInView(self.view, withImage: image1, withMessage: "You just triggered a great popup window", animated: true)
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
+    
+        
+        
         var numCorrect = 0
         var accelAnswers:[String] = ["acceleration","accel"]
         var accelMistakes:[String] = ["aceleration", "acel"]
@@ -189,6 +205,10 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         return self
     }
 
+    
+    func closePopUp() {
+        popViewController.closePopup()
+    }
     
     
         

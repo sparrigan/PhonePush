@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5794FE29982FB8BD4E864F5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 008083B3AD2210FF5D1FF534 /* libPods.a */; };
 		CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */; };
 		CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286841AAF9D4F005C0E45 /* Integrator.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
@@ -16,6 +17,8 @@
 		CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3B1AADEE3C00427689 /* Images.xcassets */; };
 		CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */; };
 		CE463E4B1AADEE3C00427689 /* PhonePushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */; };
+		CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296CE1AD97D69007117AD /* graphPlotter.swift */; };
+		CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296D01AD97DE7007117AD /* graphQstns.swift */; };
 		CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE25B1AD769900061F500 /* graphSort.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		008083B3AD2210FF5D1FF534 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FFD0AB1B271C009DB3D10E2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccelRecorder.swift; sourceTree = "<group>"; };
 		CE0286841AAF9D4F005C0E45 /* Integrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
 		CE4216E01AD180C6004EF105 /* calcQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstns.swift; sourceTree = "<group>"; };
@@ -43,7 +48,11 @@
 		CE463E441AADEE3C00427689 /* PhonePushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhonePushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE463E491AADEE3C00427689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonePushTests.swift; sourceTree = "<group>"; };
+		CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhonePush-Bridging-Header.h"; sourceTree = "<group>"; };
+		CEA296CE1AD97D69007117AD /* graphPlotter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphPlotter.swift; sourceTree = "<group>"; };
+		CEA296D01AD97DE7007117AD /* graphQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphQstns.swift; sourceTree = "<group>"; };
 		CEDDE25B1AD769900061F500 /* graphSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphSort.swift; sourceTree = "<group>"; };
+		E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5794FE29982FB8BD4E864F5 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,12 +74,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9424226CD13C018A235B0418 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				008083B3AD2210FF5D1FF534 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C7D665F826064C2162D4D643 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */,
+				0FFD0AB1B271C009DB3D10E2 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		CE463E261AADEE3C00427689 = {
 			isa = PBXGroup;
 			children = (
 				CE463E311AADEE3C00427689 /* PhonePush */,
 				CE463E471AADEE3C00427689 /* PhonePushTests */,
 				CE463E301AADEE3C00427689 /* Products */,
+				C7D665F826064C2162D4D643 /* Pods */,
+				9424226CD13C018A235B0418 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,9 +116,12 @@
 			children = (
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
 				CE463E361AADEE3C00427689 /* ViewController.swift */,
+				CEA296CE1AD97D69007117AD /* graphPlotter.swift */,
 				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
 				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
 				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
+				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
+				CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */,
 				CEDDE25B1AD769900061F500 /* graphSort.swift */,
 				CE463E381AADEE3C00427689 /* Main.storyboard */,
 				CE463E3B1AADEE3C00427689 /* Images.xcassets */,
@@ -131,9 +163,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CE463E4E1AADEE3C00427689 /* Build configuration list for PBXNativeTarget "PhonePush" */;
 			buildPhases = (
+				00AF09E823071BBFBB78719E /* Check Pods Manifest.lock */,
 				CE463E2B1AADEE3C00427689 /* Sources */,
 				CE463E2C1AADEE3C00427689 /* Frameworks */,
 				CE463E2D1AADEE3C00427689 /* Resources */,
+				A0E4575C6D38A9C4215A93B2 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -219,6 +253,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		00AF09E823071BBFBB78719E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A0E4575C6D38A9C4215A93B2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		CE463E2B1AADEE3C00427689 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -230,6 +297,8 @@
 				CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */,
 				CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */,
 				CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */,
+				CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */,
+				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,21 +421,25 @@
 		};
 		CE463E4F1AADEE3C00427689 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PhonePush/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/nicholasharrigan/Desktop/tiny_teacher/PhonePush/PhonePush/PhonePush/PhonePush-Bridging-Header.h";
 			};
 			name = Debug;
 		};
 		CE463E501AADEE3C00427689 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0FFD0AB1B271C009DB3D10E2 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = PhonePush/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/nicholasharrigan/Desktop/tiny_teacher/PhonePush/PhonePush/PhonePush/PhonePush-Bridging-Header.h";
 			};
 			name = Release;
 		};

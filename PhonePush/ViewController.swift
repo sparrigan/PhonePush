@@ -55,19 +55,14 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
     var titleText:UITextView = UITextView(frame: CGRect(x: 50, y: 50, width: 90.00, height: 10.00));
     var calibText:UITextView = UITextView(frame: CGRect(x: 70, y: 250, width: 90.00, height: 10.00));
     var calcQstnsVC:calcQstns?
-
+    var graphQstnsVC:graphQstns?
+    var settingVar = 2
     
     //Tolerance for a right answer
     let tolerance:Double = 0.11
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
-       
-        
-        
-
         
         //Instantiate objects
         aRec = accelRecorder(tb: tb)
@@ -219,9 +214,24 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
             //Questions on calculating unknown quantities from push data
             //Set qstntype in call to 0 for accel calc, 1 for initial velocity calc
             
+            if settingVar == 1 {
+            
             calcQstnsVC = calcQstns(velinit: velinit, constAccel: constAccel, timeConstAccel: timeConstAccel, distConstAccel: distConstAccel, tolerance: tolerance,qstntype: 1)
             
             self.navigationController?.pushViewController(calcQstnsVC!, animated: true)
+                
+            } else {
+                
+                graphQstnsVC = graphQstns(timeArray: tDbl, accelArray: aDbl, velArray: vDbl, posArray: pDbl, qstntype: 0)
+                
+            self.navigationController?.pushViewController(graphQstnsVC!, animated: true)
+                
+            }
+            
+            
+            
+            
+            
             
             
             /*

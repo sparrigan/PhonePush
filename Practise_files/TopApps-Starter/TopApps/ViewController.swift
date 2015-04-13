@@ -18,10 +18,10 @@ class ViewController: UIViewController {
  
     //This is the way of doing it with SwiftyJSON
     
-    DataManager.getTopAppsDataFromFileWithSuccess { (data) -> Void in
+    //DataManager.getTopAppsDataFromFileWithSuccess { (data) -> Void in
         // Get #1 app name using SwiftyJSON
         //Create JSON object using SwiftyJSON class. This automatically does deserialization and all the conditional checks
-        let json = JSON(data: data)
+      //  let json = JSON(data: data)
         //Now we have JSON object (as variable name json) search through the various levels.
         //First we go to feed, then we choose im:name, then we choose
         
@@ -29,22 +29,68 @@ class ViewController: UIViewController {
         //an NSerrorpointer object when calling JSON above, and it will set the value of this
         //according to whether or not the request could be fulfilled (the call itself is no
         //longer optional, as it was in the original RW tutorial
-        let appName = json["feed"]["entry"][0]["im:name"]["label"].stringValue
+        //ACTUALLY - IT LOOKS LIKE SWIFTYJSON MIGHT JUST RETURN THE EMPTY STRING "" WHEN IT
+        //CAN'T FIND ANYTHING AT REQUESTED ENTRY?
         
+        //THIS IS THE RIGHT WAY OF WRITING OPTIONAL BINDING AND IT WORKS! - NOTE THAT NEED TO USE STRING AT END, NOT STRINGVALUE. WHY?
+        
+        DataManager.getTopAppsDataFromItunesWithSuccess { (iTunesData) -> Void in
+            
+            let json = JSON(data: iTunesData)
+        
+            if let teacherNames = json["teachers"].array {
+        
+        println(teacherNames.count)
+        
+            for ii in teacherNames {
+                println(ii)
+            }
+            
+            } else {
+                println("RAAA")
+            }
+        
+        
+        /*
+        
+        if let appName:String = json["feedw"]["entry"][0]["im:name"]["label"].string {
+            
         println("SwiftyJSON: \(appName)")
         
+        } else {
+            println("LALALA DIDNT WORK")
+        }
         
-        // Get the #1 app name from iTunes and SwiftyJSON
+        
+        
+        // Get the top ten app names from iTunes and SwiftyJSON
         DataManager.getTopAppsDataFromItunesWithSuccess { (iTunesData) -> Void in
             let json2 = JSON(data: iTunesData)
-            
+            //Loop through and print top ten apps.
             println("Top apps!")
             for ii in 0...10 {
             let appName2 = json2["feed"]["entry"][ii]["im:name"]["label"].stringValue
             println("\(ii+1). \(appName2)")
             }
         
-            // More soon...
+            //This is some extra code that assigns each of the top 25 apps to their own AppModel object (see AppModel class), storing all of these objects in an array
+            
+            //Again, should really check for existence before making this assignment,
+            //and since RW tutorial .arrayValue has stopped being optional - use error instead
+            let appArray = json["feed"]["entry"].arrayValue
+                //2
+                var apps = [AppModel]()
+                
+                //3
+                for appDict in appArray {
+                    var appName: String? = appDict["im:name"]["label"].stringValue
+                    var appURL: String? = appDict["im:image"][0]["label"].stringValue
+                    
+                    var app = AppModel(name: appName, appStoreURL: appURL)
+                    apps.append(app)
+                //4
+                println(apps)
+            }
         }
 
         
@@ -55,7 +101,14 @@ class ViewController: UIViewController {
         //if let appName = json["feed"]["entry"][0]["im:name"]["label"].stringValue {
           //  println("SwiftyJSON: \(appName)")
         //}
+
+*/
+
     }
+    
+    
+    
+    
     
     
     //This is the way of doing it with swift optionals

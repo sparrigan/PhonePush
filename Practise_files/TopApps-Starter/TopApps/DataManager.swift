@@ -9,7 +9,10 @@
 
 import Foundation
 
-let TopAppURL = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=25/json"
+//let TopAppURL = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=25/json"
+
+let TopAppURL = "http://tinyteacher.ngrok.com/teachers"
+
 
 class DataManager {
   
@@ -38,7 +41,7 @@ class DataManager {
     
     // Use NSURLSession to get data from an NSURL
     let loadDataTask = session.dataTaskWithURL(url, completionHandler: { (data: NSData!, response: NSURLResponse!, error: NSError!) -> Void in
-      println(error)
+      //println(error)
         
         if let responseError = error {
         completion(data: nil, error: responseError)

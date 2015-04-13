@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift -->
+<html itemscope="" itemtype="http://schema.org/QAPage"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>ios - How do you stylize a font in Swift? - Stack Overflow</title>
+    <link rel="shortcut icon" href="http://cdn.sstatic.net/stackoverflow/img/favicon.ico?v=6cd6089ee7f6">
+    <link rel="apple-touch-icon image_src" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png?v=41f6e13ade69">
+    <link rel="search" type="application/opensearchdescription+xml" title="Stack Overflow" href="http://stackoverflow.com/opensearch.xml">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="stackoverflow.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon@2.png?v=ea71a5211a91&amp;a">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="How do you stylize a font in Swift?">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="I&#39;m trying out developing for Swift, it&#39;s going pretty well. One of the issues I&#39;m having is finding out how to stylize fonts programmatically in the language. 
+
+For example in this label I wrote the ">
+    <meta property="og:url" content="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift">
+    <link rel="canonical" href="./ios - How do you stylize a font in Swift  - Stack Overflow_files/ios - How do you stylize a font in Swift  - Stack Overflow.html">
+
+    
+    
+    <script type="text/javascript" async="" src="http://engine.adzerk.net/ados?t=1428803504606&request={%22Placements%22:[{%22A%22:22,%22S%22:8277,%22D%22:%22adzerk1353162099%22,%22AT%22:4,%22Z%22:43},{%22A%22:22,%22S%22:8277,%22D%22:%22adzerk699201700%22,%22AT%22:4,%22Z%22:44},{%22A%22:22,%22S%22:8277,%22D%22:%22adzerk6767342%22,%22ATA%22:[17,2221],%22Z%22:45}],%22Keywords%22:%22ios%2Cswift%2Cuifont%22,%22Referrer%22:%22https%3A%2F%2Fwww.google.com%2F%22,%22IsAsync%22:true}"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/quant.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/beacon.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/analytics.js"></script><script type="text/javascript" async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/ados.js"></script><script src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/jquery.min.js"></script>
+    <script src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/stub.en.js"></script>
+    <link rel="stylesheet" type="text/css" href="./ios - How do you stylize a font in Swift  - Stack Overflow_files/all.css">
+    
+    <link rel="alternate" type="application/atom+xml" title="Feed for question &#39;How do you stylize a font in Swift?&#39;" href="http://stackoverflow.com/feeds/question/24708401">
+    <meta name="twitter:app:country" content="US">
+    <meta name="twitter:app:name:iphone" content="Stack Exchange iOS">
+    <meta name="twitter:app:id:iphone" content="871299723">
+    <meta name="twitter:app:url:iphone" content="se-zaphod://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift">
+    <meta name="twitter:app:name:ipad" content="Stack Exchange iOS">
+    <meta name="twitter:app:id:ipad" content="871299723">
+    <meta name="twitter:app:url:ipad" content="se-zaphod://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift">
+    <meta name="twitter:app:name:googleplay" content="Stack Exchange Android">
+    <meta name="twitter:app:url:googleplay" content="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift">
+    <meta name="twitter:app:id:googleplay" content="com.stackexchange.marvin">
+    <script>
+        
+        StackExchange.ready(function () {
+                
+                StackExchange.using("snippets", function () {
+                    StackExchange.snippets.initSnippetRenderer();
+                });
+                
+
+            StackExchange.using("postValidation", function () {
+                StackExchange.postValidation.initOnBlurAndSubmit($('#post-form'), 2, 'answer');
+            });
+
+            
+            StackExchange.question.init({showAnswerHelp:true,totalCommentCount:0,shownCommentCount:0,highlightColor:'#F4A83D',backgroundColor:'#FFF',questionId:24708401});
+
+            styleCode();
+
+                StackExchange.realtime.subscribeToQuestion('1', '24708401');
+                                                    StackExchange.using("gps", function () { StackExchange.gps.trackOutboundClicks('#content', '.post-text'); });
+
+        });
+    </script>
+
+
+    <script>
+        StackExchange.init({"locale":"en","stackAuthUrl":"https://stackauth.com","serverTime":1428803504,"networkMetaHostname":"meta.stackexchange.com","routeName":"Questions/Show","styleCode":true,"enableUserHovercards":true,"snippets":{"enabled":true,"domain":"stacksnippets.net"},"site":{"name":"Stack Overflow","description":"Q&A for professional and enthusiast programmers","isNoticesTabEnabled":true,"recaptchaPublicKey":"6LdchgIAAAAAAJwGpIzRQSOFaO0pU6s44Xt8aTwc","recaptchaAudioLang":"en","enableNewTagCreationWarning":true,"insertSpaceAfterNameTabCompletion":false,"nonAsciiTags":true,"enableSocialMediaInSharePopup":true},"user":{"fkey":"ddced41b95efd2873d8369862ce1b852","isAnonymous":true}});
+        StackExchange.using.setCacheBreakers({"js/prettify-full.en.js":"b0706fb11edc","js/moderator.en.js":"4cc4fdc2f83b","js/full-anon.en.js":"743f58427a9e","js/full.en.js":"50aa6a7fff3d","js/wmd.en.js":"99d23ba1c510","js/third-party/jquery.autocomplete.min.js":"e5f01e97f7c3","js/third-party/jquery.autocomplete.min.en.js":"","js/mobile.en.js":"1757aa447cbe","js/help.en.js":"56d0a3a560ae","js/tageditor.en.js":"c8d06452914a","js/tageditornew.en.js":"8b1eb6f02d49","js/inline-tag-editing.en.js":"21223186b436","js/revisions.en.js":"6c7265ea9fa1","js/review.en.js":"448f00a1dbd6","js/tagsuggestions.en.js":"bc2c996faeda","js/post-validation.en.js":"9a0e61efe86f","js/explore-qlist.en.js":"257ba4cb7b04","js/events.en.js":"ce4cf22b2af6","js/keyboard-shortcuts.en.js":"c90d5118fc05","js/external-editor.en.js":"b04e37426de6","js/external-editor.en.js":"b04e37426de6","js/snippet-javascript.en.js":"49fc6920793f","js/snippet-javascript-codemirror.en.js":"ffa18f0c2b30"});
+        StackExchange.using("gps", function() {
+             StackExchange.gps.init(true);
+        });
+    </script>
+    
+        <script>
+            StackExchange.ready(function () {
+                $('#nav-tour').click(function () {
+                    StackExchange.using("gps", function() {
+                        StackExchange.gps.track("aboutpage.click", { aboutclick_location: "headermain" }, true);
+                    });
+                });
+            });
+        </script>
+    
+    
+<style type="text/css"></style><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/full-anon.en.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/snippet-javascript.en.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/post-validation.en.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/prettify-full.en.js"></script><script async="" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/external-editor.en.js"></script><script type="text/javascript" src="http://static.adzerk.net/Extensions/adFeedback.js"></script><link rel="stylesheet" href="http://static.adzerk.net/Extensions/adFeedback.css"><link type="text/css" rel="stylesheet" href="./ios - How do you stylize a font in Swift  - Stack Overflow_files/jobs.min.css"></head>
+<body class="question-page new-topbar">
+    <noscript>&lt;div id="noscript-padding"&gt;&lt;/div&gt;</noscript>
+    <div id="notify-container"></div>
+    <div id="overlay-header"></div>
+    <div id="custom-header"></div>
+
+
+
+
+<div class="topbar">
+    <div class="topbar-wrapper">
+
+        <div class="js-topbar-dialog-corral">
+
+<div class="topbar-dialog siteSwitcher-dialog dno">
+    <div class="header">
+        <h3><a href="http://stackoverflow.com/">current community</a></h3>
+    </div>
+    <div class="modal-content current-site-container">
+        <ul class="current-site">
+                <li>
+                        <div class="related-links">
+            <a href="http://chat.stackoverflow.com/" class="js-gps-track" data-gps-track="site_switcher.click({ item_type:6 })">chat</a>
+                    <a href="http://blog.stackoverflow.com/" class="js-gps-track" data-gps-track="site_switcher.click({ item_type:7 })">blog</a>
+            </div>
+
+
+
+
+    <a href="http://stackoverflow.com/" class="current-site-link site-link js-gps-track" data-id="1" data-gps-track="
+        site_switcher.click({ item_type:3 })">
+        <div class="site-icon favicon favicon-stackoverflow" title="Stack Overflow"></div>
+        Stack Overflow
+    </a>
+
+                </li>
+                <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    
+
+
+
+    <a href="http://meta.stackoverflow.com/" class="site-link js-gps-track" data-id="552" data-gps-track="
+            site.switch({ target_site:552, item_type:3 }),
+        site_switcher.click({ item_type:4 })">
+        <div class="site-icon favicon favicon-stackoverflowmeta" title="Meta Stack Overflow"></div>
+        Meta Stack Overflow
+    </a>
+
+                </li>
+                            <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    <a class="site-link js-gps-track" href="http://careers.stackoverflow.com/?utm_source=stackoverflow.com&utm_medium=site-ui&utm_campaign=multicollider" data-gps-track="site_switcher.click({ item_type:9 })">
+                        <div class="site-icon favicon favicon-careers" title="Stack Overflow Careers"></div>
+                        Stack Overflow Careers
+                    </a>
+                </li>
+        </ul>
+    </div>
+    
+    <div class="header" id="your-communities-header">
+        <h3>
+your communities        </h3>
+            
+    </div>
+    <div class="modal-content" id="your-communities-section">
+            
+            <div class="call-to-login">
+<a href="https://stackoverflow.com/users/signup?returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift" class="login-link js-gps-track" data-gps-track="site_switcher.click({ item_type:10 })">Sign up</a> or <a href="https://stackoverflow.com/users/login?returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift" class="login-link js-gps-track" data-gps-track="site_switcher.click({ item_type:11 })">log in</a> to customize your list.
+            </div>
+    </div>
+    
+    <div class="header">
+        <h3><a href="http://stackexchange.com/sites">more stack exchange communities</a></h3>
+    </div>
+    <div class="modal-content">
+            <div class="child-content"></div>
+    </div>
+</div>
+        </div>
+
+        <div class="network-items">
+
+            <a href="http://stackexchange.com/" class="topbar-icon icon-site-switcher yes-hover js-site-switcher-button js-gps-track" data-gps-track="site_switcher.show" title="A list of all 141 Stack Exchange sites">
+                <span class="hidden-text">Stack Exchange</span>
+            </a>
+
+        </div>
+
+        <div class="topbar-links">
+
+                <div class="links-container">
+                <span class="topbar-menu-links">
+                                <a href="https://stackoverflow.com/users/signup?returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift" class="login-link">sign up</a>
+                                <a href="https://stackoverflow.com/users/login?returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift" class="login-link">log in</a>
+
+                        <a href="http://stackoverflow.com/tour">tour</a>
+                            <a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" class="icon-help js-help-button" title="Help Center and other resources">
+        help
+        <span class="triangle"></span>
+    </a>
+    <div class="topbar-dialog help-dialog js-help-dialog dno">
+        <div class="modal-content">
+            <ul>
+                                    <li>
+                        <a href="http://stackoverflow.com/tour" class="js-gps-track" data-gps-track="help_popup.click({ item_type:1 })">
+                            Tour
+                            <span class="item-summary">
+                                Start here for a quick overview of the site
+                            </span>
+                        </a>
+                    </li>
+                <li>
+                    <a href="http://stackoverflow.com/help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:4 })">
+                        Help Center
+                        <span class="item-summary">
+                            Detailed answers to any questions you might have
+                        </span>
+                    </a>
+                </li>
+                    <li>
+                        <a href="http://meta.stackoverflow.com/" class="js-gps-track" data-gps-track="help_popup.click({ item_type:2 })">
+                            Meta
+                            <span class="item-summary">
+                                Discuss the workings and policies of this site
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+
+                            <a href="http://careers.stackoverflow.com/?utm_source=stackoverflow.com&utm_medium=site-ui&utm_campaign=anon-topbar">stack overflow careers</a>
+                    </span>
+                </div>
+
+            <div class="search-container">
+                <form id="search" action="http://stackoverflow.com/search" method="get" autocomplete="off">
+                    <input name="q" type="text" placeholder="search" value="" tabindex="1" autocomplete="off" maxlength="240">
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script>
+        StackExchange.ready(function() { StackExchange.topbar.init(); });
+    </script>
+
+    <div class="container">
+        <div id="header">
+            <br class="cbt">
+            <div id="hlogo">
+                <a href="http://stackoverflow.com/">
+                    Stack Overflow
+                </a>
+            </div>
+            <div id="hmenus">
+                <div class="nav mainnavs">
+                    <ul>
+                        <li class="youarehere"><a id="nav-questions" href="http://stackoverflow.com/questions">Questions</a></li>
+                        <li><a id="nav-tags" href="http://stackoverflow.com/tags">Tags</a></li>
+                        <li><a id="nav-users" href="http://stackoverflow.com/users">Users</a></li>
+                        <li><a id="nav-badges" href="http://stackoverflow.com/help/badges">Badges</a></li>
+                        <li><a id="nav-unanswered" href="http://stackoverflow.com/unanswered">Unanswered</a></li>
+                    </ul>
+                </div>
+                <div class="nav askquestion">
+                    <ul>
+                        <li>
+                            <a id="nav-askquestion" href="http://stackoverflow.com/questions/ask">Ask Question</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+        <div id="content" class="snippet-hidden">
+            
+
+<div itemscope="" itemtype="http://schema.org/Question">
+    <link itemprop="image" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png?v=41f6e13ade69">
+			<!--googleoff: all-->
+
+<div id="herobox-mini">
+    <div id="hero-content">
+        <span id="controls">
+            <a href="http://stackoverflow.com/tour" id="tell-me-more" class="button">Take the 2-minute tour</a>
+            <span id="close"><a title="click to dismiss">×</a></span>
+        </span>
+        <div id="blurb">
+            Stack Overflow is a question and answer site for professional and enthusiast programmers. It's 100% free, no registration required.
+        </div>        
+    </div>
+    <script>
+        $('#tell-me-more').click(function () {
+            var clickSource = $("body").attr("class") + '-mini';
+            if ($("body").hasClass("questions-page")) {
+                clickSource = 'questionpagemini';
+            } else if ($("body").hasClass("question-page")) {
+                clickSource = 'questionpagemini';
+            } else if ($("body").hasClass("home-page")) {
+                clickSource = 'homepagemini';
+            }
+
+            StackExchange.using("gps", function () {
+                StackExchange.gps.track("aboutpage.click", { aboutclick_location: clickSource } , true);
+            });
+        });
+        $('#herobox-mini #close').click(function () {
+            StackExchange.using("gps", function () {
+                StackExchange.gps.track("hero.action", { hero_action_type: "close" }, true);
+            });
+            $.cookie("hero", "none", { path: "/", expires: 365 });
+            var $hero = $("#herobox-mini");
+            $hero.slideUp('fast', function () { $hero.remove(); });
+            return false;
+        });
+    </script>
+</div>
+			<!--googleon: all-->
+			<div id="question-header">
+			<h1 itemprop="name"><a href="./ios - How do you stylize a font in Swift  - Stack Overflow_files/ios - How do you stylize a font in Swift  - Stack Overflow.html" class="question-hyperlink">How do you stylize a font in Swift?</a></h1>
+		</div>
+			<div id="mainbar">
+
+			
+
+<div class="question" data-questionid="24708401" id="question">
+
+    <script>
+                var ados = ados || {};ados.run = ados.run || [];
+                ados.run.push(function() { ados_add_placement(22,8277,"adzerk1353162099",4).setZone(43) ; });                    
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk1353162099">
+            <iframe id="ados_frame_adzerk1353162099_502649" frameborder="0" scrolling="no" height="90" width="728"></iframe><img height="0" width="0" border="0" style="position: absolute; display: none !important; visibility: hidden !important; opacity: 0 !important; background-position: 0px 0px;" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/i.gif"></div>    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+    <input type="hidden" name="_id_" value="24708401">
+    <a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
+    <span itemprop="upvoteCount" class="vote-count-post ">4</span>
+    <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>
+    
+    <a class="star-off" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" title="This is a favorite question (click again to undo)">favorite</a>
+    <div class="favoritecount"><b></b></div>   
+
+</div>
+
+            </td>
+            
+<td class="postcell">
+<div>
+    <div class="post-text" itemprop="text">
+
+        <p>I'm trying out developing for Swift, it's going pretty well. One of the issues I'm having is finding out how to stylize fonts programmatically in the language. </p>
+
+<p>For example in this label I wrote the code below for, how can I make it Helvetica Neue Ultralight for example?</p>
+
+<pre class="default prettyprint prettyprinted"><code><span class="pln">label</span><span class="pun">.</span><span class="pln">font </span><span class="pun">=</span><span class="pln"> </span><span class="typ">UIFont</span><span class="pln"> </span><span class="pun">(</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Helvetica Neue"</span><span class="pun">,</span><span class="pln"> size</span><span class="pun">:</span><span class="pln"> </span><span class="lit">30</span><span class="pun">)</span></code></pre>
+
+    </div>
+    <div class="post-taglist">
+        <a href="http://stackoverflow.com/questions/tagged/ios" class="post-tag js-gps-track" title="show questions tagged &#39;ios&#39;" rel="tag">ios</a> <a href="http://stackoverflow.com/questions/tagged/swift" class="post-tag js-gps-track" title="show questions tagged &#39;swift&#39;" rel="tag">swift</a> <a href="http://stackoverflow.com/questions/tagged/uifont" class="post-tag js-gps-track" title="show questions tagged &#39;uifont&#39;" rel="tag">uifont</a> 
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/q/24708401" title="short permalink to this question" class="short-link" id="link-post-24708401">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/24708401/edit" class="suggest-edit-post" title="">improve this question</a></div>        
+    </td>
+    <td align="right" class="post-signature">
+<div class="user-info user-hover">
+    <div class="user-action-time">
+        <a href="http://stackoverflow.com/posts/24708401/revisions" title="show all edits to this post">edited <span title="2014-07-12 00:35:01Z" class="relativetime">Jul 12 '14 at 0:35</span></a>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/2792531/nhgrif"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/teNzk.gif" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/2792531/nhgrif">nhgrif</a><br>
+        <span class="reputation-score" title="reputation score 16035" dir="ltr">16k</span><span title="2 gold badges"><span class="badge1"></span><span class="badgecount">2</span></span><span title="23 silver badges"><span class="badge2"></span><span class="badgecount">23</span></span><span title="58 bronze badges"><span class="badge3"></span><span class="badgecount">58</span></span>
+    </div>
+</div>    </td>
+    <td class="post-signature owner">
+        <div class="user-info ">
+    <div class="user-action-time">
+        asked <span title="2014-07-12 00:22:29Z" class="relativetime">Jul 12 '14 at 0:22</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/3763693/user3763693"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/0aa4e82d3379baa52a36703c765160ff" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/3763693/user3763693">user3763693</a><br>
+        <span class="reputation-score" title="reputation score " dir="ltr">45</span><span title="3 silver badges"><span class="badge2"></span><span class="badgecount">3</span></span><span title="8 bronze badges"><span class="badge3"></span><span class="badgecount">8</span></span>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</div>
+</td>
+        </tr>
+                
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-24708401" class="comments  dno">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+                        <tr><td></td><td></td></tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-24708401" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post, or add one of your own" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" onclick=""></a>
+        </div>         
+    </td>
+</tr>        </tbody></table>
+</div>
+
+			<div id="answers">
+
+				<a name="tab-top"></a>
+				<div id="answers-header">
+					<div class="subheader answers-subheader">
+						<h2>
+								3 Answers
+                                <span style="display:none;" itemprop="answerCount">3</span>
+						</h2>
+						<div>
+							<div id="tabs">
+        <a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift?answertab=active#tab-top" title="Answers with the latest activity first">active</a>
+        <a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift?answertab=oldest#tab-top" title="Answers in the order they were provided">oldest</a>
+        <a class="youarehere" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift?answertab=votes#tab-top" title="Answers with the highest score first">votes</a>
+</div>
+						</div>
+					</div>    
+				</div>    
+
+
+
+
+  
+<a name="24708424"></a>
+<div id="answer-24708424" class="answer" data-answerid="24708424" itemscope="" itemtype="http://schema.org/Answer">
+    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+    <input type="hidden" name="_id_" value="24708424">
+    <a class="vote-up-off" title="This answer is useful">up vote</a>
+    <span itemprop="upvoteCount" class="vote-count-post ">10</span>
+    <a class="vote-down-off" title="This answer is not useful">down vote</a>
+    
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<p>I am assuming this is a custom font. For any custom font this is what you do.</p>
+
+<ol>
+<li><p>First download and add your font files to your project in Xcode 
+(The files should appear as well in “Target -&gt; Build Phases -&gt; Copy Bundle Resources”).</p></li>
+<li><p>In your Info.plist file add the key “Fonts provided by application” with type “Array”.</p></li>
+<li><p>For each font you want to add to your project, create an item for the array you have created with the full name of the file including its extension (e.g. HelveticaNeue-UltraLight.ttf).
+Save your “Info.plist” file.</p></li>
+</ol>
+
+<p><code>label.font = UIFont (name: "HelveticaNeue-UltraLight", size: 30)</code></p>
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/a/24708424" title="short permalink to this answer" class="short-link" id="link-post-24708424">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/24708424/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td align="right" class="post-signature">
+<div class="user-info user-hover">
+    <div class="user-action-time">
+        <a href="http://stackoverflow.com/posts/24708424/revisions" title="show all edits to this post">edited <span title="2014-07-12 01:02:39Z" class="relativetime">Jul 12 '14 at 1:02</span></a>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/815724/peter-o"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/9a514cd424088a3ba3012f5d77f2e334" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/815724/peter-o">Peter O.</a><br>
+        <span class="reputation-score" title="reputation score 11841" dir="ltr">11.8k</span><span title="6 gold badges"><span class="badge1"></span><span class="badgecount">6</span></span><span title="35 silver badges"><span class="badge2"></span><span class="badgecount">35</span></span><span title="45 bronze badges"><span class="badge3"></span><span class="badgecount">45</span></span>
+    </div>
+</div>    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info ">
+    <div class="user-action-time">
+        answered <span title="2014-07-12 00:26:58Z" class="relativetime">Jul 12 '14 at 0:26</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/2636891/krukusa"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/honPa.jpg" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/2636891/krukusa">KRUKUSA</a><br>
+        <span class="reputation-score" title="reputation score " dir="ltr">823</span><span title="1 silver badge"><span class="badge2"></span><span class="badgecount">1</span></span><span title="13 bronze badges"><span class="badge3"></span><span class="badgecount">13</span></span>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-24708424" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+
+
+    <tr id="comment-38319668" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">This is correct. As I have done it this way</span>
+                –&nbsp;
+                    <a href="http://stackoverflow.com/users/3281743/user3281743" title="79 reputation" class="comment-user">user3281743</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#comment38319668_24708424"><span title="2014-07-12 00:29:44Z" class="relativetime-clean">Jul 12 '14 at 0:29</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-43921102" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">I would also add: do not forget to include your custom fonts in the "Copy Bundle Resources" section if you haven't already or you won't be able to use them</span>
+                –&nbsp;
+                    <a href="http://stackoverflow.com/users/885486/erken" title="94 reputation" class="comment-user">Erken</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#comment43921102_24708424"><span title="2015-01-03 13:13:09Z" class="relativetime-clean">Jan 3 at 13:13</span></a></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-24708424" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post, or add one of your own" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" onclick=""></a>
+        </div>         
+    </td>
+</tr>    </tbody></table>
+</div>
+<script>
+                var ados = ados || {};ados.run = ados.run || [];
+                ados.run.push(function() { ados_add_placement(22,8277,"adzerk699201700",4).setZone(44) ; });                    
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk699201700"><a href="http://engine.adzerk.net/r?e=eyJhdiI6NDE0LCJhdCI6NCwiYnQiOjAsImNtIjoxODY2MjQsImNoIjoxMTc4LCJjciI6NzI0Mjk3LCJkaSI6IjJlZmM1YmJkYTNlNDQ5Y2NiNTk5Nzk3ZDFjMzBiYmIzIiwiZG0iOjEsImZjIjo3NTQwOTEsImZsIjo0MTAxODMsImlwIjoiMTYyLjIxNy43NC42MSIsImt3IjoiaW9zLHN3aWZ0LHVpZm9udCIsIm53IjoyMiwicGMiOjAsInByIjoxNTY4LCJydCI6MSwicmYiOiJodHRwczovL3d3dy5nb29nbGUuY29tLyIsInN0Ijo4Mjc3LCJ1ayI6InVlMS1lOTM2MTY5NGZiNjI0ZjcyYjRiNzdhM2IyNDBlNWRlMSIsInpuIjo0NCwidHMiOjE0Mjg4MDM1MDQ5NjcsImJmIjp0cnVlLCJwbiI6ImFkemVyazY5OTIwMTcwMCIsInVyIjoiaHR0cDovL2NhcmVlcnMuc3RhY2tvdmVyZmxvdy5jb20vY3YvZ2V0LW9uZT91dG1fc291cmNlPXN0YWNrb3ZlcmZsb3cuY29tJnV0bV9tZWRpdW09YWQmdXRtX2NhbXBhaWduPWNhbmRpZGF0ZXMtYWRkLWN2JnV0bV9jb250ZW50PWxiLWNhcmVlcnMtZ2l0aHViIn0&s=LSnVCzAljKr2PDOkem94jwVnXRI" rel="nofollow" target="_blank" title=""><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/092148373a314bd88a621559b7cc0b46.png" title="" alt="" border="0" width="0" height="0" style="display: none !important; visibility: hidden !important; opacity: 0 !important; background-position: 0px 0px;"></a><img height="0" width="0" border="0" style="position: absolute; display: none !important; visibility: hidden !important; opacity: 0 !important; background-position: 0px 0px;" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/i(1).gif"></div>
+  
+<a name="24708411"></a>
+<div id="answer-24708411" class="answer" data-answerid="24708411" itemscope="" itemtype="http://schema.org/Answer">
+    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+    <input type="hidden" name="_id_" value="24708411">
+    <a class="vote-up-off" title="This answer is useful">up vote</a>
+    <span itemprop="upvoteCount" class="vote-count-post ">7</span>
+    <a class="vote-down-off" title="This answer is not useful">down vote</a>
+    
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<p>A great resource is <a href="http://iosfonts.com/">iosfonts.com</a>, which says that the name for that font is <code>HelveticaNeue-UltraLight</code>. So you'd use this code:</p>
+
+<pre class="default prettyprint prettyprinted"><code><span class="pln">label</span><span class="pun">.</span><span class="pln">font </span><span class="pun">=</span><span class="pln"> </span><span class="typ">UIFont</span><span class="pln"> </span><span class="pun">(</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"HelveticaNeue-UltraLight"</span><span class="pun">,</span><span class="pln"> size</span><span class="pun">:</span><span class="pln"> </span><span class="lit">30</span><span class="pun">)</span></code></pre>
+
+<p>If the system can't find the font, it defaults to a 'normal' font - I think it's something like 11-point Helvetica. This can be quite confusing, always check your font names.</p>
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/a/24708411" title="short permalink to this answer" class="short-link" id="link-post-24708411">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/24708411/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info user-hover">
+    <div class="user-action-time">
+        answered <span title="2014-07-12 00:25:03Z" class="relativetime">Jul 12 '14 at 0:25</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/1849664/undo"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/9278dc00e1a8755dc2de02b6a908a15a" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/1849664/undo">Undo</a><br>
+        <span class="reputation-score" title="reputation score 11410" dir="ltr">11.4k</span><span title="11 gold badges"><span class="badge1"></span><span class="badgecount">11</span></span><span title="40 silver badges"><span class="badge2"></span><span class="badgecount">40</span></span><span title="70 bronze badges"><span class="badge3"></span><span class="badgecount">70</span></span>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-24708411" class="comments  dno">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+                        <tr><td></td><td></td></tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-24708411" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post, or add one of your own" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" onclick=""></a>
+        </div>         
+    </td>
+</tr>    </tbody></table>
+</div>
+
+  
+<a name="28642624"></a>
+<div id="answer-28642624" class="answer" data-answerid="28642624" itemscope="" itemtype="http://schema.org/Answer">
+    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+    <input type="hidden" name="_id_" value="28642624">
+    <a class="vote-up-off" title="This answer is useful">up vote</a>
+    <span itemprop="upvoteCount" class="vote-count-post ">3</span>
+    <a class="vote-down-off" title="This answer is not useful">down vote</a>
+    
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<p>Add Custom Font in Swift</p>
+
+<ol>
+<li>Drag and drop your font in your project.</li>
+<li>Double check that it is added in Copy Bundle Resource. (Build Phase -&gt; Copy Bundle Resource).</li>
+<li>In your plist file add "Font Provided by application" and add your fonts with full name.</li>
+<li>Now use your font like: <code>myLabel.font = UIFont (name: "GILLSANSCE-ROMAN", size: 20)</code></li>
+</ol>
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/a/28642624" title="short permalink to this answer" class="short-link" id="link-post-28642624">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/28642624/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info ">
+    <div class="user-action-time">
+        answered <span title="2015-02-21 05:51:23Z" class="relativetime">Feb 21 at 5:51</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/3193017/ankit-goyal"><div class="gravatar-wrapper-32"><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/ofboC.png" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/3193017/ankit-goyal">Ankit Goyal</a><br>
+        <span class="reputation-score" title="reputation score " dir="ltr">246</span><span title="2 silver badges"><span class="badge2"></span><span class="badgecount">2</span></span><span title="10 bronze badges"><span class="badge3"></span><span class="badgecount">10</span></span>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-28642624" class="comments  dno">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+                        <tr><td></td><td></td></tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-28642624" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post, or add one of your own" href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" onclick=""></a>
+        </div>         
+    </td>
+</tr>    </tbody></table>
+</div>
+									<a name="new-answer"></a>
+						<form id="post-form" action="http://stackoverflow.com/questions/24708401/answer/submit" method="post" class="post-form">
+						    <input type="hidden" id="post-id" value="24708401">
+                            <input type="hidden" id="qualityBanWarningShown" name="qualityBanWarningShown" value="false">
+                            <input type="hidden" name="referrer" value="https://www.google.com/">
+							<h2 class="space">Your Answer</h2>
+
+
+
+            <script>
+            StackExchange.ifUsing("editor", function () {
+                StackExchange.using("externalEditor", function () {
+                    StackExchange.using("snippets", function () {
+                        StackExchange.snippets.init();
+                    });
+                });
+            }, "code-snippets");
+        </script>
+    
+
+<script>
+    StackExchange.ready(function() {
+        initTagRenderer("".split(" "), "".split(" "));
+       
+        StackExchange.using("externalEditor", function() {
+            // Have to fire editor after snippets, if snippets enabled
+            if (StackExchange.options.snippets.enabled) {
+                StackExchange.using("snippets", function() {
+                    createEditor();
+                });
+            }
+            else {
+                createEditor();
+            }
+        });
+
+        function createEditor() {
+            prepareEditor({
+                heartbeatType: 'answer',
+                bindNavPrevention: true,
+                postfix: "",
+                    onDemand: true,
+                    discardSelector: ".discard-answer"
+                ,immediatelyShowMarkdownHelp:true
+                });
+                
+
+        }
+    });  
+</script>
+
+
+<div id="post-editor" class="post-editor">
+
+    <div style="position: relative;">     
+        <div class="wmd-container">
+            <div id="wmd-button-bar" class="wmd-button-bar"><ul id="wmd-button-row" class="wmd-button-row"><li id="wmd-bold-button" class="wmd-button" style="left: 0px;"><span style="background-position: 0px -20px;"></span></li><li id="wmd-italic-button" class="wmd-button" style="left: 25px;"><span style="background-position: -20px -20px;"></span></li><li id="wmd-spacer1" class="wmd-spacer" style="left: 50px;"><span style="background-position: -40px -20px;"></span></li><li id="wmd-link-button" class="wmd-button" style="left: 75px;"><span style="background-position: -40px -20px;"></span></li><li id="wmd-quote-button" class="wmd-button" style="left: 100px;"><span style="background-position: -60px -20px;"></span></li><li id="wmd-code-button" class="wmd-button" style="left: 125px;"><span style="background-position: -80px -20px;"></span></li><li id="wmd-image-button" class="wmd-button" style="left: 150px;"><span style="background-position: -100px -20px;"></span></li><li id="wmd-spacer2" class="wmd-spacer" style="left: 175px;"><span style="background-position: -120px -20px;"></span></li><li id="wmd-olist-button" class="wmd-button" style="left: 200px;"><span style="background-position: -120px -20px;"></span></li><li id="wmd-ulist-button" class="wmd-button" style="left: 225px;"><span style="background-position: -140px -20px;"></span></li><li id="wmd-heading-button" class="wmd-button" style="left: 250px;"><span style="background-position: -160px -20px;"></span></li><li id="wmd-hr-button" class="wmd-button" style="left: 275px;"><span style="background-position: -180px -20px;"></span></li><li id="wmd-spacer3" class="wmd-spacer" style="left: 300px;"><span style="background-position: -200px -20px;"></span></li><li id="wmd-undo-button" class="wmd-button" style="left: 325px;"><span style="background-position: -200px -20px;"></span></li><li id="wmd-redo-button" class="wmd-button" style="left: 350px;"><span style="background-position: -220px -20px;"></span></li></ul></div>
+            <textarea id="wmd-input" class="wmd-input" name="post-text" cols="92" rows="15" tabindex="101" data-min-length=""></textarea>
+        </div>
+    </div>
+
+    <div class="fl" style="margin-top: 8px; height:24px;">&nbsp;</div>
+    <div id="draft-saved" class="draft-saved community-option fl" style="margin-top: 8px; height:24px; display:none;">draft saved</div>
+
+    <div id="draft-discarded" class="draft-discarded community-option fl" style="margin-top: 8px; height:24px; display:none;">draft discarded</div>
+
+
+
+    <div id="wmd-preview" class="wmd-preview"></div>
+    <div></div>
+    <div class="edit-block">
+        <input id="fkey" name="fkey" type="hidden" value="ddced41b95efd2873d8369862ce1b852">
+        <input id="author" name="author" type="text">
+    </div>
+
+
+
+</div>
+							<div style="position: relative;">
+								
+            <div class="form-item new-post-login">
+        
+                <div class="new-login-form">
+                    <div class="new-login-left">
+                        <h3>Sign up or <a id="login-link" href="http://stackoverflow.com/users/login?returnurl=%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift%23new-answer">log in</a></h3>
+                        <script>
+                            StackExchange.ready(function () {
+                                StackExchange.helpers.onClickDraftSave('#login-link');
+                            });
+                        </script>
+                        <div class="preferred-login google-login">
+                            <p><span class="icon"></span><span>Sign up using Google</span></p>
+                        </div>
+                        <div class="preferred-login facebook-login">
+                            <p><span class="icon"></span><span>Sign up using Facebook</span></p>
+                        </div>
+                        <div class="preferred-login stackexchange-login">
+                            <p><span class="icon"></span><span>Sign up using Stack Exchange</span></p>
+                        </div>
+                    </div>
+                    <input type="hidden" name="manual-openid" class="manual-openid">
+                    <input type="hidden" name="use-facebook" class="use-facebook" value="false">
+                    <input type="hidden" name="use-google" class="use-google" value="false">
+                    <input type="button" class="submit-openid" value="Submit" style="display:none">
+                    <div class="new-login-right">
+                                <h3>Post as a guest</h3>
+    <div class="form-item">
+        <table>
+        <tbody><tr>
+                    <td class="vm">
+                <div>
+                    <label for="display-name">Name</label>
+                    <input id="display-name" name="display-name" type="text" size="30" maxlength="30" value="" tabindex="105">
+                </div>
+                <div>
+                    <label for="m-address">Email</label>
+                    <input id="m-address" name="m-address" type="email" size="30" maxlength="100" value="" tabindex="106" placeholder="required, but never shown">
+                </div>
+            </td>
+        </tr>
+        </tbody></table>
+    </div>
+
+                    </div>
+                </div>
+            </div>
+            <script>
+                StackExchange.ready(
+                    function () {
+                        StackExchange.openid.initPostLogin('.new-post-login', '%2fquestions%2f24708401%2fhow-do-you-stylize-a-font-in-swift%23new-answer');
+                    }
+                );
+            </script>
+            <noscript>
+                        &lt;h3&gt;Post as a guest&lt;/h3&gt;
+    &lt;div class="form-item"&gt;
+        &lt;table&gt;
+        &lt;tr&gt;
+                    &lt;td class="vm"&gt;
+                &lt;div&gt;
+                    &lt;label for="display-name"&gt;Name&lt;/label&gt;
+                    &lt;input id="display-name" name="display-name" type="text" size="30" maxlength="30" value="" tabindex="105"&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;label for="m-address"&gt;Email&lt;/label&gt;
+                    &lt;input id="m-address" name="m-address" type="email" size="30" maxlength="100" value="" tabindex="106" placeholder="required, but never shown" /&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+
+            </noscript>
+							</div>
+           
+															<div class="form-submit cbt">
+									<input id="submit-button" type="submit" value="Post Your Answer" tabindex="110">
+									<a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" class="discard-answer dno">discard</a>
+
+<p class="privacy-policy-agreement">
+By posting your answer, you agree to the <a href="http://stackexchange.com/legal/privacy-policy" target="_blank">privacy policy</a> and <a href="http://stackexchange.com/legal/terms-of-service" target="_blank">terms of service</a>.</p>
+<input type="hidden" name="legalLinksShown" value="1">								</div>
+						</form>
+
+
+
+						<h2 class="bottom-notice" data-loc="1">
+Not the answer you're looking for?							Browse other questions tagged <a href="http://stackoverflow.com/questions/tagged/ios" class="post-tag" title="show questions tagged &#39;ios&#39;" rel="tag">ios</a> <a href="http://stackoverflow.com/questions/tagged/swift" class="post-tag" title="show questions tagged &#39;swift&#39;" rel="tag">swift</a> <a href="http://stackoverflow.com/questions/tagged/uifont" class="post-tag" title="show questions tagged &#39;uifont&#39;" rel="tag">uifont</a>  or <a href="http://stackoverflow.com/questions/ask">ask your own question</a>.						</h2>
+			</div>
+		</div>
+				<div id="sidebar" class="show-votes">
+						    <div class="module question-stats">
+			        <table id="qinfo">
+			            <tbody><tr>
+			                <td>
+			                    <p class="label-key">asked</p>
+			                </td>
+			                <td style="padding-left: 10px">
+			                    <p class="label-key" title="2014-07-12 00:22:29Z"><b>9 months ago</b></p>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td>
+			                    <p class="label-key">viewed</p>
+			                </td>
+
+			                <td style="padding-left: 10px">
+			                    <p class="label-key">
+			                        <b>7739 times</b>
+			                    </p>
+			                </td>
+			            </tr>
+			                <tr>
+			                    <td>
+			                        <p class="label-key">active</p>
+			                    </td>
+			                    <td style="padding-left: 10px">
+			                        <p class="label-key"><b><a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift?lastactivity" class="lastactivity-link" title="2015-02-21 05:51:23Z">1 month ago</a></b></p>
+			                    </td>
+			                </tr>
+			        </tbody></table>
+			    </div>
+			<div class="module community-bulletin" data-tracker="cb=1">
+    <div class="related">
+                <div class="bulletin-title">
+                    Upcoming Events
+                </div>
+                <hr>
+    <div class="spacer bulletin-item-important">
+        
+    <div class="bulletin-item-type"><a href="http://stackoverflow.com/election?cb=1" class="question-hyperlink"><div class="favicon favicon-stackoverflow" title="Stack Overflow"></div></a></div>
+    <div class="bulletin-item-content">
+        <a href="http://stackoverflow.com/election?cb=1" class="question-hyperlink">2015 Community Moderator Election</a>
+        <div>ends <span title="2015-04-21 20:00:00Z" class="relativetime">in 10 days</span></div>
+    </div>
+    <br class="cbt">
+</div>
+    </div>
+</div>			
+			<script>
+                var ados = ados || {};ados.run = ados.run || [];
+                ados.run.push(function() { ados_add_placement(22,8277,"adzerk6767342",[17,2221]).setZone(45) ; });                    
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk6767342"><a href="http://engine.adzerk.net/r?e=eyJhdiI6NDE0LCJhdCI6MTcsImJ0IjowLCJjbSI6MTg2NjI0LCJjaCI6MTE3OCwiY3IiOjY4NDI3OSwiZGkiOiJkNThkOTA3YTNhNjc0ZmRmOTRkNTUyZjg3YmE5ZjNhOSIsImRtIjoxLCJmYyI6NzA4NDMzLCJmbCI6NDMxNzgwLCJpcCI6IjE2Mi4yMTcuNzQuNjEiLCJrdyI6Imlvcyxzd2lmdCx1aWZvbnQiLCJudyI6MjIsInBjIjowLCJwciI6MTYwNCwicnQiOjEsInJmIjoiaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8iLCJzdCI6ODI3NywidWsiOiJ1ZTEtZTkzNjE2OTRmYjYyNGY3MmI0Yjc3YTNiMjQwZTVkZTEiLCJ6biI6NDUsInRzIjoxNDI4ODAzNTA0OTY4LCJiZiI6dHJ1ZSwicG4iOiJhZHplcms2NzY3MzQyIiwidXIiOiJodHRwOi8vY2FyZWVycy5zdGFja292ZXJmbG93LmNvbS9qb2JzL3JlbW90ZT91dG1fc291cmNlPXN0YWNrb3ZlcmZsb3cuY29tJnV0bV9tZWRpdW09YWQmdXRtX2NhbXBhaWduPWNhbmRpZGF0ZXMtd2ZoJnV0bV9jb250ZW50PXNiLXdmaC1kb2cifQ&s=u5U_P1614Haa3E4pFmyv2TXPiU0" rel="nofollow" target="_blank" title=""><img src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/f61fba52780740ddbbaa3a98039c750f.jpg" title="" alt="" border="0" width="0" height="0" style="display: none !important; visibility: hidden !important; opacity: 0 !important; background-position: 0px 0px;"></a><img height="0" width="0" border="0" style="position: absolute; display: none !important; visibility: hidden !important; opacity: 0 !important; background-position: 0px 0px;" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/i(2).gif"></div>  
+        <div id="hireme" class="tag-themed ios tagged"><a href="http://careers.stackoverflow.com/jobs/tag/ios?a=7swgg" target="_blank" data-la="7swgg" data-hf="h" class="top"> <span>Want an <span class="header-tag">ios</span> job?</span></a><ul class="jobs"><li><a data-cid="170404" data-la="sdMWP3iYroB" href="http://careers.stackoverflow.com/jobs/84153/ios-developer-august-home-inc" target="_blank" title="iOS Developer at August Home, Inc.. Click to learn more.">iOS Developer<br><div class="company">August Home</div><div class="location" title="San Francisco, CA">San Francisco, CA</div><span class="post-tag">swift</span><span class="post-tag highlight">ios</span></a></li><li><a data-cid="170911" data-la="soCBjwNTYz0" href="http://careers.stackoverflow.com/jobs/84674/ios-developer-linkqlo-inc" target="_blank" title="iOS Developer at Linkqlo Inc. Click to learn more.">iOS Developer<br><div class="company">Linkqlo</div><div class="location" title="Palo Alto, CA">Palo Alto, CA</div><span class="post-tag">swift</span><span class="post-tag highlight">ios</span></a></li></ul><img class="impression" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/i" style="display:none;"><img class="impression" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/sdMWP3iYroB-soCBjwNTYz0-7swgg" style="display:none;"></div>
+			  
+    
+            
+
+				<div class="module sidebar-related">
+					<h4 id="h-related">Related</h4>
+                    <div class="related js-gps-related-questions" data-tracker="rq=1">
+                        <div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/4585715?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">30
+    </div>
+</a><a href="http://stackoverflow.com/questions/4585715/how-do-you-change-the-color-of-a-uifont?rq=1" class="question-hyperlink">How do you change the color of a UIFont?</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/17903622?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/17903622/custom-font-rendering-in-ios-versus-mac-os-x?rq=1" class="question-hyperlink">Custom font rendering in iOS versus Mac OS X</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/24230836?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/24230836/set-font-size-equal-to-an-integer?rq=1" class="question-hyperlink">Set font size equal to an integer?</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/25002017?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">3
+    </div>
+</a><a href="http://stackoverflow.com/questions/25002017/how-to-change-font-of-uibutton-with-swift?rq=1" class="question-hyperlink">How to change font of UIButton with Swift</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/25942326?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">3
+    </div>
+</a><a href="http://stackoverflow.com/questions/25942326/custom-font-in-xcode-6?rq=1" class="question-hyperlink">Custom Font in Xcode 6</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/26441958?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">2
+    </div>
+</a><a href="http://stackoverflow.com/questions/26441958/changing-search-bar-placeholder-text-font-in-swift?rq=1" class="question-hyperlink">Changing Search Bar placeholder text font in Swift</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/28474232?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/28474232/uifont-extension-in-swift?rq=1" class="question-hyperlink">UIFont extension in SWIFT</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/28569042?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/28569042/how-to-customize-uilabel-with-different-font-size-and-color-with-multiple-variab?rq=1" class="question-hyperlink">How to customize UILabel with different Font Size and Color with multiple Variables together</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/28786658?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/28786658/font-type-and-color-based-on-device?rq=1" class="question-hyperlink">Font type and color based on device</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/28865384?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/28865384/xcode-swift-uitextview-font-changing-when-setting-text?rq=1" class="question-hyperlink">Xcode / Swift: UITextView font changing when setting text</a>
+</div>
+
+                    </div>
+				</div>
+            
+<div id="hot-network-questions" class="module">
+    <h4>
+        <a href="http://stackexchange.com/questions?tab=hot" class="js-gps-track" data-gps-track="posts_hot_network.click({ item_type:1, location:11 })">
+            Hot Network Questions
+        </a>
+    </h4>
+    <ul>
+            <li>
+                <div class="favicon favicon-cs" title="Computer Science Stack Exchange"></div><a href="http://cs.stackexchange.com/questions/41262/algorithm-for-fastest-division-below-threshold" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:419 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Algorithm for fastest division below threshold
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-woodworking" title="Woodworking Stack Exchange"></div><a href="http://woodworking.stackexchange.com/questions/898/creating-my-first-wooden-gaming-table" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:603 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Creating my first wooden gaming table
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-puzzling" title="Puzzling Stack Exchange"></div><a href="http://puzzling.stackexchange.com/questions/11888/quite-a-distance-from-the-start-to-the-end-of-this-short-riddle-who-am-i" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:559 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Quite a distance from the start to the end of this short riddle. Who am I?
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-physics" title="Physics Stack Exchange"></div><a href="http://physics.stackexchange.com/questions/175444/is-rest-mass-conserved-in-special-relativity" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:151 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is (rest) mass conserved in special relativity?
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-superuser" title="Super User"></div><a href="http://superuser.com/questions/900519/pc-wont-let-me-skip-disk-check-on-drive-that-isnt-needed-to-boot-how-do-i-mak" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:3 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    PC won't let me skip disk check on drive that isn't needed to boot; how do I make it check the disk while running?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-aviation" title="Aviation Stack Exchange"></div><a href="http://aviation.stackexchange.com/questions/14006/why-do-propeller-blades-not-have-winglets" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:528 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why do propeller blades not have winglets?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/43784/what-are-the-possible-downsides-of-answering-an-anonymous-employee-survey-trut" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What are the possible downsides of answering an "anonymous" employee survey truthfully?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-security" title="Information Security Stack Exchange"></div><a href="http://security.stackexchange.com/questions/85773/is-aes-256-secure-enough-for-putting-backups-to-aws-or-dropbox" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:162 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is AES 256 secure enough for putting Backups to AWS or Dropbox?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-academia" title="Academia Stack Exchange"></div><a href="http://academia.stackexchange.com/questions/43375/why-do-companies-fund-academic-research" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:415 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why do companies fund academic research?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-scifi" title="Science Fiction &amp; Fantasy Stack Exchange"></div><a href="http://scifi.stackexchange.com/questions/86066/story-identification-two-seraphim-in-space-and-the-voice-of-god" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:186 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Story identification: two seraphim in space, and the voice of God
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-academia" title="Academia Stack Exchange"></div><a href="http://academia.stackexchange.com/questions/43402/is-it-legal-to-accept-a-later-offer-e-g-came-after-15-april-despite-having-pr" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:415 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is it legal to accept a later offer (e.g came after 15 April), despite having previously accepted an offer from a university before 15 April?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-ux" title="User Experience Stack Exchange"></div><a href="http://ux.stackexchange.com/questions/76112/checkboxes-is-better-to-check-exceptions-or-to-uncheck-exceptions" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:102 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Checkboxes - Is better to check exceptions or to uncheck exceptions?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/43997/recruiter-changed-mind" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Recruiter changed mind
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-codegolf" title="Programming Puzzles &amp; Code Golf Stack Exchange"></div><a href="http://codegolf.stackexchange.com/questions/48476/programming-languages-through-the-years" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:200 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Programming Languages Through The Years
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-photo" title="Photography Stack Exchange"></div><a href="http://photo.stackexchange.com/questions/61766/raw-vs-jpeg-for-non-professional-use" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:61 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Raw vs Jpeg for non-professional use
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-astronomy" title="Astronomy Stack Exchange"></div><a href="http://astronomy.stackexchange.com/questions/10431/can-the-universe-be-spatially-closed-and-expand-forever" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:514 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Can the Universe be spatially closed and expand forever?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-mathematica" title="Mathematica Stack Exchange"></div><a href="http://mathematica.stackexchange.com/questions/79617/how-do-i-get-my-spline-based-arrows-to-have-rounded-ends" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:387 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How do I get my spline based arrows to have rounded ends?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-physics" title="Physics Stack Exchange"></div><a href="http://physics.stackexchange.com/questions/175551/is-there-any-such-thing-as-a-change-in-acceleration-ex-3-m-s-s-s" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:151 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is there any such thing as a change in acceleration (ex: 3 m/s/s/s)?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-apple" title="Ask Different"></div><a href="http://apple.stackexchange.com/questions/180485/is-the-iphone-6-more-powerful-than-a-cray-supercomputer" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:118 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is the iPhone 6 more powerful than a Cray supercomputer?
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-gardening" title="Gardening &amp; Landscaping Stack Exchange"></div><a href="http://gardening.stackexchange.com/questions/17949/what-is-the-best-method-saw-to-cut-through-tough-palm-tree-fronds-with-30-foot" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:269 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What is the best method/saw to cut through tough palm tree fronds with? (30-foot Queen Palms)
+                </a>
+
+            </li>
+            <li class="dno js-hidden" style="display: list-item;">
+                <div class="favicon favicon-tex" title="TeX - LaTeX Stack Exchange"></div><a href="http://tex.stackexchange.com/questions/238094/horizontal-brace-above-another-brace-node-in-tikz" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:85 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Horizontal brace above another brace + node in TikZ
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-worldbuilding" title="Worldbuilding Stack Exchange"></div><a href="http://worldbuilding.stackexchange.com/questions/13792/whats-the-most-entertaining-way-to-prove-to-someone-that-they-arent-real" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:579 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What's the most entertaining way to prove to someone that they aren't real?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-askubuntu" title="Ask Ubuntu"></div><a href="http://askubuntu.com/questions/607718/does-the-dev-null-file-actually-have-a-fixed-size" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:89 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Does the /dev/null file actually have a fixed size?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-math" title="Mathematics Stack Exchange"></div><a href="http://math.stackexchange.com/questions/1230700/how-to-show-that-the-union-of-an-infinite-sequence-of-subgroups-is-a-subgroup" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:69 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How to show that the union of an infinite sequence of subgroups is a subgroup?
+                </a>
+
+            </li>
+    </ul>
+
+        <a href="http://stackoverflow.com/questions/24708401/how-do-you-stylize-a-font-in-swift#" class="show-more js-show-more js-gps-track" data-gps-track="posts_hot_network.click({ item_type:3, location:11 })">
+            more hot questions
+        </a>
+</div>
+		</div>
+	
+<div id="feed-link">
+    <div id="feed-link-text">
+        <a href="http://stackoverflow.com/feeds/question/24708401" title="feed of this question and its answers">
+            <span class="feed-icon"></span>question feed
+        </a>
+    </div>
+</div>	<script>
+StackExchange.ready(function(){$.get('/posts/24708401/ivc/7f5f');});
+</script>
+<noscript>
+    &lt;div&gt;&lt;img src="/posts/24708401/ivc/7f5f" class="dno" alt="" width="0" height="0"&gt;&lt;/div&gt;
+</noscript><div style="display:none" id="prettify-lang">default</div></div>
+
+
+
+        </div>
+    </div>
+    <div id="footer" class="categories">
+        <div class="footerwrap">
+            <div id="footer-menu">
+                <div class="top-footer-links">
+                        <a href="http://stackoverflow.com/tour">tour</a>
+                    <a href="http://stackoverflow.com/help">help</a>
+                    <a href="http://blog.stackoverflow.com/?blb=1">blog</a>
+                        <a href="http://chat.stackoverflow.com/">chat</a>
+                    <a href="http://data.stackexchange.com/">data</a>
+                    <a href="http://stackexchange.com/legal">legal</a>
+                    <a href="http://stackexchange.com/legal/privacy-policy">privacy policy</a>
+                    <a href="http://stackexchange.com/work-here">work here</a>
+                    <a href="http://stackexchange.com/mediakit">advertising info</a>
+
+                    <a onclick="StackExchange.switchMobile(&quot;on&quot;)">mobile</a>
+                    <b><a href="http://stackoverflow.com/contact">contact us</a></b>
+                        <b><a href="http://meta.stackoverflow.com/">feedback</a></b>
+                    
+                </div>
+                <div id="footer-sites">
+                    <table>
+    <tbody><tr>
+            <th colspan="3">
+                Technology
+            </th>
+            <th>
+                Life / Arts
+            </th>
+            <th>
+                Culture / Recreation
+            </th>
+            <th>
+                Science
+            </th>
+            <th>
+                Other
+            </th>
+    </tr>
+    <tr>
+            <td>
+                <ol>
+                        <li><a href="http://stackoverflow.com/" title="professional and enthusiast programmers">Stack Overflow</a></li>
+                        <li><a href="http://serverfault.com/" title="system and network administrators">Server Fault</a></li>
+                        <li><a href="http://superuser.com/" title="computer enthusiasts and power users">Super User</a></li>
+                        <li><a href="http://webapps.stackexchange.com/" title="power users of web applications">Web Applications</a></li>
+                        <li><a href="http://askubuntu.com/" title="Ubuntu users and developers">Ask Ubuntu</a></li>
+                        <li><a href="http://webmasters.stackexchange.com/" title="pro webmasters">Webmasters</a></li>
+                        <li><a href="http://gamedev.stackexchange.com/" title="professional and independent game developers">Game Development</a></li>
+                        <li><a href="http://tex.stackexchange.com/" title="users of TeX, LaTeX, ConTeXt, and related typesetting systems">TeX - LaTeX</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="http://programmers.stackexchange.com/" title="professional programmers interested in conceptual questions about software development">Programmers</a></li>
+                        <li><a href="http://unix.stackexchange.com/" title="users of Linux, FreeBSD and other Un*x-like operating systems.">Unix &amp; Linux</a></li>
+                        <li><a href="http://apple.stackexchange.com/" title="power users of Apple hardware and software">Ask Different (Apple)</a></li>
+                        <li><a href="http://wordpress.stackexchange.com/" title="WordPress developers and administrators">WordPress Development</a></li>
+                        <li><a href="http://gis.stackexchange.com/" title="cartographers, geographers and GIS professionals">Geographic Information Systems</a></li>
+                        <li><a href="http://electronics.stackexchange.com/" title="electronics and electrical engineering professionals, students, and enthusiasts">Electrical Engineering</a></li>
+                        <li><a href="http://android.stackexchange.com/" title="enthusiasts and power users of the Android operating system">Android Enthusiasts</a></li>
+                        <li><a href="http://security.stackexchange.com/" title="Information security professionals">Information Security</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="http://dba.stackexchange.com/" title="database professionals who wish to improve their database skills and learn from others in the community">Database Administrators</a></li>
+                        <li><a href="http://drupal.stackexchange.com/" title="Drupal developers and administrators">Drupal Answers</a></li>
+                        <li><a href="http://sharepoint.stackexchange.com/" title="SharePoint enthusiasts">SharePoint</a></li>
+                        <li><a href="http://ux.stackexchange.com/" title="user experience researchers and experts">User Experience</a></li>
+                        <li><a href="http://mathematica.stackexchange.com/" title="users of Mathematica">Mathematica</a></li>
+                        <li><a href="http://salesforce.stackexchange.com/" title="Salesforce administrators, implementation experts, developers and anybody in-between">Salesforce</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#technology" class="more">
+                                more (14)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://photo.stackexchange.com/" title="professional, enthusiast and amateur photographers">Photography</a></li>
+                        <li><a href="http://scifi.stackexchange.com/" title="science fiction and fantasy enthusiasts">Science Fiction &amp; Fantasy</a></li>
+                        <li><a href="http://graphicdesign.stackexchange.com/" title="Graphic Design professionals, students, and enthusiasts">Graphic Design</a></li>
+                        <li><a href="http://cooking.stackexchange.com/" title="professional and amateur chefs">Seasoned Advice (cooking)</a></li>
+                        <li><a href="http://diy.stackexchange.com/" title="contractors and serious DIYers">Home Improvement</a></li>
+                        <li><a href="http://money.stackexchange.com/" title="people who want to be financially literate">Personal Finance &amp; Money</a></li>
+                        <li><a href="http://academia.stackexchange.com/" title="academics and those enrolled in higher education">Academia</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#lifearts" class="more">
+                                more (10)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://english.stackexchange.com/" title="linguists, etymologists, and serious English language enthusiasts">English Language &amp; Usage</a></li>
+                        <li><a href="http://skeptics.stackexchange.com/" title="scientific skepticism">Skeptics</a></li>
+                        <li><a href="http://judaism.stackexchange.com/" title="those who base their lives on Jewish law and tradition and anyone interested in learning more">Mi Yodeya (Judaism)</a></li>
+                        <li><a href="http://travel.stackexchange.com/" title="road warriors and seasoned travelers">Travel</a></li>
+                        <li><a href="http://christianity.stackexchange.com/" title="committed Christians, experts in Christianity and those interested in learning more">Christianity</a></li>
+                        <li><a href="http://gaming.stackexchange.com/" title="passionate videogamers on all platforms">Arqade (gaming)</a></li>
+                        <li><a href="http://bicycles.stackexchange.com/" title="people who build and repair bicycles, people who train cycling, or commute on bicycles">Bicycles</a></li>
+                        <li><a href="http://rpg.stackexchange.com/" title="gamemasters and players of tabletop, paper-and-pencil role-playing games">Role-playing Games</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#culturerecreation" class="more">
+                                more (21)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://math.stackexchange.com/" title="people studying math at any level and professionals in related fields">Mathematics</a></li>
+                        <li><a href="http://stats.stackexchange.com/" title="people interested in statistics, machine learning, data analysis, data mining, and data visualization">Cross Validated (stats)</a></li>
+                        <li><a href="http://cstheory.stackexchange.com/" title="theoretical computer scientists and researchers in related fields">Theoretical Computer Science</a></li>
+                        <li><a href="http://physics.stackexchange.com/" title="active researchers, academics and students of physics">Physics</a></li>
+                        <li><a href="http://mathoverflow.net/" title="professional mathematicians">MathOverflow</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#science" class="more">
+                                more (7)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://stackapps.com/" title="apps, scripts, and development with the Stack Exchange API">Stack Apps</a></li>
+                        <li><a href="http://meta.stackexchange.com/" title="meta-discussion of the Stack Exchange family of Q&amp;A websites">Meta Stack Exchange</a></li>
+                        <li><a href="http://area51.stackexchange.com/" title="proposing new sites in the Stack Exchange network">Area 51</a></li>
+                        <li><a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a></li>
+                    
+                </ol>
+            </td>
+    </tr>
+</tbody></table>
+                </div>
+            </div>
+
+            <div id="copyright">
+                site design / logo © 2015 stack exchange inc; user contributions licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="license">cc by-sa 3.0</a> 
+                with <a href="http://blog.stackoverflow.com/2009/06/attribution-required/" rel="license">attribution required</a>
+            </div>
+            <div id="svnrev">
+                rev 2015.4.11.2462
+            </div>
+            
+        </div>
+    </div>
+    <noscript>
+        &lt;div id="noscript-warning"&gt;Stack Overflow works best with JavaScript enabled&lt;img src="http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif" alt="" class="dno"&gt;&lt;/div&gt;
+    </noscript>
+<script>var p = "http", d = "static"; if (document.location.protocol == "https:") { p += "s"; d = "engine"; } var z = document.createElement("script"); z.type = "text/javascript"; z.async = true; z.src = p + "://" + d + ".adzerk.net/ados.js"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(z, s);</script>
+<script>
+    var ados = ados || {};
+    ados.run = ados.run || [];
+    ados.run.push(function () { ados_setKeywords('ios,swift,uifont');; ados_load(); });         
+</script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-5620270-1');        
+        
+        ga('set', 'dimension2', '|ios|swift|uifont|');         
+        ga('send', 'pageview');
+        var _qevents = _qevents || [],
+            _comscore = _comscore || [];
+        (function () {
+            var ssl='https:'==document.location.protocol,
+                s=document.getElementsByTagName('script')[0],
+                qc=document.createElement('script');
+            qc.async=true;
+            qc.src=(ssl?'https://secure':'http://edge')+'.quantserve.com/quant.js';
+            s.parentNode.insertBefore(qc, s);
+            var sc=document.createElement('script');
+            sc.async=true;
+            sc.src=(ssl?'https://sb':'http://b') + '.scorecardresearch.com/beacon.js';
+            s.parentNode.insertBefore(sc, s);
+        })();
+        _comscore.push({ c1: "2", c2: "17440561" });
+        _qevents.push({ qacct: "p-c1rF4kxgLUzNc" });
+    </script>                
+    
+<script type="text/javascript" src="./ios - How do you stylize a font in Swift  - Stack Overflow_files/p"></script></body></html>

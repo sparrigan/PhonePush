@@ -137,15 +137,11 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     func checkAns() {
         
         //let imageview = UIImageView(frame: CGRectMake(200,200,400,300))
-        let image1 = UIImage(named: "arnie.jpg")
+        
         //imageview.image = image1
         //self.view.addSubview(imageview)
         
-        self.popViewController = PopUpViewControllerSwift()
-        self.popViewController.title = "This is a popup view"
-        self.popViewController.showInView(self.view, withImage: image1, withMessage: "You just triggered a great popup window", animated: true)
-        
-        var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
+
     
         
         
@@ -172,9 +168,21 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         }
         
         if numCorrect == 3 {
-            println("ALL CORRECT! :D")
+
+            let imageCorrect = UIImage(named: "tickbox")
+            self.popViewController = PopUpViewControllerSwift()
+            self.popViewController.title = "Correct :)"
+            self.popViewController.showInView(self.view, withImage: imageCorrect, withMessage: "You got all three correct :)", animated: true, correct: true)
+            var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
+            
         } else {
-            println("\(3-numCorrect) are wrong :(")
+            
+            let imageWrong = UIImage(named: "crossBox")
+            self.popViewController = PopUpViewControllerSwift()
+            self.popViewController.title = "Wrong :("
+            self.popViewController.showInView(self.view, withImage: imageWrong, withMessage: "You got \(3-numCorrect) wrong :(", animated: true, correct: false)
+            var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
+            
         }
         
         

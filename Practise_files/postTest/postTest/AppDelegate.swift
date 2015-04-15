@@ -13,13 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         //STUFF I ADDED
         
-        var URLStr = "http://626c02b0.ngrok.com/login"
+        var URLStr = "https://626c02b0.ngrok.com/login"
         
         self.post(["username":"jameson", "password":"password"], url: URLStr) { (succeeded: Bool, msg: String) -> () in
             var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")

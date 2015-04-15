@@ -407,6 +407,7 @@
 				CED2CEFC1ADC2D210085DC70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CED2CEFD1ADC2D210085DC70 /* Build configuration list for PBXNativeTarget "postTestTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +416,7 @@
 				CED2CEFF1ADC2D210085DC70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

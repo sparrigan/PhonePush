@@ -10,6 +10,8 @@
 		C5794FE29982FB8BD4E864F5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 008083B3AD2210FF5D1FF534 /* libPods.a */; };
 		CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */; };
 		CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286841AAF9D4F005C0E45 /* Integrator.swift */; };
+		CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */; };
+		CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090FA1ADECB1C00D237B3 /* DataManager.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
 		CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E341AADEE3C00427689 /* AppDelegate.swift */; };
 		CE463E371AADEE3C00427689 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E361AADEE3C00427689 /* ViewController.swift */; };
@@ -40,6 +42,8 @@
 		0FFD0AB1B271C009DB3D10E2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccelRecorder.swift; sourceTree = "<group>"; };
 		CE0286841AAF9D4F005C0E45 /* Integrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
+		CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerLogin.swift; sourceTree = "<group>"; };
+		CE4090FA1ADECB1C00D237B3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		CE4216E01AD180C6004EF105 /* calcQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstns.swift; sourceTree = "<group>"; };
 		CE463E2F1AADEE3C00427689 /* PhonePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhonePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE463E331AADEE3C00427689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -122,6 +126,8 @@
 			children = (
 				CE4D1C561ADA03EC001E6D53 /* tickbox.png */,
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
+				CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */,
+				CE4090FA1ADECB1C00D237B3 /* DataManager.swift */,
 				CE463E361AADEE3C00427689 /* ViewController.swift */,
 				CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */,
 				CE4D1C581ADA092E001E6D53 /* crossBox.png */,
@@ -302,6 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */,
 				CE463E371AADEE3C00427689 /* ViewController.swift in Sources */,
 				CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */,
 				CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */,
@@ -309,6 +316,7 @@
 				CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */,
 				CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */,
 				CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */,
+				CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */,
 				CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */,
 				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
 			);

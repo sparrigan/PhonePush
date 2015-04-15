@@ -19,7 +19,7 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     var calcVarSymbol = ""
     var calcVarUnit = ""
     var notCalcVarUnit = ""
-    var submitButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+    var submitButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     var answerText = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     let screenSize: CGRect = UIScreen.mainScreen().bounds
 
@@ -31,7 +31,7 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     var tolerance:Double = 0.0
     var qstntype: Int = 0
 
-    override init() {
+    init() {
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -201,18 +201,18 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     func keyboardWillShow(sender: NSNotification) {
         
         var info = sender.userInfo!
-        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.frame.origin.y -= keyboardFrame.height
     }
     
     func keyboardWillHide(sender: NSNotification) {
         
         var info = sender.userInfo!
-        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.frame.origin.y += keyboardFrame.height
     }
     
-    func textFieldShouldReturn(txtField: UITextField!) -> Bool {
+    func textFieldShouldReturn(txtField: UITextField) -> Bool {
         txtField.resignFirstResponder()
         return true;
     }

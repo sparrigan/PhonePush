@@ -6,16 +6,19 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
 
+import Foundation
 import UIKit
-import swiftyJSON
+//import SwiftyJSON
 
 class ViewControllerLogin: UIViewController {
     
     var questionText = UITextView(frame: CGRect(x: 50, y: 25, width: 600, height: 200.00));
-    let PPButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+    let PPButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         self.view.backgroundColor = UIColor.whiteColor()
         
@@ -71,6 +74,8 @@ class ViewControllerLogin: UIViewController {
     
     
     func lalala(dat: NSData) {
+        
+        println(dat)
         let json = JSON(data: dat)
         if let teacherNames = json["teachers"].array {
             self.questionText.text = teacherNames[0].string

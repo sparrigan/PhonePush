@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import CorePlot
 
 class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     
@@ -72,11 +73,13 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         //[plotSpace setYRange: [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat( 0 ) length:CPTDecimalFromFloat( 16 )]];
         //[plotSpace setXRange: [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat( -4 ) length:CPTDecimalFromFloat( 8 )]];
         
-        var maxY = yArray.reduce(-Double.infinity, { max($0, $1) })
-        var minY = yArray.reduce(Double.infinity, { min($0, $1) })
+        var maxY = yArray.reduce(-Double.infinity, combine: { max($0, $1) })
+        var minY = yArray.reduce(Double.infinity, combine: { min($0, $1) })
         
-        var maxX = xArray.reduce(-Double.infinity, { max($0, $1) })
-        var minX = xArray.reduce(Double.infinity, { min($0, $1) })
+        var maxX = xArray.reduce(-Double.infinity, combine: { max($0, $1) })
+        var minX = xArray.reduce(Double.infinity, combine: { min($0, $1) })
+        
+        
         
         plotSpace.setPlotRange(CPTPlotRange(location: minX, length: maxX-minX), forCoordinate: CPTCoordinate.X)
         //plotSpace.setPlotRange(CPTPlotRange(location: 0, length: timeDbl[timeDbl.count-1]), forCoordinate: CPTCoordinate.X)
@@ -205,8 +208,8 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         
         //Use the 'arrays' to populate the labels and CHECKMARKS for the x axis.
-        x.axisLabels = xLabels
-        x.majorTickLocations = xLocations
+        x.axisLabels = xLabels as Set<NSObject>
+        x.majorTickLocations = xLocations as Set<NSObject>
         
         //Getting chart to automatically set y values:
         var y:CPTAxis = axisSet.yAxis
@@ -235,18 +238,23 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         return UInt(xArray.count)
     }
     
+
+    
     //Required by CorePlot delegate: Returns the x and y values for given index
     //(fieldEnum parameter determines whether coreplot is asking for x or y)
-    func numberForPlot(plot: CPTPlot!, field fieldEnum: UInt, recordIndex index: UInt) -> NSNumber! {
+    func numberForPlot(plot: CPTPlot, field fieldEnum: UInt, recordIndex idx: UInt) -> AnyObject! {
         
-        
+        println("CALLED IT")
         //var x:Int = index - 4
         
         if fieldEnum.hashValue == CPTScatterPlotField.X.hashValue {
-            return xArray[Int(index)]
-        } else {
+            //println("Looking for X value and got \(xArray[Int(idx)])")
+            return xArray[Int(idx)]
             
-            return yArray[Int(index)]
+        } else {
+            //println("Looking for Y value and got \(yArray[Int(idx)])")
+            return yArray[Int(idx)]
+            
         }
         
     }

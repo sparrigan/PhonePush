@@ -19,7 +19,7 @@ class PopUpViewControllerSwift : UIViewController {
         super.init(coder: aDecoder)
     }
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     

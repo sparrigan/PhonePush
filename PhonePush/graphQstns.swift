@@ -8,6 +8,8 @@
 
 import UIKit
 
+//import CorePlot
+
 class graphQstns: UIViewController, UITextFieldDelegate {
     
     var timeArray:[Double] = []
@@ -20,11 +22,11 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     var ansTxt1 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     var ansTxt2 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     var ansTxt3 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
-    var submitButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+    var submitButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     
     var popViewController : PopUpViewControllerSwift!
     
-    override init() {
+    init() {
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -192,18 +194,18 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     func keyboardWillShow(sender: NSNotification) {
         
         var info = sender.userInfo!
-        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.frame.origin.y -= keyboardFrame.height
     }
     
     func keyboardWillHide(sender: NSNotification) {
         
         var info = sender.userInfo!
-        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.frame.origin.y += keyboardFrame.height
     }
     
-    func textFieldShouldReturn(txtField: UITextField!) -> Bool {
+    func textFieldShouldReturn(txtField: UITextField) -> Bool {
         txtField.resignFirstResponder()
         return true;
     }

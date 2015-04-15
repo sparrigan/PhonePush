@@ -18,7 +18,7 @@ class graphSort: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     var pDbl: [Double] = []
     var tDbl: [Double] = []
     
-    override init() {
+    init() {
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,7 +53,7 @@ class graphSort: UIViewController, UIDocumentInteractionControllerDelegate, UITe
         
     }
     
-    func textFieldShouldReturn(txtField: UITextField!) -> Bool {
+    func textFieldShouldReturn(txtField: UITextField) -> Bool {
         txtField.resignFirstResponder()
         return true;
     }

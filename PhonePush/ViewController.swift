@@ -37,11 +37,11 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
     var aRec:accelRecorder?
     var tb = UITextField(frame: CGRect(x: 100, y: 100, width: 200, height: 40))
     var calibcheck:Int = 0
-    let button   = UIButton.buttonWithType(UIButtonType.System) as UIButton
-    let startButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
-    let sendAccelButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
-    let sendVelButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
-    let sendPosButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+    let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    let startButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    let sendAccelButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    let sendVelButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    let sendPosButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     var stopped = 0
     var aDbl: [Double] = []
     var vDbl: [Double] = []
@@ -192,7 +192,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
             }
             //Find average acceleration value from constant region
             if aDbl.count>0 {
-            constAccel = aDbl[indexConstAccel..<aDbl.count].reduce(0,+)/Double(aDbl.count-indexConstAccel)
+            constAccel = aDbl[indexConstAccel..<aDbl.count].reduce(0,combine: +)/Double(aDbl.count-indexConstAccel)
             }
             //Find total time of constant acceleration
             if tDbl.count>0 {
@@ -327,7 +327,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
     func dblToStringRows (AA: [Double], BB: [Double])->[String] {
         var temp:[String] = []
         //Only concatenate strings up until the length of shortest array input
-        var shortestCount = [AA.count,BB.count].reduce(Int.max, { min($0, $1) })
+        var shortestCount = [AA.count,BB.count].reduce(Int.max, combine: { min($0, $1) })
         for i in 0...shortestCount-1 {
             temp += [",".join([String(format:"%f",AA[i]),String(format:"%f",BB[i])])]
         }
@@ -398,7 +398,7 @@ class Regex {
     }
     
     func test(input: String) -> Bool {
-        let matches = self.internalExpression.matchesInString(input, options: nil, range:NSMakeRange(0, countElements(input)))
+        let matches = self.internalExpression.matchesInString(input, options: nil, range:NSMakeRange(0, count(input)))
         return matches.count > 0
     }
 }

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CA376E2B00BD0F2F768E2C57"
+               BlueprintIdentifier = "C2DF9BB2BED07772653F1826"
                BuildableName = "libPods-PhonePush-CorePlot.a"
                BlueprintName = "Pods-PhonePush-CorePlot"
                ReferencedContainer = "container:Pods.xcodeproj">

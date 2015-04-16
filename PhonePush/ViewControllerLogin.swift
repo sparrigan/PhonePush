@@ -19,7 +19,6 @@ class ViewControllerLogin: UIViewController {
         super.viewDidLoad()
         
         
-        
         self.view.backgroundColor = UIColor.whiteColor()
         
         PPButton.frame = CGRectMake(300, 450, 500, 250)
@@ -67,7 +66,12 @@ class ViewControllerLogin: UIViewController {
             })
         }
         
-    
+    /*
+        var returnStr = "Nic"
+        var URLString = ExpandURITemplate("http://www.example.com/login/{teacher}",
+        values: ["teacher": returnStr])
+        println("\(URLString)") // http://www.example.com/foo?query=mycelium&number=100
+    */
 
         
     }

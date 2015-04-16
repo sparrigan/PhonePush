@@ -16,13 +16,14 @@ let TopAppURL = "http://tinyteacher.ngrok.com/teachers"
 class DataManager {
     
     
-    class func getFromServer(callURL: String, success: ((iTunesData: NSData!) -> Void)) {
+    class func getFromServer(callURL: String, success: ((gotData: NSData!, error: NSError) -> Void)) {
         
         loadDataFromURL(NSURL(string: callURL)!, completion:{(data, error) -> Void in
             
+            //PUT A CASE HERE FOR IT WE CANNOT ASSIGN URLDATA
             if let urlData = data {
-                //3
-                success(iTunesData: urlData)
+                
+                success(gotData: urlData, error: error!)
                 
             }
         })
@@ -36,10 +37,12 @@ class DataManager {
         // Use NSURLSession to get data from an NSURL
         let loadDataTask = session.dataTaskWithURL(url, completionHandler: { (data: NSData!, response: NSURLResponse!, error: NSError!) -> Void in
             if let responseError = error {
+                println("HERE!!! response error")
                 completion(data: nil, error: responseError)
             } else if let httpResponse = response as? NSHTTPURLResponse {
                 if httpResponse.statusCode != 200 {
-                    var statusError = NSError(domain:"com.raywenderlich", code:httpResponse.statusCode, userInfo:[NSLocalizedDescriptionKey : "HTTP status code has unexpected value."])
+                    println("HERE!!! NON 200 error")
+                    var statusError = NSError(domain:"com.tinyteacher", code:httpResponse.statusCode, userInfo:[NSLocalizedDescriptionKey : "HTTP status code has unexpected value."])
                     completion(data: nil, error: statusError)
                 } else {
                     completion(data: data, error: nil)

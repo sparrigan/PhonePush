@@ -5,6 +5,8 @@
 
 #pod "SwiftyJSON", ">= 2.1.3"
 
+#pod 'Runes'
+
 pod 'CorePlot', :git => 'https://github.com/core-plot/core-plot.git', :branch => 'release-2.0'
 
 #pod 'CorePlot', :git => 'https://github.com/core-plot/core-plot.git'

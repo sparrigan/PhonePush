@@ -9,6 +9,7 @@
 import UIKit
 import QuartzCore
 
+//View Controller that pops up after correct or wrong answer.
 class PopUpViewControllerSwift : UIViewController {
     
     var popUpView: UIView = UIView(frame: CGRectMake(200, 200, 300, 300))
@@ -33,7 +34,6 @@ class PopUpViewControllerSwift : UIViewController {
     func showInView(aView: UIView, withImage image : UIImage!, withMessage message: String!, animated: Bool, correct: Bool)
     {
       
-        println("ee")
        
         if correct == true {
             self.view.backgroundColor = UIColor.greenColor().colorWithAlphaComponent(0.6)

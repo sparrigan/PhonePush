@@ -4,12 +4,9 @@
 //
 //  Created by Nicholas Harrigan on 09/03/2015.
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
-//
 
-//        var newvc:UIViewController = calcQstns()
 
-//        self.navigationController?.pushViewController(newvc, animated: true)
-
+//PHONEPUSH Main ViewController with calibration
 import UIKit
 
 protocol vcProtocol {

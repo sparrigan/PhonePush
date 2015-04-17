@@ -162,22 +162,14 @@
 		CE463E311AADEE3C00427689 /* PhonePush */ = {
 			isa = PBXGroup;
 			children = (
-				CE5C41A31AE04FCE0033647B /* mortarboard.png */,
+				CED1D0AD1AE0A5CB00B56442 /* AnswerPopUp */,
+				CED1D0AC1AE0A58B00B56442 /* LoginPage */,
+				CED1D0AB1AE0A55000B56442 /* Graphing */,
+				CED1D0AA1AE0A4CE00B56442 /* Push */,
 				CEA3614D1ADF3B6D00EC266A /* Libraries */,
-				CE4D1C561ADA03EC001E6D53 /* tickbox.png */,
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
-				CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */,
-				CE4090FA1ADECB1C00D237B3 /* DataManager.swift */,
 				CE463E361AADEE3C00427689 /* ViewController.swift */,
-				CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */,
-				CE4D1C581ADA092E001E6D53 /* crossBox.png */,
-				CEA296CE1AD97D69007117AD /* graphPlotter.swift */,
-				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
-				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
-				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
-				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
 				CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */,
-				CEDDE25B1AD769900061F500 /* graphSort.swift */,
 				CE463E381AADEE3C00427689 /* Main.storyboard */,
 				CE463E3B1AADEE3C00427689 /* Images.xcassets */,
 				CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */,
@@ -229,6 +221,46 @@
 				CEC6E0F31ADF1DAF005B2D57 /* SwiftyJSON.swift */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		CED1D0AA1AE0A4CE00B56442 /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
+				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
+				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
+				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
+			);
+			name = Push;
+			sourceTree = "<group>";
+		};
+		CED1D0AB1AE0A55000B56442 /* Graphing */ = {
+			isa = PBXGroup;
+			children = (
+				CEA296CE1AD97D69007117AD /* graphPlotter.swift */,
+				CEDDE25B1AD769900061F500 /* graphSort.swift */,
+			);
+			name = Graphing;
+			sourceTree = "<group>";
+		};
+		CED1D0AC1AE0A58B00B56442 /* LoginPage */ = {
+			isa = PBXGroup;
+			children = (
+				CE5C41A31AE04FCE0033647B /* mortarboard.png */,
+				CE4090FA1ADECB1C00D237B3 /* DataManager.swift */,
+				CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */,
+			);
+			name = LoginPage;
+			sourceTree = "<group>";
+		};
+		CED1D0AD1AE0A5CB00B56442 /* AnswerPopUp */ = {
+			isa = PBXGroup;
+			children = (
+				CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */,
+				CE4D1C561ADA03EC001E6D53 /* tickbox.png */,
+				CE4D1C581ADA092E001E6D53 /* crossBox.png */,
+			);
+			name = AnswerPopUp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

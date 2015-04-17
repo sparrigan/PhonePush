@@ -128,15 +128,69 @@ class ViewControllerLogin: UIViewController {
         //(and then retrieve appropriate setting file
         var replyString = ExpandURITemplate(sendURL,
             values: ["teacher": teacherName])
+        
         //Get from server at URL that corresponds to students teacher choice
-        DataManager.getFromServer(replyString, success: { (data) -> Void in
+        DataManager.getFromServer(replyString, success: { (data, error) -> Void in
             //We get back a JSON from this call that contains the activity and 
-            //activity settings for that teacher. Act accordingly by opening VC 
-            //for appropriate activity
+            //activity settings for that teacher.
+            NSOperationQueue.mainQueue().addOperationWithBlock() {
             
-            
-            
+                //Check that there are no errors, if so then go back to list of teachers 
+                //on retry
+                if let err = error {
+                    //If we have an error (error optional is not nil) Then present
+                    //alert with options for more info or to retry
+                    let alertController = UIAlertController(title: "There was an error", message: "Try again or see more info", preferredStyle: .Alert)
+                    let infobutton = UIAlertAction(title: "Info", style: .Default)
+                        {(action) in
+                            //UIAlertController that gives more detailed error info
+                            let infoalertController = UIAlertController(title: "Error info", message: "\(err.localizedDescription)", preferredStyle: .Alert)
+                            let retrybutton = UIAlertAction(title: "Retry", style: .Default)
+                                {(action) in
+                                    //To retry fetching teachers recursively call this function again
+                                    self.returnTeacher(teacherName)
+                            }
+                            infoalertController.addAction(retrybutton)
+                            self.presentViewController(infoalertController, animated: true) {
+                            }
+                    }
+                    alertController.addAction(infobutton)
+                    let retrybutton = UIAlertAction(title: "Retry", style: .Default)
+                        {(action) in
+                            //To retry fetching teachers recursively call this function again
+                            self.returnTeacher(teacherName)
+                    }
+                    alertController.addAction(retrybutton)
+                    self.presentViewController(alertController, animated: true) {
+                    }
+                    //If there is no error then unwrap JSON and display teachers
+                    //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
+                } else {
+                    //Extract data from Json into object using swiftyJSON
+                    var tempList = JSON(data: data)
+                    //Unwrap JSON to get name of activity teacher has set - NEED TO CATCH THIS
+                    if let activityName = tempList["activity_name"].string {
+    
+                        //Open up activity that teacher requested through openChosenActivity
+                        //function
+                        self.openChosenActivity(activityName)
+                    }
+                }
+            }
         })
+    }
+    
+    
+    func openChosenActivity(activityName:String) {
+        println(activityName)
+        
+        if activityName == "PhonePush" {
+            var PhonePushVC:ViewController = ViewController()
+            self.navigationController?.pushViewController(PhonePushVC, animated: true)
+        } else {
+            println("Unrecognised Activity")
+        }
+        
     }
     
     

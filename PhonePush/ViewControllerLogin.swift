@@ -22,7 +22,6 @@ class ViewControllerLogin: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.backgroundColor = UIColor.whiteColor()
         
         //Holder logo image whilst student tries to get and select teacher data in order to push activity
@@ -39,8 +38,31 @@ class ViewControllerLogin: UIViewController {
                 //What to do (on main queue) if get data...
                 //First check whether we have an error:
                 if let err = error {
-                    println("")
+                    //If we have an error (error optional is not nil) Then present
+                    //alert with options for more info or to retry
+                    let alertController = UIAlertController(title: "There was an error", message: "Try again or see more info", preferredStyle: .Alert)
+                    let infobutton = UIAlertAction(title: "Info", style: .Default)
+                        {(action) in
+                            //UIAlertController that gives more detailed error info
+                            let infoalertController = UIAlertController(title: "Error info", message: "\(err.localizedDescription)", preferredStyle: .Alert)
+                            let okbutton = UIAlertAction(title: "OK", style: .Default)
+                                {(action) in
+                            }
+                            self.presentViewController(infoalertController, animated: true) {
+                            }
+                    }
+                    alertController.addAction(infobutton)
+                    let retrybutton = UIAlertAction(title: "Retry", style: .Default)
+                        {(action) in
+                            //RETRY CODE: RUN WHOLE ATTEMPT AGAIN (NEED IN FUNCTION?)
+                    }
+                    alertController.addAction(retrybutton)
+                    self.presentViewController(alertController, animated: true) {
+                    }
+                //If there is no error then unwrap JSON and display teachers 
+                //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
                 } else {
+                    println("got through")
                     //Extract data from Json into object using swiftyJSON
                     var tempList = JSON(data: data)
                     //Unwrap JSON to get at array of teacher names - NEED TO CATCH THIS

@@ -183,7 +183,6 @@
 				CED1D0AA1AE0A4CE00B56442 /* Push */,
 				CEA3614D1ADF3B6D00EC266A /* Libraries */,
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
-				CE463E361AADEE3C00427689 /* ViewController.swift */,
 				CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */,
 				CE463E381AADEE3C00427689 /* Main.storyboard */,
 				CE463E3B1AADEE3C00427689 /* Images.xcassets */,
@@ -241,9 +240,9 @@
 		CED1D0AA1AE0A4CE00B56442 /* Push */ = {
 			isa = PBXGroup;
 			children = (
+				CE463E361AADEE3C00427689 /* ViewController.swift */,
+				CED9F9781AE1736200122C34 /* Qstns */,
 				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
-				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
-				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
 				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
 			);
 			name = Push;
@@ -298,6 +297,15 @@
 				CED1D0B71AE0A9EC00B56442 /* electronbg.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		CED9F9781AE1736200122C34 /* Qstns */ = {
+			isa = PBXGroup;
+			children = (
+				CEA296D01AD97DE7007117AD /* graphQstns.swift */,
+				CE4216E01AD180C6004EF105 /* calcQstns.swift */,
+			);
+			name = Qstns;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -208,9 +208,6 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate,
             //DECISION LOGIC HERE FOR WHAT QUESTION TO ASK...
             
             
-            //Questions for sorting out graphs
-            
-            
             
             //Questions on calculating unknown quantities from push data
             //Set qstntype in call to 0 for accel calc, 1 for initial velocity calc

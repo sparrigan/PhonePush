@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import UIKit
 //import SwiftyJSON
 
@@ -60,6 +60,8 @@ class ViewControllerLogin: UIViewController {
             NSOperationQueue.mainQueue().addOperationWithBlock() {
                 //What to do (on main queue) if get data...
                 //First check whether we have an error:
+                
+                println("Got here")
                 if let err = error {
                     //If we have an error (error optional is not nil) Then present
                     //alert with options for more info or to retry
@@ -89,8 +91,9 @@ class ViewControllerLogin: UIViewController {
                     //If there is no error then unwrap JSON and display teachers
                     //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
                 } else {
+                    
                     //Extract data from Json into object using swiftyJSON
-                    var tempList = JSON(data: data)
+                    let tempList = JSON(data: data)
                     //Unwrap JSON to get at array of teacher names - NEED TO CATCH THIS
                     if let teacherList = tempList["teachers"].array {
                         //Initialise Alertcontroller for presenting teacher options to user
@@ -105,6 +108,7 @@ class ViewControllerLogin: UIViewController {
                             }
                             alertController.addAction(tempbutton)
                         }
+                        
                         //Add a retry button after all teacher options
                         var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
                         //To retry fetching teachers recursively call this function again
@@ -115,8 +119,20 @@ class ViewControllerLogin: UIViewController {
                         //NEEDING TO PUT THIS IN VIEWDIDAPPEAR AS OPPOSED TO VIEWDIDLOAD
                         self.presentViewController(alertController, animated: true) {
                         }
+                    } else {
+                        //If cannot get teacher array from JSON then send warning and allow
+                        //retry
+                        let alertController = UIAlertController(title: "Bad data from server", message: "Could not extract list of teachers from information sent from server. Please try again", preferredStyle: .Alert)
+                        var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
+                            //To retry fetching teachers recursively call this function again
+                            self.teacherSelection()
+                        }
+                        alertController.addAction(retrybutton)
+                        self.presentViewController(alertController, animated: true) {
+                        }
+
+                        
                     }
-                    
                 }
             }
         })
@@ -128,6 +144,8 @@ class ViewControllerLogin: UIViewController {
         //(and then retrieve appropriate setting file
         var replyString = ExpandURITemplate(sendURL,
             values: ["teacher": teacherName])
+        
+        
         
         //Get from server at URL that corresponds to students teacher choice
         DataManager.getFromServer(replyString, success: { (data, error) -> Void in
@@ -173,6 +191,7 @@ class ViewControllerLogin: UIViewController {
     
                         //Open up activity that teacher requested through openChosenActivity
                         //function
+                        
                         self.openChosenActivity(activityName)
                     }
                 }
@@ -185,14 +204,20 @@ class ViewControllerLogin: UIViewController {
         println(activityName)
         
         if activityName == "PhonePush" {
-            var PhonePushVC:ViewController = ViewController()
-            self.navigationController?.pushViewController(PhonePushVC, animated: true)
+            var PPVC:ViewController = ViewController()
+            self.navigationController?.pushViewController(PPVC, animated: true)
+        } else if activityName == "DecayDice" {
+        
+            var DDVC:DecayDiceVC = DecayDiceVC()
+            self.navigationController?.pushViewController(DDVC, animated: true)
+        
         } else {
             println("Unrecognised Activity")
         }
         
     }
     
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

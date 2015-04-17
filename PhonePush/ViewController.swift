@@ -9,7 +9,7 @@
 //PHONEPUSH Main ViewController with calibration
 import UIKit
 
-protocol vcProtocol {
+protocol PPVCProtocol {
     
     func returnData()
 
@@ -22,7 +22,7 @@ func =~ (input: String, pattern: String) -> Bool {
 }
 
 
-class ViewController: UIViewController, UIDocumentInteractionControllerDelegate, vcProtocol, accelRecorderDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, UIDocumentInteractionControllerDelegate, PPVCProtocol, accelRecorderDelegate, UITextFieldDelegate {
 
     
     

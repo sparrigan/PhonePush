@@ -83,6 +83,17 @@ public struct JSON {
         self.object = object
     }
 
+    /**
+    Creates a JSON from a [JSON]
+    
+    :param: jsonArray A Swift array of JSON objects
+    
+    :returns: The created JSON
+    */
+    public init(_ jsonArray:[JSON]) {
+        self.init(jsonArray.map { $0.object })
+    }
+
     /// Private object
     private var _object: AnyObject = NSNull()
     /// Private type
@@ -132,7 +143,7 @@ public struct JSON {
 }
 
 // MARK: - SequenceType
-extension JSON: SequenceType{
+extension JSON : Swift.SequenceType {
     
     /// If `type` is `.Array` or `.Dictionary`, return `array.empty` or `dictonary.empty` otherwise return `false`.
     public var isEmpty: Bool {
@@ -247,7 +258,8 @@ extension JSON {
         get {
             var returnJSON = JSON.nullJSON
             if self.type == .Dictionary {
-                if let object_: AnyObject = self.object[key] {
+                let dictionary_ = self.object as! [String : AnyObject]
+                if let object_: AnyObject = dictionary_[key] {
                     returnJSON = JSON(object_)
                 } else {
                     returnJSON._error = NSError(domain: ErrorDomain, code: ErrorNotExist, userInfo: [NSLocalizedDescriptionKey: "Dictionary[\"\(key)\"] does not exist"])
@@ -355,7 +367,7 @@ extension JSON {
 
 // MARK: - LiteralConvertible
 
-extension JSON: StringLiteralConvertible {
+extension JSON: Swift.StringLiteralConvertible {
 	
 	public init(stringLiteral value: StringLiteralType) {
 		self.init(value)
@@ -370,28 +382,28 @@ extension JSON: StringLiteralConvertible {
 	}
 }
 
-extension JSON: IntegerLiteralConvertible {
+extension JSON: Swift.IntegerLiteralConvertible {
 
 	public init(integerLiteral value: IntegerLiteralType) {
 		self.init(value)
 	}
 }
 
-extension JSON: BooleanLiteralConvertible {
+extension JSON: Swift.BooleanLiteralConvertible {
 	
 	public init(booleanLiteral value: BooleanLiteralType) {
 		self.init(value)
 	}
 }
 
-extension JSON: FloatLiteralConvertible {
+extension JSON: Swift.FloatLiteralConvertible {
 	
 	public init(floatLiteral value: FloatLiteralType) {
 		self.init(value)
 	}
 }
 
-extension JSON: DictionaryLiteralConvertible {
+extension JSON: Swift.DictionaryLiteralConvertible {
 	
 	public init(dictionaryLiteral elements: (String, AnyObject)...) {
 		var dictionary_ = [String : AnyObject]()
@@ -402,14 +414,14 @@ extension JSON: DictionaryLiteralConvertible {
 	}
 }
 
-extension JSON: ArrayLiteralConvertible {
+extension JSON: Swift.ArrayLiteralConvertible {
 	
 	public init(arrayLiteral elements: AnyObject...) {
 		self.init(elements)
 	}
 }
 
-extension JSON: NilLiteralConvertible {
+extension JSON: Swift.NilLiteralConvertible {
 	
 	public init(nilLiteral: ()) {
 		self.init(NSNull())
@@ -418,7 +430,7 @@ extension JSON: NilLiteralConvertible {
 
 // MARK: - Raw
 
-extension JSON: RawRepresentable {
+extension JSON: Swift.RawRepresentable {
 	
 	public init?(rawValue: AnyObject) {
 		if JSON(rawValue).type == .Unknown {
@@ -460,7 +472,7 @@ extension JSON: RawRepresentable {
 
 // MARK: - Printable, DebugPrintable
 
-extension JSON: Printable, DebugPrintable {
+extension JSON: Swift.Printable, Swift.DebugPrintable {
     
     public var description: String {
         if let string = self.rawString(options:.PrettyPrinted) {
@@ -569,7 +581,7 @@ extension JSON {
 
 // MARK: - Bool
 
-extension JSON: BooleanType {
+extension JSON: Swift.BooleanType {
     
     //Optional bool
     public var bool: Bool? {
@@ -1002,7 +1014,7 @@ extension JSON {
 }
 
 //MARK: - Comparable
-extension JSON: Comparable {}
+extension JSON: Swift.Comparable {}
 
 public func ==(lhs: JSON, rhs: JSON) -> Bool {
     
@@ -1095,7 +1107,7 @@ private let falseObjCType = String.fromCString(falseNumber.objCType)
 
 // MARK: - NSNumber: Comparable
 
-extension NSNumber: Comparable {
+extension NSNumber: Swift.Comparable {
     var isBool:Bool {
         get {
             let objCType = String.fromCString(self.objCType)

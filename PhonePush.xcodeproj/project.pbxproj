@@ -34,7 +34,7 @@
 		CED1D0BA1AE0AA0200B56442 /* eOrbits.atlas in Resources */ = {isa = PBXBuildFile; fileRef = CED1D0B91AE0AA0200B56442 /* eOrbits.atlas */; };
 		CED1D0BC1AE0AA1000B56442 /* nucleus.atlas in Resources */ = {isa = PBXBuildFile; fileRef = CED1D0BB1AE0AA1000B56442 /* nucleus.atlas */; };
 		CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE25B1AD769900061F500 /* graphSort.swift */; };
-		CEE8CE561AE191FA0089F5E1 /* deciderPP.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */; };
+		CEE8CE561AE191FA0089F5E1 /* nextQstn.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE551AE191FA0089F5E1 /* nextQstn.swift */; };
 		CEE8CE581AE1AB400089F5E1 /* PPintroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */; };
 		CEE8CE611AE341F20089F5E1 /* testVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE601AE341F10089F5E1 /* testVC.swift */; };
 		CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */; };
@@ -114,7 +114,7 @@
 		CED1D0B91AE0AA0200B56442 /* eOrbits.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = eOrbits.atlas; sourceTree = "<group>"; };
 		CED1D0BB1AE0AA1000B56442 /* nucleus.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = nucleus.atlas; sourceTree = "<group>"; };
 		CEDDE25B1AD769900061F500 /* graphSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphSort.swift; sourceTree = "<group>"; };
-		CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deciderPP.swift; sourceTree = "<group>"; };
+		CEE8CE551AE191FA0089F5E1 /* nextQstn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = nextQstn.swift; sourceTree = "<group>"; };
 		CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PPintroVC.swift; sourceTree = "<group>"; };
 		CEE8CE601AE341F10089F5E1 /* testVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testVC.swift; sourceTree = "<group>"; };
 		CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		CED1D0AA1AE0A4CE00B56442 /* Push */ = {
 			isa = PBXGroup;
 			children = (
-				CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */,
+				CEE8CE551AE191FA0089F5E1 /* nextQstn.swift */,
 				CE463E361AADEE3C00427689 /* PPcalibVC.swift */,
 				CEE8CE601AE341F10089F5E1 /* testVC.swift */,
 				CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */,
@@ -513,7 +513,7 @@
 				CEA6C37E1AE0BAE700B92A3C /* SwiftyJSON.swift in Sources */,
 				CEE8CE611AE341F20089F5E1 /* testVC.swift in Sources */,
 				CED1D0B01AE0A9C000B56442 /* DecayDiceVC.swift in Sources */,
-				CEE8CE561AE191FA0089F5E1 /* deciderPP.swift in Sources */,
+				CEE8CE561AE191FA0089F5E1 /* nextQstn.swift in Sources */,
 				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

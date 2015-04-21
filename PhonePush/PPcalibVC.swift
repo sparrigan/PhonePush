@@ -173,8 +173,6 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     
     func openQstnWithData(pushData: [String: Any]) {
         
-
-        
         //Make this all depend on index value
         
         //Get what VCs are currently in stack
@@ -188,7 +186,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
         VCstack.append(nextVC!)
         //Animate transition from old stack to newly formed one
         navigationController!.setViewControllers(VCstack, animated: true)
-            
+        
     }
     
     

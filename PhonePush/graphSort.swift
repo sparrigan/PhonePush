@@ -5,6 +5,7 @@
 //  Created by Nicholas Harrigan on 09/04/2015.
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
+//Question that asks students to determine which graph is which
 
 import UIKit
 
@@ -26,7 +27,7 @@ class graphSort: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     convenience init(aDbl: [Double], vDbl: [Double], pDbl: [Double], tDbl: [Double]) {
         
         self.init()
-        
+    
         self.aDbl = aDbl
         self.vDbl = vDbl
         self.pDbl = pDbl

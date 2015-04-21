@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
 
+//Class that records data from accelerometer
+
 //TODO:
 
 //ACCELERATION READINGS DON'T START AT ZERO.

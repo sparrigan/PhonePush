@@ -8,8 +8,10 @@
 
 //import Foundation
 import UIKit
-//import SwiftyJSON
 
+
+
+//ViewController that manages logging in when app first starts
 class ViewControllerLogin: UIViewController {
     
     let PPButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
@@ -36,31 +38,25 @@ class ViewControllerLogin: UIViewController {
         //Call funtion that prompts user to select teacher (note recursively calls itself on
         //retrys)
         
-        teacherSelection()
+        
+        //UNCOMMENT THIS FOR A REAL RUN
+        //teacherSelection()
         
         
-        //Button to start an activity for debugging
-        /*
-        PPButton.frame = CGRectMake((screenSize.width-500)/2, 450, 500, 250)
-        PPButton.backgroundColor = UIColor(red: 151.0/255.0, green: 241.0/255.0, blue: 92.0/255.0, alpha: 1.0)
-        PPButton.setTitle("Start", forState: UIControlState.Normal)
-        PPButton.layer.cornerRadius = 20
-        PPButton.layer.borderWidth = 5
-        PPButton.layer.borderColor = UIColor.blackColor().CGColor
-        PPButton.titleLabel!.font =  UIFont(name: "Arial", size: 60)
-        PPButton.addTarget(self, action: "PPStart:", forControlEvents: .TouchUpInside)
-        self.view.addSubview(PPButton)
-        */
+        //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
+        self.openChosenActivity("PhonePush")
+        
     }
     
     
+    //Gets list of teachers and presents it to user in alert, registering which one they click
     func teacherSelection() {
         //Get list of teachers from server, passing completionhandler that runs on main queue
         DataManager.getFromServer(teachersURL, success: { (data, error) -> Void in
             NSOperationQueue.mainQueue().addOperationWithBlock() {
                 //What to do (on main queue) if get data...
-                //First check whether we have an error:
                 
+                //First check whether we have an error:
                 println("Got here")
                 if let err = error {
                     //If we have an error (error optional is not nil) Then present
@@ -108,7 +104,6 @@ class ViewControllerLogin: UIViewController {
                             }
                             alertController.addAction(tempbutton)
                         }
-                        
                         //Add a retry button after all teacher options
                         var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
                         //To retry fetching teachers recursively call this function again
@@ -131,7 +126,6 @@ class ViewControllerLogin: UIViewController {
                         self.presentViewController(alertController, animated: true) {
                         }
 
-                        
                     }
                 }
             }
@@ -139,13 +133,13 @@ class ViewControllerLogin: UIViewController {
     }
     
     
+    //Opens http connection at URL that returns chosen teacher to server and gets back
+    //activity that the teacher has chosen
     func returnTeacher(teacherName: String) {
         //Template URL to visit in order to notify server of teacher choice 
         //(and then retrieve appropriate setting file
         var replyString = ExpandURITemplate(sendURL,
             values: ["teacher": teacherName])
-        
-        
         
         //Get from server at URL that corresponds to students teacher choice
         DataManager.getFromServer(replyString, success: { (data, error) -> Void in
@@ -200,11 +194,12 @@ class ViewControllerLogin: UIViewController {
     }
     
     
+    //Opens a chosen activity
     func openChosenActivity(activityName:String) {
         println(activityName)
         
         if activityName == "PhonePush" {
-            var PPVC:ViewController = ViewController()
+            var PPVC:PPintroVC = PPintroVC(qstnsArray: [""])
             self.navigationController?.pushViewController(PPVC, animated: true)
         } else if activityName == "DecayDice" {
         
@@ -217,24 +212,12 @@ class ViewControllerLogin: UIViewController {
         
     }
     
-
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     override func viewDidAppear(animated: Bool) {
-        
-        
     }
-    
-    /*
-    func PPStart(sender:UIButton) {
-        var PhonePushVC:ViewController = ViewController()
-        
-        self.navigationController?.pushViewController(PhonePushVC, animated: true)
-    }
-    */
     
 }

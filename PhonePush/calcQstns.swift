@@ -30,24 +30,29 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     //Tolerance for a right answer
     var tolerance:Double = 0.0
     var qstntype: Int = 0
+    var currentQstn: Int = 0
 
     init() {
 
         super.init(nibName: nil, bundle: nil)
     }
     
-    convenience init(velinit: Double, constAccel: Double, timeConstAccel: Double, distConstAccel: Double, tolerance: Double, qstntype: Int) {
+
+    convenience init(pushData: [String: Any], currentQstn: Int) {
         
         self.init()
-
-        self.velinit = velinit
-        self.constAccel = constAccel
-        self.timeConstAccel = timeConstAccel
-        self.distConstAccel = distConstAccel
-        self.tolerance = tolerance
-        self.qstntype = qstntype
+       
+        //Need to check for all these values properly
+        self.velinit = pushData["velInit"] as! Double
+        self.constAccel = pushData["constAccel"] as! Double
+        self.timeConstAccel = pushData["timeConstAccel"] as! Double
+        self.distConstAccel = pushData["distConstAccel"] as! Double
+        self.tolerance = 0.2
+        self.qstntype = 0
+        self.currentQstn = currentQstn
         
         self.view.backgroundColor = UIColor.whiteColor()
+
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -62,7 +67,7 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
         
         
-         rightWrongText.backgroundColor = UIColor.clearColor()
+        rightWrongText.backgroundColor = UIColor.clearColor()
         
         calcAccelQstn(qstntype)
         

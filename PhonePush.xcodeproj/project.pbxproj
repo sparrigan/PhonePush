@@ -14,7 +14,7 @@
 		CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090FA1ADECB1C00D237B3 /* DataManager.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
 		CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E341AADEE3C00427689 /* AppDelegate.swift */; };
-		CE463E371AADEE3C00427689 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E361AADEE3C00427689 /* ViewController.swift */; };
+		CE463E371AADEE3C00427689 /* PPcalibVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E361AADEE3C00427689 /* PPcalibVC.swift */; };
 		CE463E3A1AADEE3C00427689 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE463E381AADEE3C00427689 /* Main.storyboard */; };
 		CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3B1AADEE3C00427689 /* Images.xcassets */; };
 		CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */; };
@@ -34,6 +34,9 @@
 		CED1D0BA1AE0AA0200B56442 /* eOrbits.atlas in Resources */ = {isa = PBXBuildFile; fileRef = CED1D0B91AE0AA0200B56442 /* eOrbits.atlas */; };
 		CED1D0BC1AE0AA1000B56442 /* nucleus.atlas in Resources */ = {isa = PBXBuildFile; fileRef = CED1D0BB1AE0AA1000B56442 /* nucleus.atlas */; };
 		CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE25B1AD769900061F500 /* graphSort.swift */; };
+		CEE8CE561AE191FA0089F5E1 /* deciderPP.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */; };
+		CEE8CE581AE1AB400089F5E1 /* PPintroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */; };
+		CEE8CE611AE341F20089F5E1 /* testVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE601AE341F10089F5E1 /* testVC.swift */; };
 		CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +89,7 @@
 		CE463E2F1AADEE3C00427689 /* PhonePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhonePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE463E331AADEE3C00427689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE463E341AADEE3C00427689 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CE463E361AADEE3C00427689 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CE463E361AADEE3C00427689 /* PPcalibVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPcalibVC.swift; sourceTree = "<group>"; };
 		CE463E391AADEE3C00427689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE463E3B1AADEE3C00427689 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		CE463E3E1AADEE3C00427689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -111,6 +114,9 @@
 		CED1D0B91AE0AA0200B56442 /* eOrbits.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = eOrbits.atlas; sourceTree = "<group>"; };
 		CED1D0BB1AE0AA1000B56442 /* nucleus.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = nucleus.atlas; sourceTree = "<group>"; };
 		CEDDE25B1AD769900061F500 /* graphSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphSort.swift; sourceTree = "<group>"; };
+		CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deciderPP.swift; sourceTree = "<group>"; };
+		CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PPintroVC.swift; sourceTree = "<group>"; };
+		CEE8CE601AE341F10089F5E1 /* testVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testVC.swift; sourceTree = "<group>"; };
 		CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
 		E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -240,7 +246,10 @@
 		CED1D0AA1AE0A4CE00B56442 /* Push */ = {
 			isa = PBXGroup;
 			children = (
-				CE463E361AADEE3C00427689 /* ViewController.swift */,
+				CEE8CE551AE191FA0089F5E1 /* deciderPP.swift */,
+				CE463E361AADEE3C00427689 /* PPcalibVC.swift */,
+				CEE8CE601AE341F10089F5E1 /* testVC.swift */,
+				CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */,
 				CED9F9781AE1736200122C34 /* Qstns */,
 				CE0286841AAF9D4F005C0E45 /* Integrator.swift */,
 				CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */,
@@ -489,19 +498,22 @@
 				CED1D0B21AE0A9CC00B56442 /* dataViewController.swift in Sources */,
 				CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */,
 				CED1D0B61AE0A9DA00B56442 /* atomNode.swift in Sources */,
-				CE463E371AADEE3C00427689 /* ViewController.swift in Sources */,
+				CE463E371AADEE3C00427689 /* PPcalibVC.swift in Sources */,
 				CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */,
 				CEDDE25C1AD769900061F500 /* graphSort.swift in Sources */,
 				CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */,
 				CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */,
 				CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */,
+				CEE8CE581AE1AB400089F5E1 /* PPintroVC.swift in Sources */,
 				CED1D0B51AE0A9DA00B56442 /* AtomScene.swift in Sources */,
 				CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */,
 				CEA3614C1ADF3A5300EC266A /* URITemplate.swift in Sources */,
 				CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */,
 				CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */,
 				CEA6C37E1AE0BAE700B92A3C /* SwiftyJSON.swift in Sources */,
+				CEE8CE611AE341F20089F5E1 /* testVC.swift in Sources */,
 				CED1D0B01AE0A9C000B56442 /* DecayDiceVC.swift in Sources */,
+				CEE8CE561AE191FA0089F5E1 /* deciderPP.swift in Sources */,
 				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

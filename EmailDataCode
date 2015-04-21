@@ -1,0 +1,93 @@
+BELOW IS CODE THAT IS USED TO SEND DATA THROUGH EMAIL (INCLUDING FUNCTIONS FOR BUTTONS TO PRESS TO SEND EACH TYPE OF DATA
+
+            /*
+            //STUFF FOR PRINTING OUT DATA
+            var vString:String = "\n".join(dblToStringRows(tDbl,BB: vDbl))
+            //ExportToCSVVEL(self, data: vString)
+            //Now concatenate into string
+            var pString:String = "\n".join(dblToStringRows(tDbl,BB: pDbl))
+            //ExportToCSVVEL(self, data: pString)
+            */
+            
+            
+            /*
+            //add button for exporting accel data
+            sendAccelButton.frame = CGRectMake(50, 225, 250, 125)
+            sendAccelButton.backgroundColor = UIColor(red: 245.0/255.0, green: 121.0/255.0, blue: 121.0/255.0, alpha: 1.0)
+            sendAccelButton.setTitle("Send accel", forState: UIControlState.Normal)
+            sendAccelButton.layer.cornerRadius = 20
+            sendAccelButton.layer.borderWidth = 5
+            sendAccelButton.layer.borderColor = UIColor.blackColor().CGColor
+            sendAccelButton.titleLabel!.font =  UIFont(name: "Arial", size: 20)
+            sendAccelButton.addTarget(self, action: "sendAccel:", forControlEvents: .TouchUpInside)
+            self.view.addSubview(sendAccelButton)
+            //add button for exporting velocity data
+            sendVelButton.frame = CGRectMake(350, 225, 250, 125)
+            sendVelButton.backgroundColor = UIColor(red: 245.0/255.0, green: 121.0/255.0, blue: 121.0/255.0, alpha: 1.0)
+            sendVelButton.setTitle("Send velocity", forState: UIControlState.Normal)
+            sendVelButton.layer.cornerRadius = 20
+            sendVelButton.layer.borderWidth = 5
+            sendVelButton.layer.borderColor = UIColor.blackColor().CGColor
+            sendVelButton.titleLabel!.font =  UIFont(name: "Arial", size: 20)
+            sendVelButton.addTarget(self, action: "sendVel:", forControlEvents: .TouchUpInside)
+            self.view.addSubview(sendVelButton)
+            //add button for exporting position data
+            sendPosButton.frame = CGRectMake(650, 225, 250, 125)
+            sendPosButton.backgroundColor = UIColor(red: 245.0/255.0, green: 121.0/255.0, blue: 121.0/255.0, alpha: 1.0)
+            sendPosButton.setTitle("Send position", forState: UIControlState.Normal)
+            sendPosButton.layer.cornerRadius = 20
+            sendPosButton.layer.borderWidth = 5
+            sendPosButton.layer.borderColor = UIColor.blackColor().CGColor
+            sendPosButton.titleLabel!.font =  UIFont(name: "Arial", size: 20)
+            sendPosButton.addTarget(self, action: "sendPos:", forControlEvents: .TouchUpInside)
+            self.view.addSubview(sendPosButton)
+            */
+            
+            /*
+            //Write down values of init vel, time and distance on screen
+            var resultsText:UITextView = UITextView(frame: CGRect(x: 50, y: 50, width: 90.00, height: 10.00));
+            resultsText.font = UIFont(name: "Arial", size: 60)
+            resultsText.editable = false
+            if (tDbl.count>0 && pDbl.count>0 && vDbl.count>0) {
+                resultsText.text = "t = \(round(100*timeConstAccel)/100), v0 = \(round(100*velinit)/100), s = \(round(100*distConstAccel)/100), a = \(round(100*constAccel)/100)"
+                self.view.addSubview(resultsText)
+                fitToText(resultsText)
+            } else {
+                resultsText.text = "!!! Data collection did not start !!!"
+                self.view.addSubview(resultsText)
+                fitToText(resultsText)
+            }
+            */
+
+
+
+sendAccel(sender:UIButton) {
+        if (aDbl.count>0 && tDbl.count>0) {
+            //Join up data into table structure suitable for CSV
+            var alladata = "\n".join(dblToStringRows(tDbl,BB: aDbl))
+            //Export data as CSV to email etc...
+            //ExportToCSV(self, aDbl: finalaccel.aDbl, tDbl: finalaccel.tDbl)
+            ExportToCSVVEL(self, data: alladata)
+        }
+    }
+    
+    func sendVel(sender:UIButton) {
+        if (vDbl.count>0 && tDbl.count>0) {
+            //Join up data into table structure suitable for CSV
+            var allvdata = "\n".join(dblToStringRows(tDbl,BB: vDbl))
+            //Export data as CSV to email etc...
+            //ExportToCSV(self, aDbl: finalaccel.aDbl, tDbl: finalaccel.tDbl)
+            ExportToCSVVEL(self, data: allvdata)
+        }
+    }
+    
+    func sendPos(sender:UIButton) {
+        if (pDbl.count>0 && tDbl.count>0) {
+            //Join up data into table structure suitable for CSV
+            var allpdata = "\n".join(dblToStringRows(tDbl,BB: pDbl))
+            //Export data as CSV to email etc...
+            //ExportToCSV(self, aDbl: finalaccel.aDbl, tDbl: finalaccel.tDbl)
+            ExportToCSVVEL(self, data: allpdata)
+        }
+    }
+    */

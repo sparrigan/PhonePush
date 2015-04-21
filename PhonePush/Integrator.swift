@@ -4,7 +4,8 @@
 //
 //  Created by Nicholas Harrigan on 21/01/2015.
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
-//
+
+//Class that integrates accelerometer data to get velocity and position data
 
 import Foundation
 

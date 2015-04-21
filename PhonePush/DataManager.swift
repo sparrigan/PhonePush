@@ -1,46 +1,37 @@
 //
 //  DataManager.swift
-//  TopApps
 //
-//  Created by Dani Arnaout on 9/2/14.
-//  Edited by Eric Cerney on 9/27/14.
-//  Copyright (c) 2014 Ray Wenderlich All rights reserved.
-//
+//Class that deals with GET and POST on http
 
 import Foundation
 
-
-let TopAppURL = "http://tinyteacher.ngrok.com/teachers"
-
-
 class DataManager {
     
-    
+    //Method for getting data from server
     class func getFromServer(callURL: String, success: ((gotData: NSData!, error: NSError?) -> Void)) {
-        
+        //Call this method, passing it the completion handler that the call was made with
         loadDataFromURL(NSURL(string: callURL)!, completion:{(data, error) -> Void in
-            
                 success(gotData: data, error: error)
-            
         })
     }
     
-    
     class func loadDataFromURL(url: NSURL, completion:(data: NSData?, error: NSError?) -> Void) {
-        
         var session = NSURLSession.sharedSession()
         
         // Use NSURLSession to get data from an NSURL
+        //Deal with possibility of errors before running actual completionhandler we were
+        //passed
         let loadDataTask = session.dataTaskWithURL(url, completionHandler: { (data: NSData!, response: NSURLResponse!, error: NSError?) -> Void in
+            //First check whether we got an error from swift
             if let responseError = error {
-                println("HERE!!! response error")
                 completion(data: nil, error: responseError)
+            //If no error from swift, then check for response errors
+            //Lump all non-200 returns together as unknown http status
             } else if let httpResponse = response as? NSHTTPURLResponse {
                 if httpResponse.statusCode != 200 {
-                    println("HERE!!! NON 200 error")
-
                     var statusError = NSError(domain:"com.tinyteacher", code:httpResponse.statusCode, userInfo:[NSLocalizedDescriptionKey : "HTTP status code has unexpected value."])
                     completion(data: nil, error: statusError)
+                //If no errors whatsoever then pass data to completionhandler we were given
                 } else {
                     completion(data: data, error: nil)
                 }
@@ -51,7 +42,8 @@ class DataManager {
     }
     
     
-    
+    //Method for posting to server (don't use this yet) - needs to be passed a 
+    //completionhandler as well
     class func postToServer(params : Dictionary<String, String>, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
@@ -96,6 +88,5 @@ class DataManager {
         task.resume()
         
     }
-    
     
 }

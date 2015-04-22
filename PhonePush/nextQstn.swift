@@ -46,6 +46,7 @@ public class nextQstn {
         if let pushData = pushData {
             //Check that we haven't reached the end of the question array
             if qstnIndex < qstnString.count {
+                
                 if qstnString[qstnIndex] == "calcQstn" {
                     //Increment index for next question
                     qstnIndex++
@@ -55,11 +56,27 @@ public class nextQstn {
                     qstnIndex++
                     nextVC = graphQstns(pushData: pushData)
                 
-                    //STICK IN ONE HERE THAT CALLS PUSH AGAIN IF NEEDED (CHECKING WHETHER
-                    //PPCALIBVC IS AT THE TOP OF THE STACK TO SEE WHETHER ITS ALREADY BEEN DONE
+                    //THIS IS A TEST-CASE JUST FOR SHOWING HOW TO DEAL WITH A QUESTION
+                    //THAT WANTS USER TO DO ANOTHER PHONE PUSH BEFORE CONTINUING
+                } else if qstnString[qstnIndex] == "testCase" {
+                    //This is just a testcase for what to do if question needs user to give
+                    //another push
+                    //Check whether top of stack is VC2 before changing stack
+                    var tempStack = navi.viewControllers
+                    if let testForCalib: AnyObject = tempStack?[tempStack.count-1]  {
+                        if let testForCalib = testForCalib as? PPcalibVC {
+                            println("Phone was just pushed")
+                            //MAKE NEXTVC BE EQUAL TO THE ACTUAL QUESTION VC HERE
+                        } else {
+                            println("Need to get data from another push before running this question. Running calib VC...")
+                            nextVC = PPcalibVC()
+                        }
+                    }
+                    
                 } else {
                     println("Unknown entry!")
                 }
+                
             } else {
                 println("End of questions!")
             }

@@ -56,7 +56,8 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
         
         super.init(nibName: nil, bundle: nil)
     }
-    
+    //DON'T NEED THIS CONVENIENCE INIT ANYMORE, AS DEAL WITH
+    //INCREMENTING QUESTION NUMBER IN NEXTQSTN CLASS
     convenience init(cQstn: Int) {
         self.init()
         currentQstn = cQstn

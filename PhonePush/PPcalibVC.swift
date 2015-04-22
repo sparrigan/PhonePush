@@ -162,15 +162,19 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
             
             var pushData: [String: Any] = ["aRaw": aDbl, "vRaw": vDbl, "pRaw":pDbl, "tRaw":tDbl, "indexConstAccel":indexConstAccel, "constAccel":constAccel, "timeConstAccel":timeConstAccel, "distConstAccel":distConstAccel, "velInit":velinit]
             
-            //Call function that sends data to appropriate question
+            //Add new accelerometer data to class that sorts through questions passing 
+            //data between them
+            nQstn.passAccelData(pushData)
    
-            openQstnWithData(pushData)
+            //Open up first question by calling class that sorts through question
+            nQstn.goToNext(self.navigationController!)
           
         }
 
     }
     
-    
+    //OLD FUNCTION FOR OPENING QUESTIONS AFTER CALIBRATION DIRECTLY
+    /*
     func openQstnWithData(pushData: [String: Any]) {
         
         //Make this all depend on index value
@@ -188,7 +192,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
         navigationController!.setViewControllers(VCstack, animated: true)
         
     }
-    
+    */
     
     func getCalibration(acC: CGPoint, aCount: Double) {
         //For debugging, AccelRecorder calls this function with calib data

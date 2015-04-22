@@ -31,15 +31,17 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         super.init(nibName: nil, bundle: nil)
     }
     
-    convenience init(timeArray:[Double], accelArray:[Double], velArray: [Double], posArray:[Double], qstntype: Int) {
+    convenience init(pushData: [String: Any]) {
         
         self.init()
    
-        self.timeArray = timeArray
-        self.accelArray = accelArray
-        self.velArray = velArray
-        self.posArray = posArray
-        self.qstntype = qstntype
+        self.timeArray = pushData["tRaw"] as! [Double]
+        self.accelArray = pushData["aRaw"] as! [Double]
+        self.velArray = pushData["vRaw"] as! [Double]
+        self.posArray = pushData["pRaw"] as! [Double]
+        
+        //Set whether to ask for accel or initial velocity
+        self.qstntype = 0
         
         self.view.backgroundColor = UIColor.whiteColor()
     }
@@ -175,7 +177,7 @@ class graphQstns: UIViewController, UITextFieldDelegate {
             self.popViewController = PopUpViewControllerSwift()
             self.popViewController.title = "Correct :)"
             self.popViewController.showInView(self.view, withImage: imageCorrect, withMessage: "You got all three correct :)", animated: true, correct: true)
-            var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
+            var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUpCorrect"), userInfo: nil, repeats: false)
             
         } else {
             
@@ -218,10 +220,14 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     
     func closePopUp() {
         popViewController.closePopup()
+        
     }
     
+    func closePopUpCorrect() {
+        popViewController.closePopup()
+        nQstn.goToNext(self.navigationController!)
+        
+    }
     
-        
-        
 }
 

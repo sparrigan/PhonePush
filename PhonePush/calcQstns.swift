@@ -30,7 +30,6 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     //Tolerance for a right answer
     var tolerance:Double = 0.0
     var qstntype: Int = 0
-    var currentQstn: Int = 0
 
     init() {
 
@@ -38,7 +37,7 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
     }
     
 
-    convenience init(pushData: [String: Any], currentQstn: Int) {
+    convenience init(pushData: [String: Any]) {
         
         self.init()
        
@@ -49,7 +48,6 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
         self.distConstAccel = pushData["distConstAccel"] as! Double
         self.tolerance = 0.2
         self.qstntype = 0
-        self.currentQstn = currentQstn
         
         self.view.backgroundColor = UIColor.whiteColor()
 
@@ -66,10 +64,12 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
         
-        
         rightWrongText.backgroundColor = UIColor.clearColor()
         
         calcAccelQstn(qstntype)
+        
+        //Correct answer for debugging:
+        println("Correct constant acceleration answer is: \(constAccel)")
         
     }
     
@@ -201,6 +201,10 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
         answerPreText.removeFromSuperview()
         answerPostText.removeFromSuperview()
         submitButton.removeFromSuperview()
+        //Probs don't need all the above shit now
+        
+        nQstn.goToNext(self.navigationController!)
+        
     }
     
     func keyboardWillShow(sender: NSNotification) {

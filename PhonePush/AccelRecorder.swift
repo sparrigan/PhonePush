@@ -147,12 +147,7 @@ class accelRecorder: NSObject {
                     //!!!!
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
+   
                     
                     
                     

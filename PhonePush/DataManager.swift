@@ -8,10 +8,11 @@ import Foundation
 class DataManager {
     
     //Method for getting data from server
-    class func getFromServer(callURL: String, success: ((gotData: NSData!, error: NSError?) -> Void)) {
+    class func getFromServer(callURL: String, success: ((gotData: NSData?, error: NSError?) -> Void)) {
         //Call this method, passing it the completion handler that the call was made with
         loadDataFromURL(NSURL(string: callURL)!, completion:{(data, error) -> Void in
-                success(gotData: data, error: error)
+                    success(gotData: data, error: error)
+            
         })
     }
     
@@ -21,7 +22,7 @@ class DataManager {
         // Use NSURLSession to get data from an NSURL
         //Deal with possibility of errors before running actual completionhandler we were
         //passed
-        let loadDataTask = session.dataTaskWithURL(url, completionHandler: { (data: NSData!, response: NSURLResponse!, error: NSError?) -> Void in
+        let loadDataTask = session.dataTaskWithURL(url, completionHandler: { (data: NSData?, response: NSURLResponse!, error: NSError?) -> Void in
             //First check whether we got an error from swift
             if let responseError = error {
                 completion(data: nil, error: responseError)

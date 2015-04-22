@@ -21,7 +21,6 @@
 		CE463E4B1AADEE3C00427689 /* PhonePushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */; };
 		CE4D1C571ADA03EC001E6D53 /* tickbox.png in Resources */ = {isa = PBXBuildFile; fileRef = CE4D1C561ADA03EC001E6D53 /* tickbox.png */; };
 		CE4D1C591ADA092E001E6D53 /* crossBox.png in Resources */ = {isa = PBXBuildFile; fileRef = CE4D1C581ADA092E001E6D53 /* crossBox.png */; };
-		CE5C41A41AE04FCE0033647B /* mortarboard.png in Resources */ = {isa = PBXBuildFile; fileRef = CE5C41A31AE04FCE0033647B /* mortarboard.png */; };
 		CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296CE1AD97D69007117AD /* graphPlotter.swift */; };
 		CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296D01AD97DE7007117AD /* graphQstns.swift */; };
 		CEA3614C1ADF3A5300EC266A /* URITemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA3614B1ADF3A5300EC266A /* URITemplate.swift */; };
@@ -38,6 +37,7 @@
 		CEE8CE581AE1AB400089F5E1 /* PPintroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */; };
 		CEE8CE611AE341F20089F5E1 /* testVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CE601AE341F10089F5E1 /* testVC.swift */; };
 		CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */; };
+		CEFC1B9B1AE82B8100DAAFE7 /* mortarboard.png in Resources */ = {isa = PBXBuildFile; fileRef = CEFC1B9A1AE82B8100DAAFE7 /* mortarboard.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,7 +98,6 @@
 		CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonePushTests.swift; sourceTree = "<group>"; };
 		CE4D1C561ADA03EC001E6D53 /* tickbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tickbox.png; sourceTree = "<group>"; };
 		CE4D1C581ADA092E001E6D53 /* crossBox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crossBox.png; sourceTree = "<group>"; };
-		CE5C41A31AE04FCE0033647B /* mortarboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mortarboard.png; sourceTree = "<group>"; };
 		CE9965E51ADEE06700DECE7B /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../../Library/Developer/Xcode/DerivedData/PhonePush-eikiouqgwfpbnzehtftbfaieaedu/Build/Products/Debug-iphoneos/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		CE9966051ADEE2C600DECE7B /* SwiftyJSON.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftyJSON.xcodeproj; path = "SwiftyJSON-master/SwiftyJSON.xcodeproj"; sourceTree = "<group>"; };
 		CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhonePush-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -118,6 +117,7 @@
 		CEE8CE571AE1AB400089F5E1 /* PPintroVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PPintroVC.swift; sourceTree = "<group>"; };
 		CEE8CE601AE341F10089F5E1 /* testVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testVC.swift; sourceTree = "<group>"; };
 		CEEE24AE1AD9D6B4002E5F00 /* popUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
+		CEFC1B9A1AE82B8100DAAFE7 /* mortarboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mortarboard.png; sourceTree = "<group>"; };
 		E3C61D2D9817D5F1E1A04AFF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -271,7 +271,7 @@
 			children = (
 				CE4090FA1ADECB1C00D237B3 /* DataManager.swift */,
 				CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */,
-				CE5C41A31AE04FCE0033647B /* mortarboard.png */,
+				CEFC1B9A1AE82B8100DAAFE7 /* mortarboard.png */,
 			);
 			name = LoginPage;
 			sourceTree = "<group>";
@@ -439,9 +439,9 @@
 				CED1D0BA1AE0AA0200B56442 /* eOrbits.atlas in Resources */,
 				CE4D1C591ADA092E001E6D53 /* crossBox.png in Resources */,
 				CED1D0BC1AE0AA1000B56442 /* nucleus.atlas in Resources */,
+				CEFC1B9B1AE82B8100DAAFE7 /* mortarboard.png in Resources */,
 				CE463E3A1AADEE3C00427689 /* Main.storyboard in Resources */,
 				CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */,
-				CE5C41A41AE04FCE0033647B /* mortarboard.png in Resources */,
 				CED1D0B81AE0A9EC00B56442 /* electronbg.png in Resources */,
 				CE4D1C571ADA03EC001E6D53 /* tickbox.png in Resources */,
 				CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */,

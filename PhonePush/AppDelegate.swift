@@ -16,34 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    
-//    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
 
-        // Override point for customization after application launch.
-        
+        //Create window and make rootviewcontroller the navigation controller we will use.
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        //let rootViewController: ViewController = ViewController()
+        //Set the rootviewcontroller of the navigationcontroller to the login screen
         let rootViewController: ViewControllerLogin = ViewControllerLogin()
         let navigationController: UINavigationController = UINavigationController(rootViewController: rootViewController)
+        //Set the rootviewcontroller of the *window* to be the navigationcontroller
         window!.rootViewController = navigationController
         window!.makeKeyAndVisible()
         navigationController.setNavigationBarHidden(true, animated: false)
         
         return true
-        
-        /*
-        //Instantiate the first viewcontroller
-        let vc = ViewController()
-        //Create navigation controller with viewcontroller as root
-        var navController: UINavigationController = UINavigationController(rootViewController: vc)
-        //Hide the navigation bar in the navigation controller
-        navController.navigationBarHidden = true
-        //Set navcontroller as root view in window (will then deal with that from now on)
-        self.window!.rootViewController = navController
-        
-        return true
-        */
-        
     }
 
 

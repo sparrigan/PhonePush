@@ -9,8 +9,6 @@
 //import Foundation
 import UIKit
 
-
-
 //ViewController that manages logging in when app first starts
 class ViewControllerLogin: UIViewController {
     
@@ -28,24 +26,25 @@ class ViewControllerLogin: UIViewController {
         
         //Holder logo image whilst student tries to get and select teacher data in order to push activity
         let imageName = "mortarboard.png"
-        let image = UIImage(named: imageName)
-        let imageView = UIImageView(image: image!)
-        var imageScaleFactor = screenSize.width/imageView.bounds.width
-        imageView.frame = CGRect(x: (screenSize.width-imageView.bounds.width*imageScaleFactor)/2, y: (screenSize.height-imageView.bounds.height*imageScaleFactor)/2, width: imageView.bounds.width*imageScaleFactor, height: imageView.bounds.height*imageScaleFactor)
-        view.addSubview(imageView)
-        
+        //Use conditional to check we can find the mortarboard image
+        var image:UIImage?
+        if let image = UIImage(named: imageName) {
+            let imageView = UIImageView(image: image)
+            var imageScaleFactor = screenSize.width/imageView.bounds.width
+            imageView.frame = CGRect(x: (screenSize.width-imageView.bounds.width*imageScaleFactor)/2, y: (screenSize.height-imageView.bounds.height*imageScaleFactor)/2, width: imageView.bounds.width*imageScaleFactor, height: imageView.bounds.height*imageScaleFactor)
+            view.addSubview(imageView)
+        } else {
+            //Cannot find mortorboard loading image, so leave background empty!
+            self.view.backgroundColor = UIColor.whiteColor()
+        }
         
         //Call funtion that prompts user to select teacher (note recursively calls itself on
         //retrys)
-        
-        
         //UNCOMMENT THIS FOR A REAL RUN
-        //teacherSelection()
-        
+        teacherSelection()
         
         //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
-        self.openChosenActivity("PhonePush")
-        
+        //self.openChosenActivity("PhonePush")
     }
     
     
@@ -57,7 +56,6 @@ class ViewControllerLogin: UIViewController {
                 //What to do (on main queue) if get data...
                 
                 //First check whether we have an error:
-                println("Got here")
                 if let err = error {
                     //If we have an error (error optional is not nil) Then present
                     //alert with options for more info or to retry
@@ -88,36 +86,53 @@ class ViewControllerLogin: UIViewController {
                     //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
                 } else {
                     
-                    //Extract data from Json into object using swiftyJSON
-                    let tempList = JSON(data: data)
-                    //Unwrap JSON to get at array of teacher names - NEED TO CATCH THIS
-                    if let teacherList = tempList["teachers"].array {
-                        //Initialise Alertcontroller for presenting teacher options to user
-                        let alertController = UIAlertController(title: "Choose your teacher", message: "Click retry to reload list", preferredStyle: .Alert)
-                        //Loop through teachers names and add them as options in the alert
-                        for ii in teacherList {
-                            let tempbutton = UIAlertAction(title: "\(ii)", style: .Default)
-                                {(action) in
-                                    //Completion handler for what to do if teacher is clicked
-                                    //Run returnTeacher function that sends back choice to server
-                                    self.returnTeacher(String(stringInterpolationSegment: ii))
+                    //We should have valid data here because no errors. Double check by 
+                    //unwrapping:
+                    if let finaldata = data {
+                        //Extract data from Json into object using swiftyJSON
+                        let tempList = JSON(data: finaldata)
+                    
+                        //Unwrap JSON to get at array of teacher names - NEED TO CATCH THIS
+                        if let teacherList = tempList["teachers"].array {
+                            //Initialise Alertcontroller for presenting teacher options to user
+                            let alertController = UIAlertController(title: "Choose your teacher", message: "Click retry to reload list", preferredStyle: .Alert)
+                            //Loop through teachers names and add them as options in the alert
+                            for ii in teacherList {
+                                let tempbutton = UIAlertAction(title: "\(ii)", style: .Default)
+                                    {(action) in
+                                        //Completion handler for what to do if teacher is clicked
+                                        //Run returnTeacher function that sends back choice to server
+                                        self.returnTeacher(String(stringInterpolationSegment: ii))
+                                }
+                                alertController.addAction(tempbutton)
                             }
-                            alertController.addAction(tempbutton)
+                            //Add a retry button after all teacher options
+                            var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
+                                //To retry fetching teachers recursively call this function again
+                                self.teacherSelection()
+                            }
+                            alertController.addAction(retrybutton)
+                            //Display alertcontroller - NOTE POTENTIAL ISSUE WITH ACTUALLY
+                            //NEEDING TO PUT THIS IN VIEWDIDAPPEAR AS OPPOSED TO VIEWDIDLOAD
+                            self.presentViewController(alertController, animated: true) {
+                            }
+                        } else {
+                            //If cannot get teacher array from JSON then send warning and allow
+                            //retry
+                            let alertController = UIAlertController(title: "Bad data from server", message: "Could not extract list of teachers from information sent from server. Please try again", preferredStyle: .Alert)
+                            var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
+                                //To retry fetching teachers recursively call this function again
+                                self.teacherSelection()
+                            }
+                            alertController.addAction(retrybutton)
+                            self.presentViewController(alertController, animated: true) {
+                            }
                         }
-                        //Add a retry button after all teacher options
-                        var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
-                        //To retry fetching teachers recursively call this function again
-                        self.teacherSelection()
-                        }
-                        alertController.addAction(retrybutton)
-                        //Display alertcontroller - NOTE POTENTIAL ISSUE WITH ACTUALLY
-                        //NEEDING TO PUT THIS IN VIEWDIDAPPEAR AS OPPOSED TO VIEWDIDLOAD
-                        self.presentViewController(alertController, animated: true) {
-                        }
+                        
                     } else {
-                        //If cannot get teacher array from JSON then send warning and allow
-                        //retry
-                        let alertController = UIAlertController(title: "Bad data from server", message: "Could not extract list of teachers from information sent from server. Please try again", preferredStyle: .Alert)
+                        //If we fail here, then we got nil data, even though we didn't get
+                        //an error message sent through. Inform user and give option to retry
+                        let alertController = UIAlertController(title: "Bad data, no error!", message: "Bad data from server, but no error info! Bit weird. Please try again", preferredStyle: .Alert)
                         var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
                             //To retry fetching teachers recursively call this function again
                             self.teacherSelection()
@@ -127,6 +142,8 @@ class ViewControllerLogin: UIViewController {
                         }
 
                     }
+                    
+                        
                 }
             }
         })
@@ -178,8 +195,11 @@ class ViewControllerLogin: UIViewController {
                     //If there is no error then unwrap JSON and display teachers
                     //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
                 } else {
+                    
+                    //Check we have some data for swiftyJSON
+                    if let finaldata = data {
                     //Extract data from Json into object using swiftyJSON
-                    var tempList = JSON(data: data)
+                    var tempList = JSON(data: finaldata)
                     //Unwrap JSON to get name of activity teacher has set - NEED TO CATCH THIS
                     if let activityName = tempList["activity_name"].string {
     
@@ -188,6 +208,20 @@ class ViewControllerLogin: UIViewController {
                         
                         self.openChosenActivity(activityName)
                     }
+                        
+                    } else {
+                        //If we fail here, then we got nil data, even though we didn't get 
+                        //an error message sent through. Inform user and give option to retry
+                        let alertController = UIAlertController(title: "Bad data, no error!", message: "Bad data from server, but no error info! Bit weird. Please try again", preferredStyle: .Alert)
+                        var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
+                            //To retry fetching teachers recursively call this function again
+                            self.teacherSelection()
+                        }
+                        alertController.addAction(retrybutton)
+                        self.presentViewController(alertController, animated: true) {
+                        }
+                    }
+                    
                 }
             }
         })

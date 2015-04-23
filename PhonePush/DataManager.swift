@@ -72,7 +72,7 @@ class DataManager {
                 if let parseJSON = json {
                     // Okay, the parsedJSON is here, let's get the value for 'success' out of it
                     if let success = parseJSON["success"] as? Bool {
-                        println("Succes: \(success)")
+                        println("Success: \(success)")
                         postCompleted(succeeded: success, msg: "Logged in.")
                     }
                     return

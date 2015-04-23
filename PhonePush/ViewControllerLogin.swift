@@ -41,10 +41,10 @@ class ViewControllerLogin: UIViewController {
         //Call funtion that prompts user to select teacher (note recursively calls itself on
         //retrys)
         //UNCOMMENT THIS FOR A REAL RUN
-        //teacherSelection()
+        teacherSelection()
         
         //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
-        self.openChosenActivity("PhonePush")
+        //self.openChosenActivity("PhonePush",teacherChosen: nil)
     }
     
     
@@ -193,55 +193,85 @@ class ViewControllerLogin: UIViewController {
                     self.presentViewController(alertController, animated: true) {
                     }
                     //If there is no error then unwrap JSON and display teachers
-                    //NOTE: SHOULD REALLY CATCH IF DATA NO GOOD AND IF TEACHERLIST NO GOOD
                 } else {
                     
                     //Check we have some data for swiftyJSON
                     if let finaldata = data {
-                    //Extract data from Json into object using swiftyJSON
-                    var tempList = JSON(data: finaldata)
-                    //Unwrap JSON to get name of activity teacher has set - NEED TO CATCH THIS
-                    if let activityName = tempList["activity_name"].string {
-    
-                        //Open up activity that teacher requested through openChosenActivity
-                        //function
-                        
-                        self.openChosenActivity(activityName)
-                    }
+                        //Extract data from Json into object using swiftyJSON
+                        var tempList = JSON(data: finaldata)
+                        //Unwrap JSON to get name of activity teacher has set - NEED TO CATCH THIS
+                        if let activityName = tempList["activity_name"].string {
+                            //Open up activity that teacher requested through openChosenActivity
+                            //function
+                            self.openChosenActivity(activityName, teacherChosen: teacherName)
+                        } else {
+                            //If fail here then don't have expected JSON from server. Send
+                            //warning and allow retry
+                            let alertController = UIAlertController(title: "Bad data from server", message: "Could not extract expected activity data from your teacher. Click to try again.", preferredStyle: .Alert)
+                            var retryactivity = UIAlertAction(title: "Try again with same teacher", style: .Cancel) { (_) in
+                                //To retry fetching teachers recursively call this function again
+                                self.returnTeacher(teacherName)
+                            }
+                            alertController.addAction(retryactivity)
+                            var retryteacher = UIAlertAction(title: "Choose another teacher", style: .Cancel) { (_) in
+                                //To retry fetching teachers recursively call this function again
+                                self.teacherSelection()
+                            }
+                            alertController.addAction(retryteacher)
+                            self.presentViewController(alertController, animated: true) {
+                            }
+                        }
                         
                     } else {
                         //If we fail here, then we got nil data, even though we didn't get 
                         //an error message sent through. Inform user and give option to retry
                         let alertController = UIAlertController(title: "Bad data, no error!", message: "Bad data from server, but no error info! Bit weird. Please try again", preferredStyle: .Alert)
-                        var retrybutton = UIAlertAction(title: "Retry", style: .Cancel) { (_) in
+                        var retryactivity = UIAlertAction(title: "Try again with same teacher", style: .Cancel) { (_) in
+                            //To retry fetching teachers recursively call this function again
+                            self.returnTeacher(teacherName)
+                        }
+                        alertController.addAction(retryactivity)
+                        var retryteacher = UIAlertAction(title: "Choose another teacher", style: .Cancel) { (_) in
                             //To retry fetching teachers recursively call this function again
                             self.teacherSelection()
                         }
-                        alertController.addAction(retrybutton)
+                        alertController.addAction(retryteacher)
                         self.presentViewController(alertController, animated: true) {
                         }
                     }
-                    
                 }
             }
         })
     }
     
-    
     //Opens a chosen activity
-    func openChosenActivity(activityName:String) {
-        //println(activityName)
+    func openChosenActivity(activityName:String, teacherChosen: String?) {
         
         if activityName == "PhonePush" {
             var PPVC:PPintroVC = PPintroVC(qstnsArray: [""])
             self.navigationController?.pushViewController(PPVC, animated: true)
         } else if activityName == "DecayDice" {
-        
             var DDVC:DecayDiceVC = DecayDiceVC()
             self.navigationController?.pushViewController(DDVC, animated: true)
-        
         } else {
-            //println("Unrecognised Activity")
+            //Code here for if no activity stored for teacher
+            let alertController = UIAlertController(title: "No activity found for teacher", message: "Your teacher does not have an activity ready for you at this time. \n Click below to check again.", preferredStyle: .Alert)
+            //If have been passed name of chosen teacher then offer to retry getting activity
+            if let teacherSend = teacherChosen {
+                var retryactivity = UIAlertAction(title: "Check again with same teacher", style: .Cancel) { (_) in
+                    //To retry fetching teachers recursively call this function again
+                    self.returnTeacher(teacherSend)
+                }
+                alertController.addAction(retryactivity)
+            }
+            var retryteacher = UIAlertAction(title: "Choose another teacher", style: .Cancel) { (_) in
+                //To retry fetching teachers recursively call this function again
+                self.teacherSelection()
+            }
+            alertController.addAction(retryteacher)
+            self.presentViewController(alertController, animated: true) {
+            }
+
         }
         
     }

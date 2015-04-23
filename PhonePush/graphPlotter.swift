@@ -19,7 +19,6 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         super.init(frame: frame)
     }
     
-    
     //Custom init takes in data to be plotted, as well as the size of the plot
     convenience init(vSize:CGRect, xArray:[Double], yArray: [Double]) {
         //Set frame size and assign variables to local
@@ -33,7 +32,7 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     }
     
     //Instances need for plotting (hostingView holds settings)
-    var hostView: CPTGraphHostingView!
+    var hostView: CPTGraphHostingView = CPTGraphHostingView()
     var graph:CPTGraph!
     
     func loadgraph() {
@@ -197,7 +196,8 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     
     //Required by CorePlot delegate: Returns the x and y values for given index
     //(fieldEnum parameter determines whether coreplot is asking for x or y)
-    func numberForPlot(plot: CPTPlot, field fieldEnum: UInt, recordIndex idx: UInt) -> AnyObject! {
+    func numberForPlot(plot: CPTPlot, field fieldEnum: UInt, recordIndex idx: UInt) -> AnyObject {
+        //removed ! from AnyObject above
         
         //Check whether CorePlot wants x or y values and return appropriate value
         //at the index that CorePlot requested

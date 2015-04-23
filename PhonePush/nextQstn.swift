@@ -1,4 +1,3 @@
-//
 //  nextQstn.swift
 //  
 //
@@ -6,10 +5,17 @@
 //
 //
 
-import UIKit
-
 //This class gets called when a questions VC is done, and rewrites the navigation
 //stack to present the next question - including call to new push if necessary.
+
+import UIKit
+
+//Operator required for comparing classes
+infix operator >!< {}
+
+func >!< (object1: AnyObject!, object2: AnyObject!) -> Bool {
+    return (object_getClassName(object1) == object_getClassName(object2))
+}
 
 public class nextQstn {
 
@@ -26,7 +32,6 @@ public class nextQstn {
     //Local dictionary to store data from accelerometer
     
     var pushData: [String: Any]?
-    //= ["aRaw": [], "vRaw": [], "pRaw":[], "tRaw":[], "indexConstAccel":0, "constAccel":0, "timeConstAccel":0, "distConstAccel":0, "velInit":0]
     
     //This is called by initial http teacher call to update qstnString
     public func updateQstns(newStrings:[String]) {
@@ -63,7 +68,9 @@ public class nextQstn {
                     //another push
                     //Check whether top of stack is VC2 before changing stack
                     var tempStack = navi.viewControllers
+                    //Check that we have *something* at top of VC stack
                     if let testForCalib: AnyObject = tempStack?[tempStack.count-1]  {
+                        //Check whether calib screen is top of stack (so just did a calib)
                         if let testForCalib = testForCalib as? PPcalibVC {
                             //println("Phone was just pushed")
                             //MAKE NEXTVC BE EQUAL TO THE ACTUAL QUESTION VC HERE
@@ -74,34 +81,52 @@ public class nextQstn {
                     }
                     
                 } else {
-                    //println("Unknown entry!")
+                    //Don't know this entry! Skip to the next one by recursivley calling 
+                    //this method again with the same navigation controller
+                    self.goToNext(navi)
                 }
                 
             } else {
+                //!!!PUT WHAT TO DO AT END OF QUESTIONS HERE
                 println("End of questions!")
             }
         } else {
-            //PUT ALERT SCREEN HERE "NEED SOME PUSH DATA FOR THIS ACTIVITY!", FOLLOWED BY CALLING CALIBRATION SCREEN AGAIN
-            //println("NO DATA IS PRESENT FOR ASKING QUESTIONS WITH!")
+            //If got here then it means that there is no valid push-data
+            //Note that this is not where individual question request more.
+            let alertController = UIAlertController(title: "No push data available for the next question", message: "Please push the phone again when prompted so that there is some data to use", preferredStyle: .Alert)
+            var retrypush = UIAlertAction(title: "Push again", style: .Cancel) { (_) in
+                //Go back to calib screen
+                nextVC = PPcalibVC()
+            }
+            alertController.addAction(retrypush)
+            //Present alert to the currently active viewcontrollers view
+            var tempStack = navi.viewControllers
+            if let topVC: AnyObject = tempStack?[tempStack.count-1] {
+                (topVC as! UIViewController).presentViewController(alertController, animated: true) {
+                }
+            }
         }
+        
+        
+
         
         //Then remove top of stack and reorder etc... with chosen nextVC
         //Check that have a nextVC and load it up if so:
-        if let nextVC = nextVC {
+        if let nextVCcheck = nextVC {
             var VCstack = navi.viewControllers
             //Remove top VC root is at 0, top is at count
             VCstack.removeLast()
             //Add nextVC to top of stack
-            VCstack.append(nextVC)
+            VCstack.append(nextVCcheck)
             //Animate transition from old stack to newly formed one
             navi.setViewControllers(VCstack, animated: true)
         } else {
-            //println("No VC to move to!")
+            //!!!PUT WHAT TO DO AT END OF QUESTIONS HERE in case we get sent nil instead
+            //of a VC for nextVC (although should never get here!)
         }
     }
     
-    //PUBLIC FUNC NEEDS TO GO HERE FOR UPDATING THE DATA VALUES FROM A PUSH
-    
+    //Function that allows calibVC to update push results
     public func passAccelData(accelResults: [String:Any]) {
         pushData = accelResults
     }

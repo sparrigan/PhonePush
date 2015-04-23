@@ -12,7 +12,7 @@ class testVC: UIViewController {
     convenience init(cQstn: Int) {
         self.init()
         
-        println("Value of cQstn was \(cQstn)")
+        //println("Value of cQstn was \(cQstn)")
         
     }
     required init(coder aDecoder: NSCoder) {

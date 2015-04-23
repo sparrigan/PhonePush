@@ -34,7 +34,7 @@ class DecayDiceVC: UIViewController, vcProtocol {
         
         let skView = SKView(frame: CGRect(x: (view.bounds.size.width-atomWidth)/2,y: (view.bounds.size.height-atomHeight)/2, width: atomWidth, height: atomHeight))
         
-        println(atomWidth)
+        //println(atomWidth)
         
        // println("skView width: \(skView.frame.width). skview x: \((view.bounds.size.width-atomWidth)/2). Whole view width: \(view.bounds.size.width)")
         
@@ -142,7 +142,7 @@ class DecayDiceVC: UIViewController, vcProtocol {
 
     
     func returnData() {
-        println("YUS")
+        //println("YUS")
     }
     
 

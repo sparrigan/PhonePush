@@ -41,10 +41,10 @@ class ViewControllerLogin: UIViewController {
         //Call funtion that prompts user to select teacher (note recursively calls itself on
         //retrys)
         //UNCOMMENT THIS FOR A REAL RUN
-        teacherSelection()
+        //teacherSelection()
         
         //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
-        //self.openChosenActivity("PhonePush")
+        self.openChosenActivity("PhonePush")
     }
     
     
@@ -230,7 +230,7 @@ class ViewControllerLogin: UIViewController {
     
     //Opens a chosen activity
     func openChosenActivity(activityName:String) {
-        println(activityName)
+        //println(activityName)
         
         if activityName == "PhonePush" {
             var PPVC:PPintroVC = PPintroVC(qstnsArray: [""])
@@ -241,7 +241,7 @@ class ViewControllerLogin: UIViewController {
             self.navigationController?.pushViewController(DDVC, animated: true)
         
         } else {
-            println("Unrecognised Activity")
+            //println("Unrecognised Activity")
         }
         
     }

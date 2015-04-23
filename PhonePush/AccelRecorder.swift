@@ -33,12 +33,12 @@ class accelRecorder: NSObject {
     
     //Class variables
     var motionManager = CMMotionManager()
-    var integrate:integrator?
+    var integrate:integrator = integrator()
     var accelsRaw: [Double] = []
     var firstTime = 0.0
     var posdir = CGPoint(x: 0,y: 0)
     var countav = 0
-    var textField: UITextField
+    var textField: UITextField = UITextField(frame: CGRectMake(0,0,0,0))
     //Delegate for sending calilbration data to
     var delegate: accelRecorderDelegate?
     //Calibration counting variables
@@ -61,7 +61,7 @@ class accelRecorder: NSObject {
     init(tb:UITextField) {
         
         textField = tb
-        integrate = integrator()
+        //integrate = integrator()
     }
     
     
@@ -87,7 +87,7 @@ class accelRecorder: NSObject {
                 //Display current acceleration magnitude in x-y plane
                 self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
                 
-                println(vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0)))
+                //println(vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0)))
                 
                 //Only start recording data when have a significant change (>0.01g)
                 var acc = self.accelsRaw.count
@@ -128,7 +128,7 @@ class accelRecorder: NSObject {
                         
                         self.startConstAccel = self.timesDbl[self.timesDbl.count-1]
                         
-                        println("THE ACCEL IS CONST FROM TIME \(self.timesDbl[self.timesDbl.count-1])")
+                        //println("THE ACCEL IS CONST FROM TIME \(self.timesDbl[self.timesDbl.count-1])")
                     }
                     
                     
@@ -191,30 +191,30 @@ class accelRecorder: NSObject {
     }
     
     //Method that stops recording, finds vel and pos and returns the array of strings for CSV
-    func stopRec() -> (aDbl: [Double], tDbl: [Double],startConstAccel: Double, vDbl: [Double], pDbl: [Double]) {
+    func stopRec() -> (aDbl: [Double], tDbl: [Double],startConstAccel: Double, vDbl: [Double], pDbl: [Double])? {
         motionManager.stopAccelerometerUpdates()
         //Integrate accel data to get velocity
-        if accelsDbl.count > 0 {
+        if accelsDbl.count > 10 {
             velDbl = []
             //First integrate acceleration data
-            velDbl = integrate!.getInt(accelsDbl, timeVals: timesDbl)
+            velDbl = integrate.getInt(accelsDbl, timeVals: timesDbl)
             //Now concatenate into string
-        } else {
-            println("No accel to send for vel")
-        }
+       
         //Integrate velocity data to get position data
         if velDbl.count > 0 {
             posDbl = []
             //First integrate velocity data
-            posDbl = integrate!.getInt(velDbl, timeVals: timesDbl)
+            posDbl = integrate.getInt(velDbl, timeVals: timesDbl)
         } else {
-            println("No vel to send for pos")
+            //println("No vel to send for pos")
         }
-
-        
-        
         
         return (self.accelsDbl, self.timesDbl, self.startConstAccel, self.velDbl, self.posDbl)
+    
+        } else {
+            return nil
+        }
+    
     }
     
     //Method for calibrating accelerometer (timer calls finishcalibrate, that returns to delegate)

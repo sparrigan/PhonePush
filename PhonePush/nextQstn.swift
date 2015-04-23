@@ -17,7 +17,7 @@ public class nextQstn {
     //!!!UNCOMMENT THIS WHEN PASSING QSTNSTRING FROM OUTSIDE!!!!
     //public var qstnString:[String] = []
 
-    public var qstnString = ["calcQstn"]
+    public var qstnString = ["calcQstn", "graphQstn"]
 
     //This index increments with each new question, determining which qstn from
     //qstnString to add to VC stack next
@@ -65,16 +65,16 @@ public class nextQstn {
                     var tempStack = navi.viewControllers
                     if let testForCalib: AnyObject = tempStack?[tempStack.count-1]  {
                         if let testForCalib = testForCalib as? PPcalibVC {
-                            println("Phone was just pushed")
+                            //println("Phone was just pushed")
                             //MAKE NEXTVC BE EQUAL TO THE ACTUAL QUESTION VC HERE
                         } else {
-                            println("Need to get data from another push before running this question. Running calib VC...")
+                            //println("Need to get data from another push before running this question. Running calib VC...")
                             nextVC = PPcalibVC()
                         }
                     }
                     
                 } else {
-                    println("Unknown entry!")
+                    //println("Unknown entry!")
                 }
                 
             } else {
@@ -82,7 +82,7 @@ public class nextQstn {
             }
         } else {
             //PUT ALERT SCREEN HERE "NEED SOME PUSH DATA FOR THIS ACTIVITY!", FOLLOWED BY CALLING CALIBRATION SCREEN AGAIN
-            println("NO DATA IS PRESENT FOR ASKING QUESTIONS WITH!")
+            //println("NO DATA IS PRESENT FOR ASKING QUESTIONS WITH!")
         }
         
         //Then remove top of stack and reorder etc... with chosen nextVC
@@ -96,7 +96,7 @@ public class nextQstn {
             //Animate transition from old stack to newly formed one
             navi.setViewControllers(VCstack, animated: true)
         } else {
-            println("No VC to move to!")
+            //println("No VC to move to!")
         }
     }
     

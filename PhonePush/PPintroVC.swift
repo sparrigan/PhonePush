@@ -55,8 +55,8 @@ class PPintroVC: UIViewController {
     }
     
     func qstnsStart(sender:UIButton) {
-        println("lalal")
-        var PPcalib:PPcalibVC = PPcalibVC(cQstn: currentQstn)
+        //println("lalal")
+        var PPcalib:PPcalibVC = PPcalibVC()
         self.navigationController?.pushViewController(PPcalib, animated: true)
     }
 

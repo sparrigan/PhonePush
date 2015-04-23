@@ -5,6 +5,8 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 
 //ViewController that obtains calibration information and records a phone push
+//NOTE: There is a check for the average constant acceleration recorded to be negative,
+//this will need to be turned off for more general uses of this class
 
 import UIKit
 
@@ -24,8 +26,10 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     
     var mockSetting = 0
     
-    var aRec:accelRecorder?
+
     var tb = UITextField(frame: CGRect(x: 100, y: 100, width: 200, height: 40))
+    //Initialise with empty value
+    var aRec:accelRecorder = accelRecorder(tb: UITextField(frame: CGRectMake(0,0,0,0)))
     var calibcheck:Int = 0
     let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     let startButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
@@ -38,14 +42,12 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     var pDbl: [Double] = []
     var tDbl: [Double] = []
     var velinit = 0.0
-    var indexConstAccel = 0
+    //var indexConstAccel: Int?
     var constAccel = 0.0
     var timeConstAccel = 0.0
     var distConstAccel = 0.0
     var titleText:UITextView = UITextView(frame: CGRect(x: 50, y: 50, width: 90.00, height: 10.00));
     var calibText:UITextView = UITextView(frame: CGRect(x: 70, y: 250, width: 90.00, height: 10.00));
-    var calcQstnsVC:calcQstns?
-    var graphQstnsVC:graphQstns?
     var settingVar = 2
     var currentQstn:Int = 0
     //Tolerance for a right answer
@@ -71,8 +73,9 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
         self.view.backgroundColor = UIColor.whiteColor()
 
         //Instantiate accelerator recorder object
+        
         aRec = accelRecorder(tb: tb)
-        aRec!.delegate = self
+        aRec.delegate = self
         
         //Phone pushing prompts (all subsequent code follows from button press functions):
         titleText.text = "Ready, steady..."
@@ -102,7 +105,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     func calibrateStart(sender:UIButton) {
         if calibcheck == 0 {
         calibcheck = 1
-        aRec!.calibrate()
+        aRec.calibrate()
         }
     }
     
@@ -124,7 +127,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     func recStart(sender:UIButton) {
         if stopped == 0 {
             //Call recording method in accelRecorder model
-            aRec!.startRec()
+            aRec.startRec()
             startButton.setTitle("Finished", forState: .Normal)
             stopped = 1
             //Stop recording if currently recording
@@ -132,46 +135,96 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
             stopped = 0
             
             //Call stop recording method in model and receive data
-            var finalaccel = aRec!.stopRec()
-            aDbl = finalaccel.aDbl
-            tDbl = finalaccel.tDbl
-            vDbl = finalaccel.vDbl
-            pDbl = finalaccel.pDbl
-            //Find the index at which constant acceleration starts
-            //(Find index at which the time appears in tDbl)
-            indexConstAccel = find(tDbl,finalaccel.startConstAccel)!
-            //Find initial velocity as vel at time where accel first negative
-            if vDbl.count>0 {
-                velinit = vDbl[indexConstAccel]
-                //Alternative method: Finding maximum value from whole array
-                //velinit = vDbl.reduce(Double(Int.min), { max($0, $1) })
-            }
-            //Find average acceleration value from constant region
-            if aDbl.count>0 {
-            constAccel = aDbl[indexConstAccel..<aDbl.count].reduce(0,combine: +)/Double(aDbl.count-indexConstAccel)
-            }
-            //Find total time of constant acceleration
-            if tDbl.count>0 {
-            timeConstAccel = tDbl[tDbl.count-1] - tDbl[indexConstAccel]
-            }
-            //Find total distance moved under constant acceleration
-            if pDbl.count>0 {
-            distConstAccel = pDbl[pDbl.count-1] - pDbl[indexConstAccel]
-            }
             
-            //Build a dictionary with all the recorded data
+            //Make final accel return an optional that is set to nil if less than 10 data
+            //passed to it (or in any other case that would want someone to do a repush)
+            //Check that we have more than 10 values recorded from accelerometer (stop
+            //method returns nil otherwise). If not, alert user of bad push and ask to redo
             
-            var pushData: [String: Any] = ["aRaw": aDbl, "vRaw": vDbl, "pRaw":pDbl, "tRaw":tDbl, "indexConstAccel":indexConstAccel, "constAccel":constAccel, "timeConstAccel":timeConstAccel, "distConstAccel":distConstAccel, "velInit":velinit]
+            if let finalaccel = aRec.stopRec() {
             
-            //Add new accelerometer data to class that sorts through questions passing 
-            //data between them
-            nQstn.passAccelData(pushData)
-   
-            //Open up first question by calling class that sorts through question
-            nQstn.goToNext(self.navigationController!)
-          
+                aDbl = finalaccel.aDbl
+                tDbl = finalaccel.tDbl
+                vDbl = finalaccel.vDbl
+                pDbl = finalaccel.pDbl
+                
+            
+            
+                //Find the index at which constant acceleration starts
+                //(Find index at which the time appears in tDbl)
+                //Check that can unwrap optional result of find and if not alert and redo push
+                if let indexConstAccel = find(tDbl,finalaccel.startConstAccel) {
+                    
+                    //Find initial velocity as vel at time where accel first negative
+                        velinit = vDbl[indexConstAccel]
+                    //Find average acceleration value from constant region
+                    constAccel = aDbl[indexConstAccel..<aDbl.count].reduce(0,combine: +)/Double(aDbl.count-indexConstAccel)
+                    //Find total time of constant acceleration
+                    timeConstAccel = tDbl[tDbl.count-1] - tDbl[indexConstAccel]
+                    //Find total distance moved under constant acceleration
+                        distConstAccel = pDbl[pDbl.count-1] - pDbl[indexConstAccel]
+                
+                    //Check that the average acceleration calculated is negative before
+                    //finally collecting data and sending it on to questions. If not
+                    //then prompt user to push again
+                    if constAccel < 0 {
+                        
+                        //Build a dictionary with all the recorded data
+                        var pushData: [String: Any] = ["aRaw": aDbl, "vRaw": vDbl, "pRaw":pDbl, "tRaw":tDbl, "indexConstAccel":indexConstAccel, "constAccel":constAccel, "timeConstAccel":timeConstAccel, "distConstAccel":distConstAccel, "velInit":velinit]
+                    
+                        //Add new accelerometer data to class that sorts through questions passing
+                        //data between them
+                        nQstn.passAccelData(pushData)
+           
+                        //Open up first question by calling class that sorts through question
+                        nQstn.goToNext(self.navigationController!)
+                    } else {
+                        //Alert for if we get back a positive acceleration
+                        //NOTE: This needs to be 'turned off' in cases where we call
+                        //acceleration logger for other activities
+                        restartCalib("Make sure the phone can slide easily!")
+                    }
+              
+                } else {
+                    //Alert for if we cannot unwrap the result of finding element in time
+                    //array at which constant acceleration happens (this is forced to be
+                    //optional by the inbuilt find method)
+                    restartCalib("Something werid happened!")
+                }
+            } else {
+                //Alert for If we get nil back from accelrecorder.stop method 
+                //(i.e. not enough data sent)
+                restartCalib("Push too short to get any data")
+            }
         }
-
+    }
+    
+    
+    //Function that gives user alert and then restarts the calibration VC in case of errors
+    //etc... Also passed a string that contains more info dependent on why needed to push again
+    func restartCalib(specificProblem: String) {
+        
+        //Present alert:
+        let alertController = UIAlertController(title: "Oops! " + specificProblem, message: "Please push again. \n (you'll also need to recalibrate)", preferredStyle: .Alert)
+        //When retry button is clicked, reload a new instance of calibration VC to top
+        //of stack
+        var retrybutton = UIAlertAction(title: "Redo push", style: .Cancel) { (_) in
+        
+            if let navi = self.navigationController {
+                var VCstack = navi.viewControllers
+                //Remove top VC root is at 0, top is at count
+                VCstack.removeLast()
+                var restartCalib: PPcalibVC = PPcalibVC()
+                //Add nextVC to top of stack
+                VCstack.append(restartCalib)
+                //Animate transition from old stack to newly formed one
+                navi.setViewControllers(VCstack, animated: false)
+            }
+            
+        }
+        alertController.addAction(retrybutton)
+        self.presentViewController(alertController, animated: true) {
+        }
     }
     
     //OLD FUNCTION FOR OPENING QUESTIONS AFTER CALIBRATION DIRECTLY
@@ -214,8 +267,6 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
         }
     }
     
-    
-    
     //Takes in two Arrays of Doubles and converts each element to a string, and cocatenates
     //corresponding entries of arrays with a comma. Note: Order of inputs is important
     func dblToStringRows (AA: [Double], BB: [Double])->[String] {
@@ -237,16 +288,10 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     //Function that fits a textfield to its content (NOTE: MUST HAVE BEEN ADDED AS SUBVIEW FIRST)
     func fitToText(textField: UITextView) {
         var fixedWidth:CGFloat = textField.frame.size.width
-        println(fixedWidth)
         var newSize:CGSize = textField.sizeThatFits(CGSizeMake(fixedWidth, CGFloat(MAXFLOAT)))
-        println(newSize)
         var newFrame:CGRect = textField.frame
-        println(newFrame)
         newFrame.size = CGSizeMake(newSize.height,CGFloat(fmaxf(Float(newSize.width), Float(fixedWidth))))
-        println(newFrame)
         textField.frame = newFrame
-        println(textField.frame)
-        println("done")
     }
     
     override func didReceiveMemoryWarning() {
@@ -256,7 +301,6 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
     
     
 }
-
 
 class Regex {
     let internalExpression: NSRegularExpression
@@ -273,6 +317,3 @@ class Regex {
         return matches.count > 0
     }
 }
-
-
-

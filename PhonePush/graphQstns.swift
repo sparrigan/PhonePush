@@ -153,21 +153,21 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         var accelAnswers:[String] = ["acceleration","accel"]
         var accelMistakes:[String] = ["aceleration", "acel"]
         if contains(accelAnswers+accelMistakes,ansTxt1.text.lowercaseString) {
-            println("Correct acceleration")
+            //println("Correct acceleration")
             numCorrect++
             }
         
         var velAnswers:[String] = ["velocity","vel","speed"]
         var velMistakes:[String] = ["veolcity", "vilocity", "sped"]
         if contains(velAnswers+velMistakes,ansTxt2.text.lowercaseString) {
-            println("Correct velocity")
+            //println("Correct velocity")
             numCorrect++
         }
         
         var posAnswers:[String] = ["position","distance","displacement", "dist","pos"]
         var posMistakes:[String] = ["postion", "distence", "displacemint"]
         if contains(posAnswers+posMistakes,ansTxt3.text.lowercaseString) {
-            println("Correct position")
+            //println("Correct position")
             numCorrect++
         }
         

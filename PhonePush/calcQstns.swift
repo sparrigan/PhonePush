@@ -181,7 +181,7 @@ class calcQstns: UIViewController, UIDocumentInteractionControllerDelegate, UITe
             }
             
         } else {
-            println("NOT cool dude. NOT COOL")
+            //println("NOT cool dude. NOT COOL")
         }
         
         

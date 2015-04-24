@@ -23,7 +23,7 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     var ansTxt2 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     var ansTxt3 = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     var submitButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-    
+    //VC for popups for right or wrong answers
     var popViewController : PopUpViewControllerSwift!
     
     init() {
@@ -32,9 +32,9 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     }
     
     convenience init(pushData: [String: Any]) {
-        
         self.init()
-   
+        
+        //Extract needed push data (passed from nextQstn)
         self.timeArray = pushData["tRaw"] as! [Double]
         self.accelArray = pushData["aRaw"] as! [Double]
         self.velArray = pushData["vRaw"] as! [Double]
@@ -42,8 +42,6 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         
         //Set whether to ask for accel or initial velocity
         self.qstntype = 0
-        
-        self.view.backgroundColor = UIColor.whiteColor()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -52,10 +50,12 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        self.view.backgroundColor = UIColor.whiteColor()
+        //Add observers for moving screen when keyboard appears and dissapears
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
         
+        //Get plots for a-t, v-t and x-t graphs
         var gD:graphPlotter = graphPlotter(vSize: CGRectMake(10,210,300,300), xArray: timeArray, yArray: accelArray)
         gD.loadgraph()
         
@@ -64,7 +64,7 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         
         var gD3:graphPlotter = graphPlotter(vSize: CGRectMake(700,210,300,300), xArray: timeArray, yArray: posArray)
         gD3.loadgraph()
-        
+        //Add graphs to view with positions and sizes they were created with
         self.view.addSubview(gD)
         self.view.addSubview(gD2)
         self.view.addSubview(gD3)
@@ -129,9 +129,18 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         
     }
     
+    //Answer button action
     func submitAnswer(sender: UIButton) {
+        //If have some empty values, then don't bother checking yet, ask user to input
+        //all values
         if (ansTxt1.text == "" || ansTxt2.text == "" || ansTxt3.text == "") {
-            println("You need to enter all values")
+            let alertController = UIAlertController(title: "Hang about!", message: "You still have some questions to answer. \n Fill in all answers before submitting", preferredStyle: .Alert)
+            var okbutton = UIAlertAction(title: "OK", style: .Cancel) { (_) in
+            //Do nothing - will return to screen.
+            }
+            alertController.addAction(okbutton)
+            self.presentViewController(alertController, animated: true) {
+            }
         } else {
             self.checkAns()
         }
@@ -139,15 +148,6 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     
     
     func checkAns() {
-        
-        //let imageview = UIImageView(frame: CGRectMake(200,200,400,300))
-        
-        //imageview.image = image1
-        //self.view.addSubview(imageview)
-        
-
-    
-        
         
         var numCorrect = 0
         var accelAnswers:[String] = ["acceleration","accel"]
@@ -188,8 +188,6 @@ class graphQstns: UIViewController, UITextFieldDelegate {
             var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("closePopUp"), userInfo: nil, repeats: false)
             
         }
-        
-        
         
     }
     

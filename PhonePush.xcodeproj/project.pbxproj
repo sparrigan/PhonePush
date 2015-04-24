@@ -15,9 +15,7 @@
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
 		CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E341AADEE3C00427689 /* AppDelegate.swift */; };
 		CE463E371AADEE3C00427689 /* PPcalibVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E361AADEE3C00427689 /* PPcalibVC.swift */; };
-		CE463E3A1AADEE3C00427689 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE463E381AADEE3C00427689 /* Main.storyboard */; };
 		CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3B1AADEE3C00427689 /* Images.xcassets */; };
-		CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */; };
 		CE463E4B1AADEE3C00427689 /* PhonePushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */; };
 		CE4D1C571ADA03EC001E6D53 /* tickbox.png in Resources */ = {isa = PBXBuildFile; fileRef = CE4D1C561ADA03EC001E6D53 /* tickbox.png */; };
 		CE4D1C591ADA092E001E6D53 /* crossBox.png in Resources */ = {isa = PBXBuildFile; fileRef = CE4D1C581ADA092E001E6D53 /* crossBox.png */; };
@@ -88,9 +86,7 @@
 		CE463E331AADEE3C00427689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE463E341AADEE3C00427689 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE463E361AADEE3C00427689 /* PPcalibVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPcalibVC.swift; sourceTree = "<group>"; };
-		CE463E391AADEE3C00427689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE463E3B1AADEE3C00427689 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		CE463E3E1AADEE3C00427689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		CE463E441AADEE3C00427689 /* PhonePushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhonePushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE463E491AADEE3C00427689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE463E4A1AADEE3C00427689 /* PhonePushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonePushTests.swift; sourceTree = "<group>"; };
@@ -186,9 +182,7 @@
 				CEA3614D1ADF3B6D00EC266A /* Libraries */,
 				CE463E341AADEE3C00427689 /* AppDelegate.swift */,
 				CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */,
-				CE463E381AADEE3C00427689 /* Main.storyboard */,
 				CE463E3B1AADEE3C00427689 /* Images.xcassets */,
-				CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */,
 				CE463E321AADEE3C00427689 /* Supporting Files */,
 			);
 			path = PhonePush;
@@ -434,8 +428,6 @@
 				CE4D1C591ADA092E001E6D53 /* crossBox.png in Resources */,
 				CED1D0BC1AE0AA1000B56442 /* nucleus.atlas in Resources */,
 				CEFC1B9B1AE82B8100DAAFE7 /* mortarboard.png in Resources */,
-				CE463E3A1AADEE3C00427689 /* Main.storyboard in Resources */,
-				CE463E3F1AADEE3C00427689 /* LaunchScreen.xib in Resources */,
 				CED1D0B81AE0A9EC00B56442 /* electronbg.png in Resources */,
 				CE4D1C571ADA03EC001E6D53 /* tickbox.png in Resources */,
 				CE463E3C1AADEE3C00427689 /* Images.xcassets in Resources */,
@@ -527,25 +519,6 @@
 			targetProxy = CE463E451AADEE3C00427689 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		CE463E381AADEE3C00427689 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CE463E391AADEE3C00427689 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		CE463E3D1AADEE3C00427689 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CE463E3E1AADEE3C00427689 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CE463E4C1AADEE3C00427689 /* Debug */ = {

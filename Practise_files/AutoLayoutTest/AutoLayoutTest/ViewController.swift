@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         titleText.backgroundColor = UIColor.redColor()
         
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.frame = CGRectMake(300, 450, 500, 250)
+        button.frame = CGRectMake(300, 450, 500, 100)
         button.backgroundColor = UIColor(red: 127.0/255.0, green: 220.0/255.0, blue: 255.0/255.0, alpha: 1.0)
         button.setTitle("Click to start", forState: UIControlState.Normal)
         button.layer.cornerRadius = 20
@@ -39,6 +39,7 @@ class ViewController: UIViewController {
         button.titleLabel!.font =  UIFont(name: "Arial", size: 60)
         button.addTarget(self, action: "buttonStart:", forControlEvents: .TouchUpInside)
         
+        //button.titleLabel!.font = UIFont(name: button.titleLabel!.font.fontName, size: CGFloat(15))
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -56,7 +57,7 @@ class ViewController: UIViewController {
         //fits into boxes
         sizeFontToView(titleText,maxFontSize: 500,minFontSize: 5)
 
-        //sizeFontToView(button, maxFontSize: 500, minFontSize: 5)
+        sizeFontToViewButton(button, maxFontSize: 500, minFontSize: 5)
         
     }
 
@@ -154,6 +155,91 @@ class ViewController: UIViewController {
                     options: NSStringDrawingOptions.UsesLineFragmentOrigin,
                     attributes: attrs,
                     context: nil).size
+            }
+            
+        }
+        
+    }
+    
+    
+    //SIZE FUNCTION FOR BUTTONS TEST
+    
+    func sizeFontToViewButton(tView:UIButton,maxFontSize:Double = 500,minFontSize:Double = 5) {
+        //maxFontSize is the Maximum font size you would consider allowable (defaults to 500)
+        //minFontSize is the Minumum font size you would consider allowable (defaults to 5)
+        
+        //TO DO: TREAT TVIEW AS AN OPTIONAL AND UNWRAP CAREFULLY (AS MIGHT GET THIS CALLED
+        //BEFORE HAS BEEN ADDED TO VIEW ETC... IF IS DONE AFTER VIEWDIDLOAD)
+        
+        //ALSO: FIRST CHECK WHETHER TEXT ALREADY FITS? TO STOP NEED FOR ITERATIONS IF FUNC
+        //IS CALLED ACCIDENTALLY WHEN IT ISN'T NEEDED?
+        
+        //ALSO: DO BINARY SEARCH INSTEAD OF LINEAR
+        
+        //ALSO: NEED TO FIGURE OUT HOW TO DO WHEN HAVE TEXT CENTERED (I.E. HOW DO WE SET
+        //THIS OPTION IN boundingRectWithSize?
+        
+        //Max size for tallerSize (just needs to be very large)
+        let kMaxFieldHeight = 9999
+        //String that we want to try and get to fit
+        var fitString:NSString = tView.titleLabel!.text!
+        //Fudge factor due to padding in UIView
+        var fudgeFactor = CGFloat(16.0)
+        //Font size we start with
+        
+        //Start font off at largest size that we would allow
+        var fontSize = maxFontSize
+        
+        //println("Title text is: \(tView.titleLabel!.text!)")
+        //println("Font size: \(tView.titleLabel!.font.pointSize)")
+        //println("Button view width: \(tView.frame.size.width)")
+        
+        
+        //println("Size with attributes: \(fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font]))")
+        
+        tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName, size: CGFloat(fontSize))
+        
+        //Make holder size that is width of the view but very tall - so we can see what height
+        //text has when we try and force it into it
+        var tallerSize = CGSizeMake(tView.frame.size.width - CGFloat(fudgeFactor), CGFloat(kMaxFieldHeight))
+        //Dictionary with font attributes in that we use to get size of text (of this font type/size) when pushed into tallerSize
+        var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize)) as! AnyObject]
+        //Get first run of stringSize for current fontSize when try to push into tallerSize
+        /*
+        var stringSize = fitString.boundingRectWithSize(tallerSize,
+            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+            attributes: attrs,
+            context: nil).size
+        */
+        var stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
+        
+        //Loop reducing font until will fit
+        //while (stringSize.height >= tView.frame.size.height) {
+        while (stringSize.width >= tView.frame.size.width-fudgeFactor) {
+            if (fontSize <= minFontSize) {
+                println("too small!!")
+                return
+            } else {
+                fontSize -= 1.0
+                
+                tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
+                //println("While loop")
+                //println("New font: \(fontSize)")
+                //println("Current button font size: \(tView.titleLabel!.font.pointSize)")
+                //println("StringSize is: \(stringSize.height)")
+                //println("Button frame height: \(tView.frame.size.height)")
+                //println("")
+                //Update the attributes dictionary with the new font size
+                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                //Generate a new stringSize trying to fit this new sized font into tallerSize
+                /*
+                stringSize = fitString.boundingRectWithSize(tallerSize,
+                    options: NSStringDrawingOptions.TruncatesLastVisibleLine,
+                    attributes: attrs,
+                    context: nil).size
+                */
+                stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
+           
             }
             
         }

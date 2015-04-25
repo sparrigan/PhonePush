@@ -13,6 +13,7 @@ class ViewController: UIViewController {
             let view1 = UIView()
     let metricsDictionary = ["view1Height": 50.0, "viewWidth":100.0 ]
     var titleText:UITextView = UITextView()
+    let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,16 @@ class ViewController: UIViewController {
         UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
         titleText.editable = false
         titleText.backgroundColor = UIColor.redColor()
+        
+        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        button.frame = CGRectMake(300, 450, 500, 250)
+        button.backgroundColor = UIColor(red: 127.0/255.0, green: 220.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+        button.setTitle("Click to start", forState: UIControlState.Normal)
+        button.layer.cornerRadius = 20
+        button.layer.borderWidth = 5
+        button.layer.borderColor = UIColor.blackColor().CGColor
+        button.titleLabel!.font =  UIFont(name: "Arial", size: 60)
+        button.addTarget(self, action: "buttonStart:", forControlEvents: .TouchUpInside)
         
     }
     
@@ -45,6 +56,8 @@ class ViewController: UIViewController {
         //fits into boxes
         sizeFontToView(titleText,maxFontSize: 500,minFontSize: 5)
 
+        //sizeFontToView(button, maxFontSize: 500, minFontSize: 5)
+        
     }
 
 
@@ -53,23 +66,32 @@ class ViewController: UIViewController {
         
         //Add views to main view - important to do this here
         self.view.addSubview(titleText)
+        self.view.addSubview(button)
 
         //Dictionary of views to give constraints
-        let viewsDictionary = ["titleText":titleText,"MainView":self.view]
+        let viewsDictionary = ["titleText":titleText,"button":button,"MainView":self.view]
         
-        //Constraint on width of text field
-        let wConstraint = NSLayoutConstraint(item: titleText, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 0.75, constant: 0)
+        //Constraint on width of text field and button
+        let wConstraint = NSLayoutConstraint(item: titleText, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 0.9, constant: 0)
+        
+        let wButtonConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 0.25, constant: 0)
+        
+        //Constraint on height of text field
+        let hConstraint = NSLayoutConstraint(item: titleText, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.25, constant: 0)
+        
         //Constraint on height and y position of text field
-        let vConstraints:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50-[titleText(100)]", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
+        let vConstraints:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-50-[titleText]-100-[button(100)]", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
         
-        //Center the textfield constraint
+        //Center the textfield and button constraints
         let centConstraint = NSLayoutConstraint(item: titleText, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
 
+        let centButtonConstraint = NSLayoutConstraint(item: button, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
+        
         //Add constraints to superviews
         //(Note that .addConstraint and .addConstraints are different!)
         //self.view.addConstraint(wConstraint)
         
-        self.view.addConstraints([wConstraint,centConstraint]+vConstraints)
+        self.view.addConstraints([wConstraint,wButtonConstraint,hConstraint,centConstraint,centButtonConstraint]+vConstraints)
     }
     
     
@@ -139,6 +161,10 @@ class ViewController: UIViewController {
     }
     
 
+    func buttonStart(sender:UIButton) {
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

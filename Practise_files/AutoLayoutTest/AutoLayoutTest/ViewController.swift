@@ -10,10 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
-            let view1 = UIView()
+    let view1 = UIView()
     let metricsDictionary = ["view1Height": 50.0, "viewWidth":100.0 ]
-    var titleText:UITextView = UITextView()
+    var titleText:UITextView = UITextView(frame: CGRectMake(0, 0, 300, 200))
     let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    var testObject:findTextSize?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,8 @@ class ViewController: UIViewController {
         titleText.editable = false
         titleText.backgroundColor = UIColor.redColor()
         
+        testObject = findTextSize(ttView: titleText)
+        
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.frame = CGRectMake(300, 450, 500, 100)
         button.backgroundColor = UIColor(red: 127.0/255.0, green: 220.0/255.0, blue: 255.0/255.0, alpha: 1.0)
@@ -40,13 +43,19 @@ class ViewController: UIViewController {
         button.addTarget(self, action: "buttonStart:", forControlEvents: .TouchUpInside)
         
         //button.titleLabel!.font = UIFont(name: button.titleLabel!.font.fontName, size: CGFloat(15))
+    
     }
     
     override func viewDidAppear(animated: Bool) {
         //Function to setup autolayout constraints.
         //NOTE: Is important that this is called from viewDidAppear as opposed to
         //from viewDidLoad, beause otherwise
-        testWithText()
+        //testWithText()
+        
+        view.addSubview(titleText)
+        
+        println(testObject!.updateViewFont("Portrait"))
+        
     }
     
     
@@ -55,9 +64,32 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         //When rotation etc... of ipads, run function that checks text
         //fits into boxes
-        sizeFontToView(titleText,maxFontSize: 500,minFontSize: 5)
+        
+        //THIS IS THE PROPER BINARY ONE
+        //sizeFontToViewBinary(titleText, maxFontSize: 500, minFontSize: 5)
+        
+        //sizeFontToView(titleText,maxFontSize: 500,minFontSize: 5)
 
-        sizeFontToViewButton(button, maxFontSize: 500, minFontSize: 5)
+        //sizeFontToViewButton(button, maxFontSize: 500, minFontSize: 5)
+        
+        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
+        {
+            //Loop over views that have been added to array
+            
+            //Check whether there is already a value for that view set in dictionary?
+            
+            
+            println("landscape")
+            println(testObject!.updateViewFont("Landscape"))
+        }
+        
+        if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
+        {
+            println("Portrait")
+            println(testObject!.updateViewFont("Portrait"))
+        }
+
+        
         
     }
 
@@ -141,7 +173,6 @@ class ViewController: UIViewController {
         while (stringSize.height >= tView.frame.size.height) {
             
             if (fontSize <= minFontSize) {
-                println("too small!!")
                 return
             } else {
                 fontSize -= 1.0
@@ -217,7 +248,6 @@ class ViewController: UIViewController {
         //while (stringSize.height >= tView.frame.size.height) {
         while (stringSize.width >= tView.frame.size.width-fudgeFactor) {
             if (fontSize <= minFontSize) {
-                println("too small!!")
                 return
             } else {
                 fontSize -= 1.0
@@ -247,6 +277,98 @@ class ViewController: UIViewController {
     }
     
 
+    
+    //Sizing font for text but with BINARY SEARCH
+    func sizeFontToViewBinary(tView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5) {
+        //Max size for tallerSize (just needs to be very large)
+        let kMaxFieldHeight = 9999
+        //String that we want to try and get to fit
+        var fitString:NSString = tView.text
+        //Fudge factor due to padding in UIView
+        var fudgeFactor = 16.0
+        //Font size we start with
+        
+        //Start font off at largest size that we would allow
+        var fontSize = maxFontSize
+        
+        //println(tView.text)
+        
+        tView.font = UIFont(name: tView.font.fontName, size: CGFloat(fontSize))
+        
+        //Make holder size that is width of the view but very tall - so we can see what height
+        //text has when we try and force it into it
+        var tallerSize = CGSizeMake(tView.frame.size.width - CGFloat(fudgeFactor), CGFloat(kMaxFieldHeight))
+        //Dictionary with font attributes in that we use to get size of text (of this font type/size) when pushed into tallerSize
+        var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize)) as! AnyObject]
+        //Get first run of stringSize for current fontSize when try to push into tallerSize
+        var stringSize = fitString.boundingRectWithSize(tallerSize,
+            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+            attributes: attrs,
+            context: nil).size
+       
+        //Loop reducing font until will fit by removing or adding a half of it's current
+        //value until either get within 20 pixels of desired height, or more than 15 iterations
+        //are used
+        var ii = 0
+        while (abs(stringSize.height - tView.frame.size.height)>20 && ii<=15) {
+            ii++
+            //If current fontsize gives a stringsize that is too large then halve
+            //else add a half (i.e. multiply by 1.5)
+            if (stringSize.height >= tView.frame.size.height) {
+                fontSize = ceil(fontSize/2)
+            } else {
+                    fontSize = ceil(1.5*fontSize)
+            }
+            //Update view with new altered font size, and update corresponding stringSize
+            tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
+            //Update the attributes dictionary with the new font size
+            var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+            //Generate a new stringSize trying to fit this new sized font into tallerSize
+            stringSize = fitString.boundingRectWithSize(tallerSize,
+                options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+                attributes: attrs,
+                context: nil).size
+        }
+        
+        //Now have gotten pretty close with above binary search, linearly increase or decrease
+        //font size from this point as necessary until we get as close as possible.
+        if stringSize.height >= tView.frame.size.height {
+            //If end up with string too big for view try decreasing font size one point at
+            //a time
+            while (stringSize.height > tView.frame.size.height) {
+                fontSize -= 1.0
+                tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
+                //Update the attributes dictionary with the new font size
+                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                //Generate a new stringSize trying to fit this new sized font into tallerSize
+                stringSize = fitString.boundingRectWithSize(tallerSize,
+                    options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+                    attributes: attrs,
+                    context: nil).size
+            }
+        } else {
+            //If end up with string too small for view try increasing font size one point at
+            //a time
+            while (stringSize.height <= tView.frame.size.height) {
+                fontSize += 1.0
+                tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
+                //Update the attributes dictionary with the new font size
+                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                //Generate a new stringSize trying to fit this new sized font into tallerSize
+                stringSize = fitString.boundingRectWithSize(tallerSize,
+                    options: NSStringDrawingOptions.UsesLineFragmentOrigin,
+                    attributes: attrs,
+                    context: nil).size
+            }
+            //Above loop will have stopped when we arrive just *above* what fits, so go back
+            //down one point in font size
+            fontSize -= 1.0
+            tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
+        }
+    }
+
+    
+    
     func buttonStart(sender:UIButton) {
         
     }

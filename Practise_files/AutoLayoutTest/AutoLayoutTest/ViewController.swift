@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     let view1 = UIView()
     let metricsDictionary = ["view1Height": 50.0, "viewWidth":100.0 ]
-    var titleText:UITextView = UITextView(frame: CGRectMake(0, 0, 300, 200))
+    var titleText:UITextView = UITextView(frame: CGRectMake(0, 0, 300, 100))
     let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     var testObject:findTextSize?
     
@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         titleText.editable = false
         titleText.backgroundColor = UIColor.redColor()
         
-        testObject = findTextSize(ttView: titleText)
+        testObject = findTextSize(vArray: [titleText])
         
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.frame = CGRectMake(300, 450, 500, 100)
@@ -54,7 +54,9 @@ class ViewController: UIViewController {
         
         view.addSubview(titleText)
         
-        println(testObject!.updateViewFont("Portrait"))
+        var lalala = testObject!.updateViewFont("Portrait")
+        
+        println("Here is the value we get from the dic \(lalala[titleText]!)")
         
     }
     
@@ -80,13 +82,13 @@ class ViewController: UIViewController {
             
             
             println("landscape")
-            println(testObject!.updateViewFont("Landscape"))
+            //println(testObject!.updateViewFont("Landscape"))
         }
         
         if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
         {
             println("Portrait")
-            println(testObject!.updateViewFont("Portrait"))
+            //println(testObject!.updateViewFont("Portrait"))
         }
 
         

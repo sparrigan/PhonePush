@@ -6,89 +6,121 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
 
+//TODO:
+
+//BE ABLE TO DEAL WITH EITHER HAVING UITEXTVIEW OF UIBUTTON ALL THE WAY THROUGH THE FLOW
+
+//ADD BOOL OPTION IN FUNCTION CALL THAT CLONES VIEW TO ONLY RETURN NEW FONT SIZE AND NOT
+//IMPLEMENT CHANGE AS WELL
+
+//TIDY UP
+
+
 import UIKit
 
 class findTextSize {
     
-   
-    
+    //Dictionary for storing any calculations on rotation
     var fontSizeDic = [UIView: [Double]]()
+    //Local array for storing passed views
+    var viewArray = [UIView]()
     
-    var testView:UIView
-    
-
-    init(ttView:UIView) {
-        //
-        testView = ttView
-        //add views to dictionary with no values for font sizes yet
-        //fontSizeDic[testView]
-        //fontSizeDic[testView] = [0,0]
-        fontSizeDic[testView] = [0.0,0.0]
+    //At init receives an array containing the views that we want to be able to auto
+    //size the text in.
+    init(vArray:[UIView]) {
+        
+        self.viewArray = vArray
+        
+        //Loop over passed views and assign them an entry in the dictionary for storing sizes
+        for ii in viewArray {
+            fontSizeDic[ii] = [0.0,0.0]
+        }
     }
     
+    //Function that checks what type of view we have at a given element of viewArray
     func checkViewType() {
-        if let checkType = testView as? UITextView {
+        if let checkType = viewArray[0] as? UITextView {
             println("It was a textview!")
-        } else if let checkType = testView as? UIButton {
+        } else if let checkType = viewArray[0] as? UIButton {
             println("It was a button")
         } else {
             println("It was something else")
         }
     }
     
-    func updateViewFont(currentOrientation: String) -> Double {
-        //Set subscript index according to whether we are working with portrait or landscape
-        var ii = 0
+    //Function that is called in order to return the font size of the view
+    //ADD ANOTHER OPTIONAL BOOL VARIABLE THAT CAN BE PASSED IN ORDER TO SPECIFY WHETHER
+    //A CALL WILL ALSO ACTUALLY CHANGE THE FONT SIZE IN THE VIEW, OR JUST RETURN A VALUE
+    //(IN SECOND CASE DO THIS BY CREATING A LOCAL CLONE VIEW AND WORKING WITH THAT)
+    func updateViewFont(currentOrientation: String) -> [UIView: Double] {
+        
+        //Dictionary of doubles for returning font sizes of all views need to calc for
+        var newSizes = [UIView: Double]()
+        
+        //Set subscript index for fontsize dictionary according to whether we 
+        //are working with portrait or landscape
+        var jj = 0
         
         if currentOrientation == "Portrait" {
-             ii = 0
+             jj = 0
         } else if currentOrientation == "Landscape" {
-             ii = 1
+             jj = 1
         }
         
         //Go through dictionary and check whether already have a calculated value or not for
         //each view for current orientation
-        // PUT THE LOOP HERE
+        for currentView in viewArray {
         
-        //First double check that the UIView actually has an element in the dictionary!
-        if var ttt = fontSizeDic[testView] {
+            //Initialise an element of current view in view array (doing that here ensures that 
+            //we at least have valid dictionary elements for each view that could be requested
+            //on return of call)
             
-            println("Checking what's there, and it's: \(ttt[ii])")
+            newSizes[currentView] = 0.0
             
-            //Check whether there is already a value in the dictionary for this view in
-            //this orientation (specified by ii)
-            if ttt[ii] != 0 {
-            
-                println("Already had a value there - AWESOME!")
+            //First double check that the UIView actually has an element in the dictionary!
+            if var ttt = fontSizeDic[currentView] {
                 
-                //Return the font size that we already have
-                return ttt[ii]
-            } else {
-                //No font size already calculated, so need to calculate it, set the dictionary
-                //for next time, and return the newly calculated value
+                println("Checking what's there, and it's: \(ttt[jj])")
                 
+                //Check whether there is already a value in the dictionary for this view in
+                //this orientation (specified by ii)
+                if ttt[jj] != 0 {
+                
+                    println("Already had a value there - AWESOME!")
+                    
+                    //Return the font size that we already have
+                    newSizes[currentView] = ttt[jj]
+                } else {
+                    //No font size already calculated, so need to calculate it, set the dictionary
+                    //for next time, and return the newly calculated value
+                    
 
-                //Note that dictionary elements always return optional, so need to unwrap
-                fontSizeDic[testView]![0] = Double(sizeFontToViewBinary(testView as! UITextView, maxFontSize:500.0, minFontSize: 5.0))
+                    //Note that dictionary elements always return optional, so need to unwrap
+                    fontSizeDic[currentView]![0] = Double(sizeFontToViewBinary(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0))
+                    
+                    println("JUST ASSIGNED A VALUE TO \(jj) ELEMENT OF DIC")
+                    
+                    newSizes[currentView] = fontSizeDic[currentView]![0]
+                    
+                    //return ttt[ii]
+                }
                 
-                println("JUST ASSIGNED A VALUE TO \(ii) ELEMENT OF DIC")
-                
-                return fontSizeDic[testView]![0]
-                
-                //return ttt[ii]
+            } else {
+                //Nothing defined for that UIView! Something has gone wrong!
+                //IN CASE OF FAIL, ELEMENT OF RETURN DICTIONARY WILL BE LEFT AS INITIAL ZERO
             }
-        } else {
-            //Nothing defined for that UIView! Something has gone wrong!
-            //Define an element for it and work on that.
-           
-            return 0
+        
         }
         
+        return newSizes
+            
     }
     
     
-    //Sizing font for text but with BINARY SEARCH
-    func sizeFontToViewBinary(tView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5) -> CGFloat {
+    //Function that performs binary search for best fit font size - only called from above
+    //if dictionary does not already contain an entry for the current orientation from a 
+    //previous calculation
+    private func sizeFontToViewBinary(tView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5) -> CGFloat {
         
         println("Called the intesive function")
         

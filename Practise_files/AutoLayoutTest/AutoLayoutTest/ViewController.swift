@@ -23,17 +23,16 @@ class ViewController: UIViewController {
         //NOTE: Is important to define textview in viewDidLoad so that it exists for the
         //first call to viewDidLayoutSubviews (which is called even before first rotation)
         //otherwise get an error
-        titleText.setTranslatesAutoresizingMaskIntoConstraints(false)
+        //titleText.setTranslatesAutoresizingMaskIntoConstraints(false)
         titleText.text = "Ready, steady, teddy beddy ready breaky scooby dooby doo and all that jazz and the like. Who is your favourite piece of lint? Mine too! We were made for each other. Clearly."
         titleText.font = UIFont(name: "Arial", size: 200)
         UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
         titleText.editable = false
         titleText.backgroundColor = UIColor.redColor()
         
-        testObject = findTextSize(vArray: [titleText])
         
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.frame = CGRectMake(300, 450, 500, 100)
+        //button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        button.frame = CGRectMake(50, 450, 300, 100)
         button.backgroundColor = UIColor(red: 127.0/255.0, green: 220.0/255.0, blue: 255.0/255.0, alpha: 1.0)
         button.setTitle("Click to start", forState: UIControlState.Normal)
         button.layer.cornerRadius = 20
@@ -44,6 +43,9 @@ class ViewController: UIViewController {
         
         //button.titleLabel!.font = UIFont(name: button.titleLabel!.font.fontName, size: CGFloat(15))
     
+        //Initialise object for automatically finding optimal font sizes
+        testObject = findTextSize(vArray: [titleText,button])
+
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -53,8 +55,10 @@ class ViewController: UIViewController {
         //testWithText()
         
         view.addSubview(titleText)
+        view.addSubview(button)
         
         var lalala = testObject!.updateViewFont("Portrait")
+        
         
         println("Here is the value we get from the dic \(lalala[titleText]!)")
         
@@ -79,15 +83,21 @@ class ViewController: UIViewController {
             //Loop over views that have been added to array
             
             //Check whether there is already a value for that view set in dictionary?
-            
-            
             println("landscape")
+            
+            var lala = testObject!.updateViewFont("Landscape")
+            println(lala[titleText]!)
+            println(lala[button]!)
+            
             //println(testObject!.updateViewFont("Landscape"))
         }
         
         if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
         {
             println("Portrait")
+            var lala = testObject!.updateViewFont("Portrait")
+            println(lala[titleText]!)
+            println(lala[button]!)
             //println(testObject!.updateViewFont("Portrait"))
         }
 

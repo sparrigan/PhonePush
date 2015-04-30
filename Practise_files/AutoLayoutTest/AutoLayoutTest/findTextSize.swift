@@ -25,11 +25,18 @@ class findTextSize {
     //Local array for storing passed views
     var viewArray = [UIView]()
     
+    var defaultNoChange:Bool = false
+    
     //At init receives an array containing the views that we want to be able to auto
     //size the text in.
-    init(vArray:[UIView]) {
+    //Optional initialiser parameter is default for whether or not to implement changes
+    //directly to view (false) or just return numerical value only (true). Can be overriden
+    //within method call
+    init(vArray:[UIView],dNoChange:Bool = false) {
         
         self.viewArray = vArray
+        
+        self.defaultNoChange = dNoChange
         
         //Loop over passed views and assign them an entry in the dictionary for storing sizes
         for ii in viewArray {
@@ -37,22 +44,12 @@ class findTextSize {
         }
     }
     
-    //Function that checks what type of view we have at a given element of viewArray
-    func checkViewType() {
-        if let checkType = viewArray[0] as? UITextView {
-            println("It was a textview!")
-        } else if let checkType = viewArray[0] as? UIButton {
-            println("It was a button")
-        } else {
-            println("It was something else")
-        }
-    }
+
     
     //Function that is called in order to return the font size of the view
-    //ADD ANOTHER OPTIONAL BOOL VARIABLE THAT CAN BE PASSED IN ORDER TO SPECIFY WHETHER
-    //A CALL WILL ALSO ACTUALLY CHANGE THE FONT SIZE IN THE VIEW, OR JUST RETURN A VALUE
-    //(IN SECOND CASE DO THIS BY CREATING A LOCAL CLONE VIEW AND WORKING WITH THAT)
-    func updateViewFont(currentOrientation: String) -> [UIView: Double] {
+    //Optional 'noChange' parameter specifies whether to only return font size without
+    //implementing change (true). Over-rides any value specified in initaliser.
+    func updateViewFont(currentOrientation: String, noChange:Bool? = nil) -> [UIView: Double] {
         
         //Dictionary of doubles for returning font sizes of all views need to calc for
         var newSizes = [UIView: Double]()
@@ -94,15 +91,41 @@ class findTextSize {
                     //No font size already calculated, so need to calculate it, set the dictionary
                     //for next time, and return the newly calculated value
                     
+                    
+                    //Determine whether we should actually implement changes or just return
+                    //new font size, based on default settings from first class instantiation
+                    //and potential over-ridding setting passed in method call
+                    var shouldChange:Bool
+                    //If parameter passed on method call then use that.
+                    if noChange != nil {
+                        
+                        shouldChange = noChange!
+                        //shouldChange = (defaultNoChange&&noChange!)||(!defaultNoChange&&noChange!)
+                    //Else use the default parameter passed on initalisation
+                    } else {
+                         shouldChange = defaultNoChange
+                    }
+                    
+                    //Check whether we are dealing with a UITextView or a UIButton and call
+                    //appropriate internal function
+                    if let checkType = currentView as? UITextView {
+                        //It was a textview
+                        
 
-                    //Note that dictionary elements always return optional, so need to unwrap
-                    fontSizeDic[currentView]![0] = Double(sizeFontToViewBinary(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0))
+                        fontSizeDic[currentView]![jj] = Double(sizeFontToUITextView(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0, noChange: shouldChange))
+                    } else if let checkType = currentView as? UIButton {
+                        println("It was a button")
+                        //It was a button
+                        fontSizeDic[currentView]![jj] = Double(sizeFontToUIButton(currentView as! UIButton, maxFontSize:500.0, minFontSize: 5.0, noChange:shouldChange))
+                    } else {
+                        println("It was something else")
+                    }
                     
                     println("JUST ASSIGNED A VALUE TO \(jj) ELEMENT OF DIC")
                     
-                    newSizes[currentView] = fontSizeDic[currentView]![0]
+                    //Add calculated value to return array
+                    newSizes[currentView] = fontSizeDic[currentView]![jj]
                     
-                    //return ttt[ii]
                 }
                 
             } else {
@@ -120,9 +143,19 @@ class findTextSize {
     //Function that performs binary search for best fit font size - only called from above
     //if dictionary does not already contain an entry for the current orientation from a 
     //previous calculation
-    private func sizeFontToViewBinary(tView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5) -> CGFloat {
+    private func sizeFontToUITextView(tempView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5,noChange:Bool = false) -> CGFloat {
         
         println("Called the intesive function")
+        var tView:UITextView
+        
+        //If passed relevant option then clone UITextView so that only return value without
+        //actually implementing change in font on real UITextView
+        if noChange == true {
+            tView = UITextView(frame: CGRectMake(0, 0, tempView.frame.size.width, tempView.frame.size.height))
+            tView.text = tempView.text
+        } else {
+            tView = tempView
+        }
         
         
         //Max size for tallerSize (just needs to be very large)
@@ -228,9 +261,18 @@ class findTextSize {
     }
     
     //Function for binary search for font-size for SINLE LINE button text (using binary search)
-    private func sizeFontToUIButton(tView:UIButton,maxFontSize:Double = 500,minFontSize:Double = 5) -> CGFloat {
+    private func sizeFontToUIButton(tempView:UIButton,maxFontSize:Double = 500,minFontSize:Double = 5, noChange:Bool = false) -> CGFloat {
         
         println("Called the intesive function")
+        
+        var tView:UIButton
+        
+        if noChange == true {
+            tView = UIButton(frame: CGRectMake(0, 0, tempView.frame.size.width, tempView.frame.size.height))
+            tView.titleLabel!.text = tempView.titleLabel!.text
+        } else {
+            tView = tempView
+        }
         
         
         //Max size for tallerSize (just needs to be very large)

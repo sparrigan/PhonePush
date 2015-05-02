@@ -10,6 +10,7 @@
 		4800407A29FAFE0D507639E5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B58F69233816977457C53E8F /* libPods.a */; };
 		CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */; };
 		CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286841AAF9D4F005C0E45 /* Integrator.swift */; };
+		CE18CDF51AF573B300DC1109 /* findTextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDF41AF573B300DC1109 /* findTextSize.swift */; };
 		CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */; };
 		CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090FA1ADECB1C00D237B3 /* DataManager.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
@@ -79,6 +80,7 @@
 		B58F69233816977457C53E8F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccelRecorder.swift; sourceTree = "<group>"; };
 		CE0286841AAF9D4F005C0E45 /* Integrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
+		CE18CDF41AF573B300DC1109 /* findTextSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findTextSize.swift; sourceTree = "<group>"; };
 		CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerLogin.swift; sourceTree = "<group>"; };
 		CE4090FA1ADECB1C00D237B3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		CE4216E01AD180C6004EF105 /* calcQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstns.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 		CEA3614D1ADF3B6D00EC266A /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				CE18CDF41AF573B300DC1109 /* findTextSize.swift */,
 				CEA6C37D1AE0BAE700B92A3C /* SwiftyJSON.swift */,
 				CEA3614B1ADF3A5300EC266A /* URITemplate.swift */,
 			);
@@ -481,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE18CDF51AF573B300DC1109 /* findTextSize.swift in Sources */,
 				CED1D0B21AE0A9CC00B56442 /* dataViewController.swift in Sources */,
 				CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */,
 				CED1D0B61AE0A9DA00B56442 /* atomNode.swift in Sources */,

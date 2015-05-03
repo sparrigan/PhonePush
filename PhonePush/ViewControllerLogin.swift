@@ -41,10 +41,10 @@ class ViewControllerLogin: UIViewController {
         //Call funtion that prompts user to select teacher (note recursively calls itself on
         //retrys)
         //UNCOMMENT THIS FOR A REAL RUN
-        teacherSelection()
+        //teacherSelection()
         
         //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
-        //self.openChosenActivity("PhonePush",teacherChosen: nil)
+        self.openChosenActivity("PhonePush",teacherChosen: nil)
     }
     
     

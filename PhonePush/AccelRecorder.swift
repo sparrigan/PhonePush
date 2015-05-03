@@ -220,7 +220,7 @@ class accelRecorder: NSObject {
     //Method for calibrating accelerometer (timer calls finishcalibrate, that returns to delegate)
     func calibrate() {
         //println("Yay")
-        NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "finishcalibrate", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "finishcalibrate", userInfo: nil, repeats: false)
         self.accelCalib = CGPoint(x:0,y:0)
         self.countCalib = 0
         if motionManager.accelerometerAvailable == true {

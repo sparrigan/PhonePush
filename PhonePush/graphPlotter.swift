@@ -38,6 +38,7 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     func loadgraph() {
         
         //Setup hostview, make it same size as current view
+        //hostView = CPTGraphHostingView(frame: CGRectMake(0,0,0,0))
         hostView = CPTGraphHostingView(frame: self.bounds)
         hostView.layer.cornerRadius = 10
         hostView.layer.borderColor = UIColor.grayColor().CGColor

@@ -12,6 +12,7 @@ import UIKit
 
 class graphQstns: UIViewController, UITextFieldDelegate {
     
+    var checkViewAppearedForFirstTime = 0
     var timeArray:[Double] = []
     var accelArray:[Double] = []
     var velArray:[Double] = []
@@ -82,14 +83,48 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         gD2 = graph2.hostView as UIView
         gD3 = graph3.hostView as UIView
         
+        //Call function that places all the views we need and setups autolayout constraints
+        setupViews()
+        
+     
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        textResizer!.updateViewFont("")
+    
+        checkViewAppearedForFirstTime = 1
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        //Need this check to prevent crashes
+        if checkViewAppearedForFirstTime == 1 {
+            if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
+            {
+                //Check whether there is already a value for that view set in dictionary?
+                println("landscape")
+                textResizer!.updateViewFont("Landscape")
+            }
+            if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
+            {
+                println("Portrait")
+                textResizer!.updateViewFont("Portrait")
+            }
+        }
+        
+    }
+    
+    
+    func setupViews() {
         
         //Ask question based on data according to mock setting
         questionText = UITextView(frame: CGRect(x: 50, y: 25, width: screenSize.width-100, height: 200.00));
         questionText.font = UIFont(name: "Arial", size: 60)
-        //questionText.backgroundColor = UIColor.clearColor()
+        questionText.backgroundColor = UIColor.clearColor()
         questionText.editable = false
         questionText.text = "What variable is plotted on the y-axis in each graph?"
-        questionText.backgroundColor = UIColor.greenColor()
+        //questionText.backgroundColor = UIColor.greenColor()
         
         //Add textboxes for answers
         ansTxt1 = UITextField(frame: CGRect(x: 10, y: 520, width: 300.00, height: 100.00));
@@ -102,7 +137,6 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         ansTxt1.layer.borderWidth = 2.0
         ansTxt1.delegate = self;
         ansTxt1.keyboardType = UIKeyboardType.Default
-     
         ansTxt2 = UITextField(frame: CGRect(x: 350, y: 520, width: 300.00, height: 100.00));
         ansTxt2.placeholder = "y-axis ?"
         ansTxt2.layer.cornerRadius = 4.0
@@ -113,7 +147,6 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         ansTxt2.layer.borderWidth = 2.0
         ansTxt2.delegate = self;
         ansTxt2.keyboardType = UIKeyboardType.Default
-     
         ansTxt3 = UITextField(frame: CGRect(x: 700, y: 520, width: 300.00, height: 100.00));
         ansTxt3.placeholder = "y-axis ?"
         ansTxt3.layer.cornerRadius = 4.0
@@ -134,15 +167,15 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         submitButton.layer.borderColor = UIColor.blackColor().CGColor
         submitButton.titleLabel!.font =  UIFont(name: "Arial", size: 60)
         submitButton.addTarget(self, action: "submitAnswer:", forControlEvents: .TouchUpInside)
-
+        submitButton.titleLabel!.adjustsFontSizeToFitWidth = true
+        
         //View to contain all graphs and view to contain all answer buttons
         graphView = UIView(frame: CGRectMake(0,0,screenSize.width,300))
         //Color for testing
-        graphView.backgroundColor = UIColor.redColor()
+        graphView.backgroundColor = UIColor.clearColor()
         ansButtonsView = UIView(frame: CGRectMake(0,0,screenSize.width,100))
         //Color for testing
-        ansButtonsView.backgroundColor = UIColor.blueColor()
-        
+        ansButtonsView.backgroundColor = UIColor.clearColor()
         
         //Stop swift from adding its own constraints for all views in use by autolayout
         questionText.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -160,23 +193,12 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         //NOTE: May need to add these subviews in viewDidAppear instead of viewDidLoad...
         self.view.addSubview(graphView)
         self.view.addSubview(ansButtonsView)
-
-        
-        //Add graphs to view with positions and sizes they were created with
         self.view.addSubview(questionText)
-        /*
-        self.view.addSubview(ansTxt1)
-        self.view.addSubview(ansTxt2)
-        self.view.addSubview(ansTxt3)
-        */
         self.view.addSubview(submitButton)
-        
         //add graphs as subviews to graphView UIView
-        //DONT KNOW WHY WE ARE ABLE TO ADD HOSTVIEWS HERE INSTEAD OF THE GRAPHS THEMSELVES!
         graphView.addSubview(gD)
         graphView.addSubview(gD2)
         graphView.addSubview(gD3)
-        
         //add answer textfields to ansButtonView UIView
         ansButtonsView.addSubview(ansTxt1)
         ansButtonsView.addSubview(ansTxt2)
@@ -185,148 +207,59 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         //Dictionary for all views to be managed by autolayout
         let viewsDictionary = ["questionText":questionText,"graphView":graphView, "ansButtonsView":ansButtonsView,"submitButton":submitButton,"gD":gD,"gD2":gD2,"gD3":gD3,"ansTxt1":ansTxt1,"ansTxt2":ansTxt2,"ansTxt3":ansTxt3]
         //Metrics used by autolayout
-        //NOTE SURE THIS WILL ALWAYS GIVE 1/4 OF SCREEN HEIGTH. 
-        //!!!CHECK HOW TO REFER TO 'SELF' VIEW IN VFL LANGUAGE!!!
-        let metricsDictionary = ["minGraphWidth": 20,"bUpper":(self.view.frame.size.height*0.15)]
+        let metricsDictionary = ["minGraphWidth": 20]
         
-        
-        //Layout constraints between all views in self.view
-        let constraintsV:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(<=30)-[questionText]-[graphView]-[ansButtonsView]-(<=30)-[submitButton]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        //Note: need to set submitbutton height constraint seperately, as seems to be the 
-        //best (only?) way to refer to superview in order to calculate bound on size
-        let hSubmitButtonConstraint = NSLayoutConstraint(item: submitButton, attribute: .Height, relatedBy: .LessThanOrEqual, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
-        
-        //questionText specific contraints
+        //CONSTRAINT FOR SELF.VIEW
+        let constraintsV:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(5)-[questionText]-(<=20)-[graphView]-[ansButtonsView]-(<=30)-[submitButton]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
+        //QUESTIONTEXT specific contraints
         let wConstraint = NSLayoutConstraint(item: questionText, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
         let centConstraint = NSLayoutConstraint(item: questionText, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
         let hConstraint = NSLayoutConstraint(item: questionText, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.25, constant: 0)
-        
-        
-        //graphView specific constraints
+        //GRAPHVIEW specific constraints
         let wGraphConstraint = NSLayoutConstraint(item: graphView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
         let hGraphConstraint = NSLayoutConstraint(item: graphView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.4, constant: 0)
-        
-        //ansButtons specific constraints
+        //ANSBUTTONS specific constraints
         let wAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
         let hAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
-        
+        let hSubmitButtonConstraint = NSLayoutConstraint(item: submitButton, attribute: .Height, relatedBy: .LessThanOrEqual, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
+        let sumbitCentConstraint = NSLayoutConstraint(item: submitButton, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
         //Add constraints to self.view
-        self.view.addConstraints(constraintsV+[wConstraint,centConstraint,hConstraint,wGraphConstraint, hGraphConstraint,wAnsConstraint,hAnsConstraint,hSubmitButtonConstraint])
+        self.view.addConstraints(constraintsV+[wConstraint,centConstraint,hConstraint,wGraphConstraint, hGraphConstraint,wAnsConstraint,hAnsConstraint,hSubmitButtonConstraint,sumbitCentConstraint])
         
-        //Constraints for graphs within graphView
+        //CONSTRAINTS FOR GRAPHVIEW
         //Heights of graphs within graphView
         let hgDConstraint = NSLayoutConstraint(item: gD, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hgD2Constraint = NSLayoutConstraint(item: gD2, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hgD3Constraint = NSLayoutConstraint(item: gD3, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
-
         //Center vertically in graphView
         let gDcentConstraint = NSLayoutConstraint(item: gD, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
         let gD2centConstraint = NSLayoutConstraint(item: gD2, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
         let gD3centConstraint = NSLayoutConstraint(item: gD3, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
-        
-        
         //layout within graphView (including widths - min as set in metric, but fill out to
         //view with equal widths)
         let gDconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[gD(>=minGraphWidth)]-[gD2(==gD)]-[gD3(==gD)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        
         //Add constraints to graphView
         graphView.addConstraints([hgDConstraint,hgD2Constraint,hgD3Constraint,gDcentConstraint,gD2centConstraint,gD3centConstraint]+gDconstraintH)
         
-        //Constraints for answer textfields within ansButtonsView
-        //Heights of graphs within graphView
-        
+        //CONSTRAINTS FOR ANSBUTTONSVIEW
+        //Heights of answer textfields within ansbuttonsview
         let hAns1Constraint = NSLayoutConstraint(item: ansTxt1, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hAns2Constraint = NSLayoutConstraint(item: ansTxt2, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hAns3Constraint = NSLayoutConstraint(item: ansTxt3, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
-        
-        //Center vertically in graphView
-        
+        //Center vertically in ansbuttonsview
         let ans1centConstraint = NSLayoutConstraint(item: ansTxt1, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
         let ans2centConstraint = NSLayoutConstraint(item: ansTxt2, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
         let ans3centConstraint = NSLayoutConstraint(item: ansTxt3, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
-        
-        //layout within graphView (including widths - min as set in metric, but fill out to
-        //view with equal widths)
+        //layout within ansbuttonsview (including widths - min as set in metric, but fill out
+        //to view with equal widths)
         let ansTxtconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[ansTxt1(>=minGraphWidth)]-[ansTxt2(==ansTxt1)]-[ansTxt3(==ansTxt1)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        
-        //Add constraints to graphView
+        //Add constraints to ansbuttonsview
         ansButtonsView.addConstraints([hAns1Constraint,hAns2Constraint,hAns3Constraint,ans1centConstraint,ans2centConstraint,ans3centConstraint]+ansTxtconstraintH)
         
         //Font resizing function: send list of views for resizing to font resizer object
-        textResizer = findTextSize(vArray: [questionText,submitButton])
-     
+        textResizer = findTextSize(vArray: [questionText])
+        
     }
-    
-    override func viewDidAppear(animated: Bool) {
-            }
-    
-    override func viewDidLayoutSubviews() {
-
-        println("CALLED")
-        
-        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
-        {
-            //Loop over views that have been added to array
-            
-            //Check whether there is already a value for that view set in dictionary?
-            println("landscape")
-            
-            textResizer!.updateViewFont("Landscape")
-            
-            
-            //println(testObject!.updateViewFont("Landscape"))
-        }
-        
-        if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
-        {
-            println("Portrait")
-            textResizer!.updateViewFont("Portrait")
-            
-        } else {
-            
-            println("ORIENTATION NOT KNOWN")
-            textResizer!.updateViewFont("")
-        }
-        
-        
-        //println("GraphView width: \(graphView.frame.size.width)")
-        
-        //println("graph1 hostview width before: \(gD.frame.size.width)")
-        
-        /*
-        graph1.frame = CGRectMake(graph1.frame.origin.x,graph1.frame.origin.y,30,graph1.frame.size.height)
-        graph2.frame = CGRectMake(graph2.frame.origin.x,graph2.frame.origin.y,30,graph2.frame.size.height)
-        graph3.frame = CGRectMake(graph3.frame.origin.x,graph3.frame.origin.y,30,graph3.frame.size.height)
-        
-        
-        gD.frame = CGRectMake(gD.frame.origin.x,gD.frame.origin.y,30,gD.frame.height)
-        gD2.frame = CGRectMake(gD2.frame.origin.x,gD2.frame.origin.y,30,gD2.frame.height)
-        gD3.frame = CGRectMake(gD3.frame.origin.x,gD3.frame.origin.y,30,gD3.frame.height)
-        */
-        //println("graph1 hostview width after: \(gD.frame.size.width)")
-
-        
-        //var gDaaa = graphPlotter(vSize: gD2.frame, xArray: timeArray, yArray: accelArray)
-        //gDaaa.loadgraph()
-        
-        //graphView.addSubview(gDaaa)
-        
-        //gDaaa.hostView.frame = CGRectMake(0,0,500,gDaaa.hostView.frame.height)
-        
-        
-        //IS IT NECESSARY TO CALL THIS HERE?
-        /*
-        gD = graphPlotter(vSize: gD.frame, xArray: timeArray, yArray: accelArray)
-        gD.loadgraph()
-        
-        gD2 = graphPlotter(vSize: gD2.frame, xArray: timeArray, yArray: velArray)
-        gD2.loadgraph()
-        
-        gD3 = graphPlotter(vSize: gD3.frame, xArray: timeArray, yArray: posArray)
-        gD3.loadgraph()
-        */
-    }
-    
     
     
     //Answer button action

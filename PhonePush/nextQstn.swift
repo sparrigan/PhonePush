@@ -23,7 +23,7 @@ public class nextQstn {
     //!!!UNCOMMENT THIS WHEN PASSING QSTNSTRING FROM OUTSIDE!!!!
     //public var qstnString:[String] = []
 
-    public var qstnString = ["graphQstn"]
+    public var qstnString = ["calcQstn","graphQstn"]
 
     //This index increments with each new question, determining which qstn from
     //qstnString to add to VC stack next

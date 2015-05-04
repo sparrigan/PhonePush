@@ -86,6 +86,20 @@ class findTextSize {
                     
                     //Return the font size that we already have
                     newSizes[currentView] = ttt[jj]
+                    
+                    //Assign it to the currentview we are considering (check whether is button or textfield
+                    
+                    if let checkType = currentView as? UITextView {
+                        //It was a textview
+                        checkType.font = UIFont(name: checkType.font.fontName, size: CGFloat(ttt[jj]))
+                    } else if let checkType = currentView as? UIButton {
+                         //It was a button
+                        checkType.titleLabel!.font = UIFont(name: checkType.titleLabel!.font.fontName, size: CGFloat(ttt[jj]))
+                    } else {
+                        println("It was something else")
+                    }
+                    
+                    
                 } else {
                     //No font size already calculated, so need to calculate it, set the dictionary
                     //for next time, and return the newly calculated value
@@ -180,6 +194,7 @@ class findTextSize {
     private func sizeFontToUITextView(tempView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5,noChange:Bool = false) -> CGFloat {
         
         println("Called the intesive function")
+        
         var tView:UITextView
         
         //If passed relevant option then clone UITextView so that only return value without
@@ -191,6 +206,7 @@ class findTextSize {
             tView = tempView
         }
         
+
         
         //Max size for tallerSize (just needs to be very large)
         let kMaxFieldHeight = 9999
@@ -212,22 +228,24 @@ class findTextSize {
         //text has when we try and force it into it
         var tallerSize = CGSizeMake(tView.frame.size.width - CGFloat(fudgeFactor), CGFloat(kMaxFieldHeight))
         //Dictionary with font attributes in that we use to get size of text (of this font type/size) when pushed into tallerSize
-        var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize)) as! AnyObject]
+        var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize))!]
         //Get first run of stringSize for current fontSize when try to push into tallerSize
         var stringSize = fitString.boundingRectWithSize(tallerSize,
             options: NSStringDrawingOptions.UsesLineFragmentOrigin,
             attributes: attrs,
             context: nil).size
         
+            println("Size of view to match is width:\(tallerSize.width), height:\(tallerSize.height)")
+        
         //Loop reducing font until will fit by removing or adding a half of it's current
         //value until either get within 20 pixels of desired height, or more than 15 iterations
         //are used
         var ii = 0
-        while (abs(stringSize.height - tView.frame.size.height)>20 && ii<=15) {
+        while (abs(stringSize.height - (tView.frame.size.height-CGFloat(fudgeFactor)))>20 && ii<=15) {
             ii++
             //If current fontsize gives a stringsize that is too large then halve
             //else add a half (i.e. multiply by 1.5)
-            if (stringSize.height >= tView.frame.size.height) {
+            if (stringSize.height >= (tView.frame.size.height-CGFloat(fudgeFactor))) {
                 fontSize = ceil(fontSize/2)
             } else {
                 fontSize = ceil(1.5*fontSize)
@@ -235,7 +253,8 @@ class findTextSize {
             //Update view with new altered font size, and update corresponding stringSize
             tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
             //Update the attributes dictionary with the new font size
-            var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+            var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize))!]
+           //var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
             //Generate a new stringSize trying to fit this new sized font into tallerSize
             stringSize = fitString.boundingRectWithSize(tallerSize,
                 options: NSStringDrawingOptions.UsesLineFragmentOrigin,
@@ -243,22 +262,22 @@ class findTextSize {
                 context: nil).size
         }
         
-       
+
         
         //Now have gotten pretty close with above binary search, linearly increase or decrease
         //font size from this point as necessary until we get as close as possible.
-        if stringSize.height >= tView.frame.size.height {
+        if stringSize.height >= (tView.frame.size.height-CGFloat(fudgeFactor)) {
             
             
             //If end up with string too big for view try decreasing font size one point at
             //a time
             
 
-            while (stringSize.height > tView.frame.size.height) {
+            while (stringSize.height > (tView.frame.size.height-CGFloat(fudgeFactor))) {
                 fontSize -= 1.0
                 tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
                 //Update the attributes dictionary with the new font size
-                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize))!]
                 //Generate a new stringSize trying to fit this new sized font into tallerSize
                 stringSize = fitString.boundingRectWithSize(tallerSize,
                     options: NSStringDrawingOptions.UsesLineFragmentOrigin,
@@ -267,29 +286,30 @@ class findTextSize {
             }
             
         
-            
+            println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
             return tView.font.pointSize
         } else {
             
             //If end up with string too small for view try increasing font size one point at
             //a time
-            while (stringSize.height <= tView.frame.size.height) {
+            while (stringSize.height <= (tView.frame.size.height-CGFloat(fudgeFactor))) {
                 fontSize += 1.0
                 tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
                 //Update the attributes dictionary with the new font size
-                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                var attrs = [NSFontAttributeName: UIFont(name: tView.font.fontName,size: CGFloat(fontSize))!]
                 //Generate a new stringSize trying to fit this new sized font into tallerSize
                 stringSize = fitString.boundingRectWithSize(tallerSize,
                     options: NSStringDrawingOptions.UsesLineFragmentOrigin,
                     attributes: attrs,
                     context: nil).size
+                println("IN LOOP: stringsize:\(stringSize.height) tView:\(tView.frame.size.height) Fontsize:\(tView.font.pointSize)")
             }
             //Above loop will have stopped when we arrive just *above* what fits, so go back
             //down one point in font size
             fontSize -= 1.0
             tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
             
-            
+            println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
             return tView.font.pointSize
         }
     }
@@ -307,6 +327,10 @@ class findTextSize {
         } else {
             tView = tempView
         }
+        
+        //Create clone view as button
+        
+        
         
         
         //Max size for tallerSize (just needs to be very large)
@@ -332,7 +356,7 @@ class findTextSize {
         //HERE!!!
         var tallerSize = CGSizeMake(tView.frame.size.width - CGFloat(fudgeFactor), CGFloat(kMaxFieldHeight))
         //Dictionary with font attributes in that we use to get size of text (of this font type/size) when pushed into tallerSize
-        var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize)) as! AnyObject]
+        var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))!]
         //Get first run of stringSize for current fontSize when try to push into tallerSize
         //var stringSize = fitString.boundingRectWithSize(tallerSize,
         //    options: NSStringDrawingOptions.UsesLineFragmentOrigin,
@@ -358,7 +382,7 @@ class findTextSize {
             //Update view with new altered font size, and update corresponding stringSize
             tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
             //Update the attributes dictionary with the new font size
-            var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+            var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))!]
             //Generate a new stringSize trying to fit this new sized font into width of
             //tallerSize
             stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
@@ -378,11 +402,12 @@ class findTextSize {
                 fontSize -= 1.0
                 tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
                 //Update the attributes dictionary with the new font size
-                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))!]
                 //Generate a new stringSize trying to fit this new sized font into tallerSize
                 stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
             }
             
+            println(tView.titleLabel!.font.pointSize)
             return tView.titleLabel!.font.pointSize
         
         } else {
@@ -393,7 +418,7 @@ class findTextSize {
                 fontSize += 1.0
                 tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
                 //Update the attributes dictionary with the new font size
-                var attrs = [NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(fontSize))]
+                var attrs = [NSFontAttributeName: UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))!]
                 //Generate a new stringSize trying to fit this new sized font into tallerSize
                 stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
             }
@@ -402,6 +427,7 @@ class findTextSize {
             fontSize -= 1.0
             tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
             
+            println(tView.titleLabel!.font.pointSize)
             return tView.titleLabel!.font.pointSize
         }
     }

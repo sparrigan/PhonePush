@@ -47,6 +47,12 @@ class findTextSize {
         //Dictionary of doubles for returning font sizes of all views need to calc for
         var newSizes = [UIView: Double]()
         
+        //First check whether we were passed an empty string. If that's the case then 
+        //assume orientation info was not available, and so perform calculations without
+        //storing or checking for existing stored values
+        
+        if currentOrientation != "" {
+        
         //Set subscript index for fontsize dictionary according to whether we 
         //are working with portrait or landscape
         var jj = 0
@@ -104,7 +110,6 @@ class findTextSize {
                     if let checkType = currentView as? UITextView {
                         //It was a textview
                         
-
                         fontSizeDic[currentView]![jj] = Double(sizeFontToUITextView(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0, noChange: shouldChange))
                     } else if let checkType = currentView as? UIButton {
                         println("It was a button")
@@ -128,8 +133,44 @@ class findTextSize {
         
         }
         
-        return newSizes
+            //This is what we do if passed orientation of ""
+        } else {
+            for currentView in viewArray {
             
+            newSizes[currentView] = 0.0
+                
+                var shouldChange:Bool
+                //If parameter passed on method call then use that.
+                if noChange != nil {
+                    
+                    shouldChange = noChange!
+                    //shouldChange = (defaultNoChange&&noChange!)||(!defaultNoChange&&noChange!)
+                    //Else use the default parameter passed on initalisation
+                } else {
+                    shouldChange = defaultNoChange
+                }
+                
+                //Check whether we are dealing with a UITextView or a UIButton and call
+                //appropriate internal function
+                if let checkType = currentView as? UITextView {
+                    //It was a textview
+                    
+                     newSizes[currentView] = Double(sizeFontToUITextView(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0, noChange: shouldChange))
+                } else if let checkType = currentView as? UIButton {
+                    println("It was a button")
+                    //It was a button
+                     newSizes[currentView] = Double(sizeFontToUIButton(currentView as! UIButton, maxFontSize:500.0, minFontSize: 5.0, noChange:shouldChange))
+                } else {
+                    println("It was something else")
+                }
+                
+                
+            }
+            
+        }
+        
+        return newSizes
+        
     }
     
     

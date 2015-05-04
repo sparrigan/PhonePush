@@ -152,7 +152,9 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         gD.setTranslatesAutoresizingMaskIntoConstraints(false)
         gD2.setTranslatesAutoresizingMaskIntoConstraints(false)
         gD3.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
+        ansTxt1.setTranslatesAutoresizingMaskIntoConstraints(false)
+        ansTxt2.setTranslatesAutoresizingMaskIntoConstraints(false)
+        ansTxt3.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         //Add subviews to relevant parent views.
         //NOTE: May need to add these subviews in viewDidAppear instead of viewDidLoad...
@@ -175,19 +177,30 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         graphView.addSubview(gD2)
         graphView.addSubview(gD3)
         
+        //add answer textfields to ansButtonView UIView
+        ansButtonsView.addSubview(ansTxt1)
+        ansButtonsView.addSubview(ansTxt2)
+        ansButtonsView.addSubview(ansTxt3)
+        
         //Dictionary for all views to be managed by autolayout
-        let viewsDictionary = ["questionText":questionText,"graphView":graphView, "ansButtonsView":ansButtonsView,"submitButton":submitButton,"gD":gD,"gD2":gD2,"gD3":gD3]
+        let viewsDictionary = ["questionText":questionText,"graphView":graphView, "ansButtonsView":ansButtonsView,"submitButton":submitButton,"gD":gD,"gD2":gD2,"gD3":gD3,"ansTxt1":ansTxt1,"ansTxt2":ansTxt2,"ansTxt3":ansTxt3]
         //Metrics used by autolayout
-        let metricsDictionary = ["minGraphWidth": 20]
-    
+        //NOTE SURE THIS WILL ALWAYS GIVE 1/4 OF SCREEN HEIGTH. 
+        //!!!CHECK HOW TO REFER TO 'SELF' VIEW IN VFL LANGUAGE!!!
+        let metricsDictionary = ["minGraphWidth": 20,"bUpper":(self.view.frame.size.height*0.15)]
         
         
         //Layout constraints between all views in self.view
-        let constraintsV:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[questionText]-[graphView]-[ansButtonsView]-[submitButton]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
+        let constraintsV:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(<=30)-[questionText]-[graphView]-[ansButtonsView]-(<=30)-[submitButton]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
+        //Note: need to set submitbutton height constraint seperately, as seems to be the 
+        //best (only?) way to refer to superview in order to calculate bound on size
+        let hSubmitButtonConstraint = NSLayoutConstraint(item: submitButton, attribute: .Height, relatedBy: .LessThanOrEqual, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
         
         //questionText specific contraints
         let wConstraint = NSLayoutConstraint(item: questionText, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
         let centConstraint = NSLayoutConstraint(item: questionText, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
+        let hConstraint = NSLayoutConstraint(item: questionText, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.25, constant: 0)
+        
         
         //graphView specific constraints
         let wGraphConstraint = NSLayoutConstraint(item: graphView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
@@ -195,20 +208,23 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         
         //ansButtons specific constraints
         let wAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
-        let hAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.25, constant: 0)
+        let hAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
         
         //Add constraints to self.view
-        self.view.addConstraints(constraintsV+[wConstraint,centConstraint,wGraphConstraint, hGraphConstraint,wAnsConstraint,hAnsConstraint])
+        self.view.addConstraints(constraintsV+[wConstraint,centConstraint,hConstraint,wGraphConstraint, hGraphConstraint,wAnsConstraint,hAnsConstraint,hSubmitButtonConstraint])
         
         //Constraints for graphs within graphView
         //Heights of graphs within graphView
         let hgDConstraint = NSLayoutConstraint(item: gD, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hgD2Constraint = NSLayoutConstraint(item: gD2, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
         let hgD3Constraint = NSLayoutConstraint(item: gD3, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
+
         //Center vertically in graphView
         let gDcentConstraint = NSLayoutConstraint(item: gD, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
         let gD2centConstraint = NSLayoutConstraint(item: gD2, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
         let gD3centConstraint = NSLayoutConstraint(item: gD3, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
+        
+        
         //layout within graphView (including widths - min as set in metric, but fill out to
         //view with equal widths)
         let gDconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[gD(>=minGraphWidth)]-[gD2(==gD)]-[gD3(==gD)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
@@ -216,18 +232,38 @@ class graphQstns: UIViewController, UITextFieldDelegate {
         //Add constraints to graphView
         graphView.addConstraints([hgDConstraint,hgD2Constraint,hgD3Constraint,gDcentConstraint,gD2centConstraint,gD3centConstraint]+gDconstraintH)
         
+        //Constraints for answer textfields within ansButtonsView
+        //Heights of graphs within graphView
+        
+        let hAns1Constraint = NSLayoutConstraint(item: ansTxt1, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
+        let hAns2Constraint = NSLayoutConstraint(item: ansTxt2, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
+        let hAns3Constraint = NSLayoutConstraint(item: ansTxt3, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
+        
+        //Center vertically in graphView
+        
+        let ans1centConstraint = NSLayoutConstraint(item: ansTxt1, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
+        let ans2centConstraint = NSLayoutConstraint(item: ansTxt2, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
+        let ans3centConstraint = NSLayoutConstraint(item: ansTxt3, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
+        
+        //layout within graphView (including widths - min as set in metric, but fill out to
+        //view with equal widths)
+        let ansTxtconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[ansTxt1(>=minGraphWidth)]-[ansTxt2(==ansTxt1)]-[ansTxt3(==ansTxt1)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
+        
+        //Add constraints to graphView
+        ansButtonsView.addConstraints([hAns1Constraint,hAns2Constraint,hAns3Constraint,ans1centConstraint,ans2centConstraint,ans3centConstraint]+ansTxtconstraintH)
         
         //Font resizing function: send list of views for resizing to font resizer object
         textResizer = findTextSize(vArray: [questionText,submitButton])
-        
+     
     }
     
     override func viewDidAppear(animated: Bool) {
-        
-    }
+            }
     
     override func viewDidLayoutSubviews() {
 
+        println("CALLED")
+        
         if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
         {
             //Loop over views that have been added to array
@@ -246,6 +282,10 @@ class graphQstns: UIViewController, UITextFieldDelegate {
             println("Portrait")
             textResizer!.updateViewFont("Portrait")
             
+        } else {
+            
+            println("ORIENTATION NOT KNOWN")
+            textResizer!.updateViewFont("")
         }
         
         

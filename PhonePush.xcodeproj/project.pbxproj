@@ -11,6 +11,8 @@
 		CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */; };
 		CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0286841AAF9D4F005C0E45 /* Integrator.swift */; };
 		CE18CDF51AF573B300DC1109 /* findTextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDF41AF573B300DC1109 /* findTextSize.swift */; };
+		CE18CDFA1AF839DC00DC1109 /* followMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDF91AF839DC00DC1109 /* followMe.swift */; };
+		CE18CDFD1AF83A9B00DC1109 /* calcQstnGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */; };
 		CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */; };
 		CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090FA1ADECB1C00D237B3 /* DataManager.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
@@ -81,6 +83,8 @@
 		CE0286821AAF9D34005C0E45 /* AccelRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccelRecorder.swift; sourceTree = "<group>"; };
 		CE0286841AAF9D4F005C0E45 /* Integrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
 		CE18CDF41AF573B300DC1109 /* findTextSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findTextSize.swift; sourceTree = "<group>"; };
+		CE18CDF91AF839DC00DC1109 /* followMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = followMe.swift; sourceTree = "<group>"; };
+		CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstnGraph.swift; sourceTree = "<group>"; };
 		CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerLogin.swift; sourceTree = "<group>"; };
 		CE4090FA1ADECB1C00D237B3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		CE4216E01AD180C6004EF105 /* calcQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstns.swift; sourceTree = "<group>"; };
@@ -153,6 +157,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		CE18CDFB1AF839F800DC1109 /* xvaGraphs */ = {
+			isa = PBXGroup;
+			children = (
+				CE18CDF91AF839DC00DC1109 /* followMe.swift */,
+				CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */,
+			);
+			name = xvaGraphs;
+			sourceTree = "<group>";
+		};
 		CE463E261AADEE3C00427689 = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +189,7 @@
 		CE463E311AADEE3C00427689 /* PhonePush */ = {
 			isa = PBXGroup;
 			children = (
+				CE18CDFB1AF839F800DC1109 /* xvaGraphs */,
 				CED1D0AE1AE0A99300B56442 /* DecayDice */,
 				CED1D0AD1AE0A5CB00B56442 /* AnswerPopUp */,
 				CED1D0AC1AE0A58B00B56442 /* LoginPage */,
@@ -490,10 +504,12 @@
 				CED1D0B61AE0A9DA00B56442 /* atomNode.swift in Sources */,
 				CE463E371AADEE3C00427689 /* PPcalibVC.swift in Sources */,
 				CE0286831AAF9D34005C0E45 /* AccelRecorder.swift in Sources */,
+				CE18CDFA1AF839DC00DC1109 /* followMe.swift in Sources */,
 				CE0286851AAF9D4F005C0E45 /* Integrator.swift in Sources */,
 				CE463E351AADEE3C00427689 /* AppDelegate.swift in Sources */,
 				CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */,
 				CEE8CE581AE1AB400089F5E1 /* PPintroVC.swift in Sources */,
+				CE18CDFD1AF83A9B00DC1109 /* calcQstnGraph.swift in Sources */,
 				CED1D0B51AE0A9DA00B56442 /* AtomScene.swift in Sources */,
 				CEEE24AF1AD9D6B4002E5F00 /* popUpViewController.swift in Sources */,
 				CEA3614C1ADF3A5300EC266A /* URITemplate.swift in Sources */,

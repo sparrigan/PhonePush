@@ -31,8 +31,8 @@ class calcQstnGraph {
         //Split the timebase of the graph up into three segments
         var segTimes:[Int] = [0,0,0,0]
         segTimes[0] = 0
-        segTimes[1] = randomR(0...UInt32(ceil(totalTime/3)))
-        segTimes[2] = segTimes[0] + randomR(0...UInt32(ceil(3/4*(totalTime-Double(segTimes[0])))))
+        segTimes[1] = randomR(2...UInt32(ceil(totalTime/3)))
+        segTimes[2] = segTimes[1] + randomR(0...UInt32(ceil(3/4*(totalTime-Double(segTimes[1])))))
         segTimes[3] = Int(floor(totalTime))
         println(segTimes)
         
@@ -41,7 +41,8 @@ class calcQstnGraph {
         segmentList = [constVals,posLinear,negLinear,accelVals]
 
         //Randomly set start parameter that determines where first line starts
-        var yStart = 4.0
+        
+        var yStart = 0.0
         var vStart = 0.0
 
         //Loop that exhaustively calls functions for calculating three line segments in random
@@ -84,6 +85,8 @@ class calcQstnGraph {
     //Calculate region of graph with constant value (i.e. 'flat line') between two times
     func constVals(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double]) -> ([Double],[Double]){
         
+        println("RUNNING CONSTVALS")
+        
         //Create an array that contains the same constant value (determined by start parameter)
         //with a number of elements that corresponds to desired time resolution and given
         //segment range
@@ -94,16 +97,27 @@ class calcQstnGraph {
     
     //Calculate region of graph with positive velocity
     func posLinear(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double]) -> ([Double],[Double]){
+        
+        println("RUNNING POSLINEAR")
+        
         //Array for storing values
         var posLinArray:[Double] = []
         //Choose random velocity for gradient of line will create (nb: may need to constrain
         //this to ensure y-axes are usable)
         var m = randomR(1...2)
         //Calculate intercept from this gradient and starting time/yparam
-        var c = yInit-Double(m*timeRange[0])
+        //var c = yInit-Double(m*timeRange[0])
+        
+        println("m is: \(m)")
+        println("timeIndex start: \(Double(timeRange[0])), timeIndex stop: \(Double(timeRange[1])), timeStep: \(tRes)")
+        
         //Calculate y values between time range with given time resolution using y=mx+c
         for var timeIndex = Double(timeRange[0]); timeIndex < Double(timeRange[1]); timeIndex+=tRes {
-            posLinArray.append(Double(m)*timeIndex+c)
+            //Get the time spent *in this segment* (need this for y=mx+c calc)
+            var velTime = timeIndex-Double(timeRange[0])
+            println("internal time: \(velTime)")
+            //Use y=mx+c equation to add new distance on to yInit and append to array
+            posLinArray.append(yInit+Double(m)*velTime)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {
                 println("Something went wrong, looping forever (>1000) in posLinear function")
@@ -115,18 +129,27 @@ class calcQstnGraph {
     
     //Calculate region of graph with negative velocity
     func negLinear(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double]) -> ([Double],[Double]){
+        
+        println("RUNNING NEGLINEAR")
+        
         //Array for storing values
         var negLinArray:[Double] = []
         //Choose random velocity for gradient of line will create (nb: may need to constrain
         //this to ensure y-axes are usable)
         var m = -randomR(1...2)
         //Calculate intercept from this gradient and starting time/yparam
-        var c = yInit-Double(m*timeRange[0])
-        //Calculate y values between time range with given time resolution using y=mx+c
-        println("c is: \(c) and m is: \(m)")
+        //var c = yInit-Double(m*timeRange[0])
+        
+        println("m is: \(m)")
         println("timeIndex start: \(Double(timeRange[0])), timeIndex stop: \(Double(timeRange[1])), timeStep: \(tRes)")
+        
+        //Calculate y values between time range with given time resolution using y=mx+c
         for var timeIndex = Double(timeRange[0]); timeIndex < Double(timeRange[1]); timeIndex+=tRes {
-            negLinArray.append(Double(m)*timeIndex+c)
+            //Get the time spent *in this segment* (need this for y=mx+c calc)
+            var velTime = timeIndex-Double(timeRange[0])
+            println("internal time: \(velTime)")
+            //Use y=mx+c equation to add new distance on to yInit and append to array
+            negLinArray.append(yInit + Double(m)*velTime)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {
                 println("Something went wrong, looping forever (>1000) in posLinear function")
@@ -140,6 +163,8 @@ class calcQstnGraph {
     //Calculate region of graph with acceleration (pos or neg depending on yvalue it
     //starts at)
     func accelVals(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double]) -> ([Double],[Double]){
+        
+        println("RUNNING ACCELVALS")
         
         var a:Double = 0
         var vFinal:Double = 0
@@ -181,10 +206,17 @@ class calcQstnGraph {
         
         a = (pow(vFinal,2.0)-pow(vInit,2.0))/(2*yFinal)
         
+        println("a is: \(a), vInit is: \(vInit), vFinal is: \(vFinal), yFinal is: \(yFinal)")
+        println("timeIndex start: \(Double(timeRange[0])), timeIndex stop: \(Double(timeRange[1])), timeStep: \(tRes)")
+        
         //Calculate y values between time range with given time resolution using suvat
         //equation with vFinal, vInit and acceleration
         for var timeIndex = Double(timeRange[0]); timeIndex < Double(timeRange[1]); timeIndex+=tRes {
-            var currentPos = (pow(vFinal,2.0)-pow(vInit,2.0))/(2.0*a)
+            //Get the time spent *in this segment* (need this for suvat calc)
+            var accelTime = timeIndex-Double(timeRange[0])
+            //Calculate new position at this time (note that we add onto whatever
+            //initial y was for this segment)
+            var currentPos = yInit + vInit*accelTime+(0.5*a*pow(accelTime,2.0))
             accelValsArray.append(currentPos)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {

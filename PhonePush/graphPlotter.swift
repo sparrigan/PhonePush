@@ -36,7 +36,6 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     var graph:CPTGraph!
     
     func loadgraph() {
-        
         //Setup hostview, make it same size as current view
         //hostView = CPTGraphHostingView(frame: CGRectMake(0,0,0,0))
         hostView = CPTGraphHostingView(frame: self.bounds)
@@ -66,7 +65,9 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         // Note that these CPTPlotRange are defined by START and LENGTH (not START and END) !!
         //So we make the relevant lengths etc... from the min and max values above
         plotSpace.setPlotRange(CPTPlotRange(location: minX, length: maxX-minX), forCoordinate: CPTCoordinate.X)
-        plotSpace.setPlotRange(CPTPlotRange(location: minY, length: maxY-minY), forCoordinate: CPTCoordinate.Y)
+        //Note that we add a 1% offset to the y-range in order not to crop off lines
+        var offsetFix = (maxY-minY)*0.01
+        plotSpace.setPlotRange(CPTPlotRange(location: (minY-offsetFix), length: (maxY-minY)+(2*offsetFix)), forCoordinate: CPTCoordinate.Y)
         //Stop user from being able to move graph about by clicking etc...
         plotSpace.allowsUserInteraction = false
         
@@ -83,6 +84,8 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         //Add created plot to plotspace of graph we created.
         graph.addPlot(plot, toPlotSpace: graph.defaultPlotSpace)
+        //THIS STATEMENT COULD BE PROBLEMATIC...
+        //graph.defaultPlotSpace.scaleToFitPlots(graph.allPlots())
         
         //Call initPlot function that then calls various functions to set up plot
         self.initPlot()
@@ -104,6 +107,8 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         graph.plotAreaFrame.paddingRight = 10
         graph.plotAreaFrame.paddingTop = 30
         graph.plotAreaFrame.paddingBottom = 30
+
+    
     }
     
     func configureAxes() {

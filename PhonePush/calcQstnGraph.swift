@@ -13,14 +13,14 @@ class calcQstnGraph {
     var segmentList:[(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double])->([Double],[Double])] = []
     //Array for storing plotting values
     var yVals:[Double] = [0.0]
-    
+    var timeVals:[Double] = [0.0]
     var yLimit:Double = 0
     
     //Call this if you want a position-time question graph
     //totalTime: total time the graph lasts (whole x-axis)
     //yLimits: the maximum y-value to consider
     //timeRes: what time resolution to use when calculating points
-    func getXGraph(totalTime:Double,yLimit:Double,timeRes:Double) -> [Double] {
+    func getXGraph(totalTime:Double,yLimit:Double,timeRes:Double) -> ([Double],[Double]) {
         //Clear arrays
         segmentList = []
         //Array for storing plotting values
@@ -29,10 +29,11 @@ class calcQstnGraph {
         self.yLimit = yLimit
         
         //Split the timebase of the graph up into three segments
+        //NEED TO MAKE SURE THAT EACH SEGMENT HAS AT LEAST A MINIUM TIME
         var segTimes:[Int] = [0,0,0,0]
         segTimes[0] = 0
-        segTimes[1] = randomR(2...UInt32(ceil(totalTime/3)))
-        segTimes[2] = segTimes[1] + randomR(0...UInt32(ceil(3/4*(totalTime-Double(segTimes[1])))))
+        segTimes[1] = Int(ceil(totalTime/3))
+        segTimes[2] = Int(ceil(totalTime*2/3))
         segTimes[3] = Int(floor(totalTime))
         println(segTimes)
         
@@ -78,7 +79,7 @@ class calcQstnGraph {
         }
     
         //Return all data points
-        return yVals
+        return (timeVals,yVals)
     }
     
     
@@ -92,6 +93,12 @@ class calcQstnGraph {
         //segment range
         var constArray:[Double] = Array(count: Int(ceil(Double(timeRange[1]-timeRange[0])/tRes)), repeatedValue: yInit)
         
+        //Fill up time array with corresponding times (note: is class variable)
+        for var timeIndex = Double(timeRange[0]); timeIndex < Double(timeRange[1]);timeIndex+=tRes {
+            timeVals.append(timeVals[timeVals.count-1]+tRes)
+        }
+        
+        //Return array of yValues and initial y and v data for next segment
         return (constArray,[yInit,0.0])
     }
     
@@ -118,12 +125,16 @@ class calcQstnGraph {
             println("internal time: \(velTime)")
             //Use y=mx+c equation to add new distance on to yInit and append to array
             posLinArray.append(yInit+Double(m)*velTime)
+            //Fill up time array with corresponding times (note: is class variable)
+            timeVals.append(timeVals[timeVals.count-1]+tRes)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {
                 println("Something went wrong, looping forever (>1000) in posLinear function")
                 break
             }
         }
+        
+        //Return array of yValues and initial y and v data for next segment
         return (posLinArray,[posLinArray[posLinArray.count-1],Double(m)])
     }
     
@@ -150,12 +161,15 @@ class calcQstnGraph {
             println("internal time: \(velTime)")
             //Use y=mx+c equation to add new distance on to yInit and append to array
             negLinArray.append(yInit + Double(m)*velTime)
+            //Fill up time array with corresponding times (note: is class variable)
+            timeVals.append(timeVals[timeVals.count-1]+tRes)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {
                 println("Something went wrong, looping forever (>1000) in posLinear function")
                 break
             }
         }
+        //Return array of yValues and initial y and v data for next segment
         return (negLinArray,[negLinArray[negLinArray.count-1],Double(m)])
     }
     
@@ -178,9 +192,10 @@ class calcQstnGraph {
         //if initial velocity is -1, -2 then accelerate to final velocity of either 0,1,2
         } else if vInit <= -1 {
             vFinal = Double(randomR(0...2))
-        //if vInit near 0 either acc/decellerate to final velocity of 0, +1 or -1
+        //if vInit near 0 either acc/decellerate to final velocity of +1 or -1
         } else {
-            vFinal = Double(randomR(0...2)-1)
+            var ran = randomR(0...1)
+            vFinal = Double(1+(randomR(0...1)*(-2)))
         }
         
         //Look at which tri-section of y-axis starting position is for this segment to decide where to end up.
@@ -218,6 +233,8 @@ class calcQstnGraph {
             //initial y was for this segment)
             var currentPos = yInit + vInit*accelTime+(0.5*a*pow(accelTime,2.0))
             accelValsArray.append(currentPos)
+            //Fill up time array with corresponding times (note: is class variable)
+            timeVals.append(timeVals[timeVals.count-1]+tRes)
             //Break out if we've been going for too long as a precaution
             if timeIndex > 1000 {
                 println("Something went wrong, looping forever (>1000) in accelVals function")
@@ -225,6 +242,7 @@ class calcQstnGraph {
             }
         }
         
+        //Return array of yValues and initial y and v data for next segment
         return (accelValsArray,[accelValsArray[accelValsArray.count-1],vFinal])
     }
     

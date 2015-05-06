@@ -98,8 +98,9 @@ class graphQstns: UIViewController, UITextFieldDelegate {
     
     override func viewDidLayoutSubviews() {
         
-        //Need this check to prevent crashes
+        //Need this first check to prevent crashes (orientation doesn't exist at start?)
         if checkViewAppearedForFirstTime == 1 {
+            //Now check for device orientation
             if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
             {
                 //Check whether there is already a value for that view set in dictionary?

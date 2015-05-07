@@ -9,28 +9,35 @@
 import UIKit
 
 class calcQstnGraph {
-    //THIS IS CALLED TO GET DATA FOR A QSTN GRAPH
+    //Define class variables
     var segmentList:[(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String)->([Double],[Double],String)] = []
-    //Array for storing plotting values
+    var yLimit:Double = 0
+    //Array for storing x/y values to be plotted
     var yVals:[Double] = [0.0]
     var timeVals:[Double] = [0.0]
-    var yLimit:Double = 0
+    var tTime = 1.0
     
-    //Call this if you want a position-time question graph
+    //Get *distance*-time question graph
     //totalTime: total time the graph lasts (whole x-axis)
-    //yLimits: the maximum y-value to consider
+    //yLimit: the maximum y-value to consider
     //timeRes: what time resolution to use when calculating points
-    func getXGraph(totalTime:Double,yLimit:Double,timeRes:Double) -> ([Double],[Double]) {
+    //tTime: Length of time 'smooth' accel transitions between segments is given
+    //RETURNS x and y data in arrays
+    func getXGraph(totalTime:Double,yLimit:Double,timeRes:Double,transTime:Double = 1.0) -> ([Double],[Double]) {
         println("")
         println("")
         println("===========NEW RUN============")
         //Clear arrays
         segmentList = []
-        //Array for storing plotting values
         yVals = [0.0]
-
         self.yLimit = yLimit
-        
+        self.tTime = transTime
+        //Make transition time divisable by tRes
+        self.tTime = ceil(self.tTime/timeRes) * timeRes
+        //If requested transition time is larger than the size of segments, reset it to 1.0
+        if self.tTime >= totalTime/3 {
+            self.tTime = 1.0
+        }
         //Split the timebase of the graph up into three equal segments
         var segTimes:[Int] = [0,0,0,0]
         segTimes[0] = 0
@@ -38,75 +45,65 @@ class calcQstnGraph {
         segTimes[2] = Int(ceil(totalTime*2/3))
         segTimes[3] = Int(floor(totalTime))
         println(segTimes)
-        
-        //Array of functions to use in determining segments of graph
-        //note: removed negLinear for distance time
+        //Array of functions to use in determining segment shapes (chosen from randomly)
         segmentList = [constVals,posLinear,accelVals]
-
         //Set start parameters that determines where first line starts and with
         //what velocity
         var yStart = 0.0
         var vStart = 0.0
         var lastCall:String = ""
-        
-        //Loop that exhaustively calls functions for calculating three 
-        //line segments in random order.
+        //Loop that calculates each segments plot data (randomly chooses segment types)
         for ii in 0...2 {
-            //Get random element of array
+            //Get random element of array shape functions
             var currentSegment = randomR(0...UInt32(segmentList.count-1))
             var currentFunction = segmentList[currentSegment]
             println("Trying for element \(ii) with function \(currentSegment)")
-            //Remove the element that we used
+            //Remove the element that we used so does not get used again in this graph
             //Note: need to 'assign' to prevent error in calling function without args
             var temptemp = segmentList.removeAtIndex(currentSegment)
             //Add to the array of y values, the result of calling the current randomly 
             //chosen segment
             var segResult = currentFunction(tRes: timeRes, timeRange: [segTimes[ii],segTimes[ii+1]], yInit: yStart, vInit: vStart, data: yVals,lastfn: lastCall)
             yVals = yVals + segResult.0
-            //Update the starting y-value for the next segment calculation
+            //Update the starting y-value and velocity for next segment calculation
             yStart = segResult.1[0]
             vStart = segResult.1[1]
             println("new yStart: \(yStart), new vStart: \(vStart)")
-            //Update the variable storing which previously called function was
+            //Update variable storing namne of previously called function
             lastCall = segResult.2
             
         }
-        println("Length of timeVals: \(timeVals.count)")
-        println("Length of yVals: \(yVals.count)")
-        println("")
-        //yVals.append(0.0)
-        //Return time values and data points for all segments together
+        //Return time values and data points for all three segments combined
         return (timeVals,yVals)
     }
     
     
-    //Calculate region of graph with constant value (i.e. 'flat line') between two times
+    //Function calculates constant (i.e. 'flat line') segment between two times
     func constVals(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String) -> ([Double],[Double],String){
+        //Local variables
         var yInitLocal = yInit
         var startTime:Double = 0.0
         var tArray:[Double] = []
         //Check whether need transition and call transition function if so
-        if lastfn == "posLinear" || (lastfn == "accelVals" && vInit > 0) {
-            println("CALLING TRANSITION FUNCTION")
+        if (lastfn == "posLinear" || (lastfn == "accelVals" && vInit > 0)) && tTime > 0 {
             //Call transition function with relevant data
-            tArray = transition(vInit, vFinal: 0.0, startTime: Double(timeRange[0]), transitTime: 1.0, tRes: tRes, yInit: yInit)
-            //Set starting time of current run to be 1 second later
-            startTime = Double(timeRange[0])+1.0
-            //Update new yInit position
+            tArray = transition(vInit, vFinal: 0.0, startTime: Double(timeRange[0]), transitTime: tTime, tRes: tRes, yInit: yInit)
+            //Set starting time of current run to be tTime seconds later
+            startTime = Double(timeRange[0])+tTime
+            //Update new yInit position at end of transition
             yInitLocal = tArray[tArray.count-1]
         } else {
             startTime = Double(timeRange[0])
         }
         
         println("RUNNING CONSTVALS")
-        //Create an array that contains the same constant value (determined by start parameter)
-        var constArray:[Double] = Array(count: Int(ceil((Double(timeRange[1])-startTime)/tRes))+1, repeatedValue: yInitLocal)
-        //Fill up time array with corresponding times (note: is class variable)
-        for var timeIndex = startTime; timeIndex < Double(timeRange[1]);timeIndex+=tRes {
+        //Array with constant y-values for this segment (determined by yInit)
+        var constArray:[Double] = Array(count: Int(ceil((Double(timeRange[1])-startTime)/tRes)), repeatedValue: yInitLocal)
+        //Fill up time array with corresponding times (note: timeVals is class variable)
+        for var timeIndex = startTime+tRes; timeIndex < Double(timeRange[1]);timeIndex+=tRes {
             timeVals.append(timeVals[timeVals.count-1]+tRes)
         }
-        
-        //Add on transition if it was undertaken
+        //Add on transition to data (if it was undertaken)
         if tArray.count != 0 {
             constArray = tArray + constArray
         }
@@ -116,9 +113,12 @@ class calcQstnGraph {
         return (constArray,[yInitLocal,0.0],"constVals")
     }
     
-    //Calculate region of graph with positive velocity
+    //Function calculates const positive vel (i.e. 'linear') segment between two times
     func posLinear(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String) -> ([Double],[Double],String){
-        
+        //Local variables
+        var yInitLocal = yInit
+        var startTime:Double = 0.0
+        var tArray:[Double] = []
         println("RUNNING POSLINEAR")
         //Array for storing values
         var posLinArray:[Double] = []
@@ -132,14 +132,27 @@ class calcQstnGraph {
             m = randomR(1...2)
         }
 
+        //Check whether need transition and call transition function if so
+        if (lastfn == "constVals" || lastfn == "") && tTime > 0 {
+            println("CALLING TRANSITION FUNCTION")
+            //Call transition function with relevant data
+            tArray = transition(vInit, vFinal: Double(m), startTime: Double(timeRange[0]), transitTime: tTime, tRes: tRes, yInit: yInit)
+            //Set starting time of current run to be tTime seconds later
+            startTime = Double(timeRange[0])+tTime
+            //Update new yInit position at end of transition
+            yInitLocal = tArray[tArray.count-1]
+        } else {
+            startTime = Double(timeRange[0])
+        }
+        
         println("m is: \(m)")
-        println("timeIndex start: \(Double(timeRange[0])), timeIndex stop: \(Double(timeRange[1])), timeStep: \(tRes)")
+        println("timeIndex start: \(startTime), timeIndex stop: \(Double(timeRange[1])), timeStep: \(tRes)")
         //Calculate y values between time range with given time resolution using y=mx+c
-        for var timeIndex = Double(timeRange[0])+tRes; timeIndex < Double(timeRange[1]); timeIndex+=tRes {
+        for var timeIndex = startTime+tRes; timeIndex < Double(timeRange[1]); timeIndex+=tRes {
             //Get the time spent *in this segment* (need this for y=mx+c calc)
-            var velTime = timeIndex-Double(timeRange[0])
+            var velTime = timeIndex-startTime
             //Use y=mx+c equation to add new distance on to yInit and append to array
-            posLinArray.append(yInit+Double(m)*velTime)
+            posLinArray.append(yInitLocal+Double(m)*velTime)
             //Fill up time array with corresponding times (note: is class variable)
             timeVals.append(timeVals[timeVals.count-1]+tRes)
             //Break out if we've been going for too long as a precaution
@@ -148,10 +161,17 @@ class calcQstnGraph {
                 break
             }
         }
+        //Add on transition if it was undertaken
+        if tArray.count != 0 {
+            posLinArray = tArray + posLinArray
+        }
+        
         println("")
         //Return array of yValues and initial y and v data for next segment
         return (posLinArray,[posLinArray[posLinArray.count-1],Double(m)],"posLinear")
     }
+
+    /*
     
     //Calculate region of graph with negative velocity
     func negLinear(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String) -> ([Double],[Double],String){
@@ -202,18 +222,17 @@ class calcQstnGraph {
         }
     }
     
+    */
     
-    //Calculate region of graph with acceleration (pos or neg depending on yvalue it
-    //starts at)
+    //Function calculates acceleration (i.e. 'curved') segment between two times
     func accelVals(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String) -> ([Double],[Double],String){
-        
+        //Local variables
         println("RUNNING ACCELVALS")
         var a:Double = 0
         var vFinal:Double = 0
         var yFinal:Double = 0
         var flipVar = 1.0
         var accelValsArray:[Double] = []
-        
         //Decide what final velocity to accelerate to based on velocity beforehand
         if vInit >= 1{
             if vInit == 1.0 {
@@ -228,7 +247,6 @@ class calcQstnGraph {
         } else {
             vFinal = 1.0
         }
-        
         //Look at which tri-section of y-axis starting position is for this segment to
         //decide where to end up.
         var triSecHeight = self.yLimit/3
@@ -285,21 +303,21 @@ class calcQstnGraph {
         return (accelValsArray,[accelValsArray[accelValsArray.count-1],vFinal],"accelVals")
     }
     
+    
+    //Function called to insert small acceleration 'smooth transitions' when needed
     func transition(vInit: Double, vFinal:Double, startTime: Double, transitTime: Double, tRes: Double, yInit: Double) -> [Double] {
-        println("CALLED TRANSITION FUNCTION")
         //Determine what acceleration we need to get desired transition
         var a = (vFinal-vInit)/Double(transitTime)
         var transitArray:[Double] = []
-        
-        
+        //Build transition data
         for var timeIndex = startTime+tRes; timeIndex < startTime+transitTime; timeIndex+=tRes {
             var accelTime = timeIndex-startTime
             var currentPos = yInit + vInit*accelTime+(0.5*a*pow(accelTime,2.0))
             transitArray.append(currentPos)
-            //Update time values
+            //Update time values used by transition
             timeVals.append(timeVals[timeVals.count-1]+tRes)
         }
-        
+        //Return transition data
         return transitArray
     }
     

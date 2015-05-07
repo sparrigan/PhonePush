@@ -22,7 +22,7 @@ class followMe: UIViewController  {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        var lala = qstnGraph.getXGraph(30.0, yLimit: 10.0, timeRes: 0.5)
+        var lala = qstnGraph.getXGraph(30.0, yLimit: 10.0, timeRes: 0.2)
         
         var timeArray = lala.0
         //var timeArray:[Double] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]

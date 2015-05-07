@@ -71,8 +71,10 @@ class calcQstnGraph {
             lastCall = segResult.2
             
         }
-
+        println("Length of timeVals: \(timeVals.count)")
+        println("Length of yVals: \(yVals.count)")
         println("")
+        //yVals.append(0.0)
         //Return time values and data points for all segments together
         return (timeVals,yVals)
     }
@@ -80,18 +82,38 @@ class calcQstnGraph {
     
     //Calculate region of graph with constant value (i.e. 'flat line') between two times
     func constVals(tRes: Double, timeRange: [Int], yInit: Double, vInit: Double, data: [Double],lastfn:String) -> ([Double],[Double],String){
+        var yInitLocal = yInit
+        var startTime:Double = 0.0
+        var tArray:[Double] = []
+        //Check whether need transition and call transition function if so
+        if lastfn == "posLinear" || (lastfn == "accelVals" && vInit > 0) {
+            println("CALLING TRANSITION FUNCTION")
+            //Call transition function with relevant data
+            tArray = transition(vInit, vFinal: 0.0, startTime: Double(timeRange[0]), transitTime: 1.0, tRes: tRes, yInit: yInit)
+            //Set starting time of current run to be 1 second later
+            startTime = Double(timeRange[0])+1.0
+            //Update new yInit position
+            yInitLocal = tArray[tArray.count-1]
+        } else {
+            startTime = Double(timeRange[0])
+        }
         
         println("RUNNING CONSTVALS")
         //Create an array that contains the same constant value (determined by start parameter)
-        var constArray:[Double] = Array(count: Int(ceil(Double(timeRange[1]-timeRange[0])/tRes)), repeatedValue: yInit)
+        var constArray:[Double] = Array(count: Int(ceil((Double(timeRange[1])-startTime)/tRes))+1, repeatedValue: yInitLocal)
         //Fill up time array with corresponding times (note: is class variable)
-        for var timeIndex = Double(timeRange[0]); timeIndex < Double(timeRange[1]);timeIndex+=tRes {
+        for var timeIndex = startTime; timeIndex < Double(timeRange[1]);timeIndex+=tRes {
             timeVals.append(timeVals[timeVals.count-1]+tRes)
+        }
+        
+        //Add on transition if it was undertaken
+        if tArray.count != 0 {
+            constArray = tArray + constArray
         }
         
         println("")
         //Return array of yValues and initial y and v data for next segment
-        return (constArray,[yInit,0.0],"constVals")
+        return (constArray,[yInitLocal,0.0],"constVals")
     }
     
     //Calculate region of graph with positive velocity
@@ -262,6 +284,25 @@ class calcQstnGraph {
         //Return array of yValues and initial y and v data for next segment
         return (accelValsArray,[accelValsArray[accelValsArray.count-1],vFinal],"accelVals")
     }
+    
+    func transition(vInit: Double, vFinal:Double, startTime: Double, transitTime: Double, tRes: Double, yInit: Double) -> [Double] {
+        println("CALLED TRANSITION FUNCTION")
+        //Determine what acceleration we need to get desired transition
+        var a = (vFinal-vInit)/Double(transitTime)
+        var transitArray:[Double] = []
+        
+        
+        for var timeIndex = startTime+tRes; timeIndex < startTime+transitTime; timeIndex+=tRes {
+            var accelTime = timeIndex-startTime
+            var currentPos = yInit + vInit*accelTime+(0.5*a*pow(accelTime,2.0))
+            transitArray.append(currentPos)
+            //Update time values
+            timeVals.append(timeVals[timeVals.count-1]+tRes)
+        }
+        
+        return transitArray
+    }
+    
     
     //Generates random integer in given range
     func randomR(range: Range<UInt32>) -> Int {

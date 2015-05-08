@@ -65,7 +65,7 @@ class accelRecorder: NSObject {
     }
     
     
-    //Method to start recording
+    //Method to start recording (under restrictions needed for suvat phonepush activities)
     func startRec() {
         
         //Initialise data counting variables for new record
@@ -189,6 +189,83 @@ class accelRecorder: NSObject {
         }
         //END OF RECORDING
     }
+    
+    
+    //Method to start recording indiscriminately
+    func startRecAll() {
+        
+        //Initialise data counting variables for new record
+        
+        self.accelsRaw = []
+        self.firstTime = 0
+        posdir.x=0
+        posdir.y=0
+        countav=0
+        accelsDbl = []
+        timesDbl = []
+        
+        //START RECORDING
+        if motionManager.accelerometerAvailable == true {
+            //motionManager.accelerometerUpdateInterval = 0.00001
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler:{
+                data, error in
+                var vecsign = 1.0
+                //Display current acceleration magnitude in x-y plane
+                self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
+               
+               
+                    self.startvar = 1
+                    //Now recording, set 'time' to zero at first time we record
+                    if self.firstTime == 0 {
+                        self.firstTime = data.timestamp
+                    }
+                    //Take average of first five acceleration measurements in x-y plane
+                    //to find a definition for 'positive direction' whilst still recording
+                    if self.countav<=5 {
+                        self.posdir.x += CGFloat(data.acceleration.x-Double(self.accelCalib.x))
+                        self.posdir.y += CGFloat(data.acceleration.y-Double(self.accelCalib.y))
+                        ++self.countav
+                    } else if self.countav == 5 {
+                        self.posdir.x = self.posdir.x/5
+                        self.posdir.y = self.posdir.y/5
+                        vecsign = Double(self.dotProdSign(CGPoint(x:data.acceleration.x-Double(self.accelCalib.x),y: data.acceleration.y-Double(self.accelCalib.y)),vec2: self.posdir))
+                        ++self.countav
+                    } else {
+                        //Determine sign of acceleration relative to initial push using inner product with average of first five acceleration vectors
+                        vecsign = Double(self.dotProdSign(CGPoint(x:data.acceleration.x-Double(self.accelCalib.x),y: data.acceleration.y-Double(self.accelCalib.y)),vec2: self.posdir))
+                    }
+                    
+                    
+                    self.accelsDbl += [vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
+                    self.timesDbl += [data.timestamp - self.firstTime]
+                    
+                    
+                    //!!!THIS CONDITIONAL STATEMENT CAN GO!!!
+                    if self.accelsDbl[self.accelsDbl.count-1] < 0 && self.firstnegaccel == 0 {
+                        
+                        self.firstnegaccel = 1
+                        
+                        self.startConstAccel = self.timesDbl[self.timesDbl.count-1]
+                        
+                        //println("THE ACCEL IS CONST FROM TIME \(self.timesDbl[self.timesDbl.count-1])")
+                    }
+                    
+                    
+                    
+                    //update lastval for next run
+                    self.lastval = vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))
+                    
+                
+                //This seperate recording of raw accelerations (as Double) used to determine when to start recording to get correct vecsign (when have significant change)
+                self.accelsRaw += [sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
+                
+                
+                
+            })
+        }
+        //END OF RECORDING
+    }
+    
     
     //Method that stops recording, finds vel and pos and returns the array of strings for CSV
     func stopRec() -> (aDbl: [Double], tDbl: [Double],startConstAccel: Double, vDbl: [Double], pDbl: [Double])? {

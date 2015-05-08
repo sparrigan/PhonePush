@@ -92,6 +92,11 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
     }
     
+    func addGraph(xVals:[Double], yVals: [Double]) {
+        
+    }
+    
+    
     func initPlot() {
         //Ronseal
         configureGraph()

@@ -14,6 +14,9 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     //Arrays for graph data
     var yArray:[Double] = []
     var xArray:[Double] = []
+    //Dic for storing what values are associated with what plot for when delegate 
+    //function is called.
+    var plotDic = [CPTPlot:([Double],[Double])]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,12 +91,37 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         //graph.defaultPlotSpace.scaleToFitPlots(graph.allPlots())
         
         //Call initPlot function that then calls various functions to set up plot
+        
+        plotDic[plot as CPTPlot] = (xArray,yArray)
+        
+        
         self.initPlot()
         
     }
     
+    //Function for adding another plot to the existing graph
     func addGraph(xVals:[Double], yVals: [Double]) {
         
+        
+        var plot:CPTScatterPlot = CPTScatterPlot(frame: CGRectZero)
+        //Set this as the delegate for getting data etc...
+        plot.dataSource = self
+        
+        //Change line style (note: need to create linestyle object first)
+        var myLineStyle:CPTMutableLineStyle = CPTMutableLineStyle()
+        myLineStyle.lineColor = CPTColor.greenColor()
+        myLineStyle.lineWidth = 2.0
+        plot.dataLineStyle = myLineStyle
+        
+        //Add created plot to plotspace of graph we created.
+        graph.addPlot(plot, toPlotSpace: graph.defaultPlotSpace)
+        //THIS STATEMENT COULD BE PROBLEMATIC...
+        //graph.defaultPlotSpace.scaleToFitPlots(graph.allPlots())
+        
+        //Call initPlot function that then calls various functions to set up plot
+        plotDic[plot as CPTPlot] = (xVals,yVals)
+        
+
     }
     
     
@@ -202,20 +230,26 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     
     //Required by CorePlot delegate: Returns the number of points to be plotted
     func numberOfRecordsForPlot(plot: CPTPlot!) -> UInt {
-        return UInt(xArray.count)
+        var tempVal = plotDic[plot]!
+        
+        return UInt(tempVal.0.count)
     }
     
     //Required by CorePlot delegate: Returns the x and y values for given index
     //(fieldEnum parameter determines whether coreplot is asking for x or y)
     func numberForPlot(plot: CPTPlot, field fieldEnum: UInt, recordIndex idx: UInt) -> AnyObject {
         //removed ! from AnyObject above
+
+        var tempVal = plotDic[plot]!
         
         //Check whether CorePlot wants x or y values and return appropriate value
         //at the index that CorePlot requested
         if fieldEnum.hashValue == CPTScatterPlotField.X.hashValue {
-            return xArray[Int(idx)]
+            
+
+            return tempVal.0[Int(idx)]
         } else {
-            return yArray[Int(idx)]
+            return tempVal.1[Int(idx)]
         }
     }
     

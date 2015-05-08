@@ -43,6 +43,7 @@ class accelRecorder: NSObject {
     var delegate: accelRecorderDelegate?
     //Calibration counting variables
     var accelCalib: CGPoint = CGPoint(x:0,y:0)
+    var accelCalibTotal:Double = 0.0
     var countCalib: Double = 0
     var bgAccel: CGPoint = CGPoint(x:0,y:0)
     var accelsDbl:[Double] = []
@@ -211,14 +212,29 @@ class accelRecorder: NSObject {
                 data, error in
                 var vecsign = 1.0
                 //Display current acceleration magnitude in x-y plane
-                self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
+                //self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
                
-               
+                //Current accel value to compare: 
+                var currentAccel = abs(9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0)))
+                var lastAccel:Double
+                
+                if self.accelsDbl.count != 0 {
+                    lastAccel = Double(self.accelsDbl[self.accelsDbl.count-1])
+                } else {
+                    lastAccel = 0.0
+                }
+                
+                //Now recording, set 'time' to zero at first time we record
+                if self.firstTime == 0 {
+                    self.firstTime = data.timestamp
+                }
+                
+                //Only consider a value if the change from last value is bigger than twice the calibration average ('background') value
+                if ((currentAccel - abs(lastAccel)) >= self.accelCalibTotal) {
+                
                     self.startvar = 1
-                    //Now recording, set 'time' to zero at first time we record
-                    if self.firstTime == 0 {
-                        self.firstTime = data.timestamp
-                    }
+                   
+                    
                     //Take average of first five acceleration measurements in x-y plane
                     //to find a definition for 'positive direction' whilst still recording
                     if self.countav<=5 {
@@ -234,30 +250,24 @@ class accelRecorder: NSObject {
                         //Determine sign of acceleration relative to initial push using inner product with average of first five acceleration vectors
                         vecsign = Double(self.dotProdSign(CGPoint(x:data.acceleration.x-Double(self.accelCalib.x),y: data.acceleration.y-Double(self.accelCalib.y)),vec2: self.posdir))
                     }
+
+  
+                    self.accelsDbl += [vecsign * 9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
+
+//                    self.accelsDbl += [vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
+                
+                } else {
+                    self.accelsDbl += [0.0]
+                }
+                //Update time value regardless of whether we deemed change large enough to
+                //record (i.e. outside above conditional).
+                self.timesDbl += [data.timestamp - self.firstTime]
+                //println(self.timesDbl)
                     
+
                     
-                    self.accelsDbl += [vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
-                    self.timesDbl += [data.timestamp - self.firstTime]
-                    
-                    
-                    //!!!THIS CONDITIONAL STATEMENT CAN GO!!!
-                    if self.accelsDbl[self.accelsDbl.count-1] < 0 && self.firstnegaccel == 0 {
-                        
-                        self.firstnegaccel = 1
-                        
-                        self.startConstAccel = self.timesDbl[self.timesDbl.count-1]
-                        
-                        //println("THE ACCEL IS CONST FROM TIME \(self.timesDbl[self.timesDbl.count-1])")
-                    }
-                    
-                    
-                    
-                    //update lastval for next run
-                    self.lastval = vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))
                     
                 
-                //This seperate recording of raw accelerations (as Double) used to determine when to start recording to get correct vecsign (when have significant change)
-                self.accelsRaw += [sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0))]
                 
                 
                 
@@ -297,7 +307,7 @@ class accelRecorder: NSObject {
     //Method for calibrating accelerometer (timer calls finishcalibrate, that returns to delegate)
     func calibrate() {
         //println("Yay")
-        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "finishcalibrate", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "finishcalibrate", userInfo: nil, repeats: false)
         self.accelCalib = CGPoint(x:0,y:0)
         self.countCalib = 0
         if motionManager.accelerometerAvailable == true {
@@ -318,6 +328,7 @@ class accelRecorder: NSObject {
         delegate?.calibcheck = 0
         accelCalib.x = accelCalib.x/CGFloat(countCalib)
         accelCalib.y = accelCalib.y/CGFloat(countCalib)
+        accelCalibTotal = 9.81*sqrt(pow(Double(accelCalib.x),2.0)+pow(Double(accelCalib.y),2.0))
         //Call function in vc that removes calibrate button and replaces with start button etc
         delegate?.endOfCalib()
     }

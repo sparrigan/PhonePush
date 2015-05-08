@@ -98,7 +98,7 @@ class followMe: UIViewController, accelRecorderDelegate  {
     func endOfCalib() {
             aRec.startRecAll()
         //!!!Replace '5' with timeOfPlot!!!
-            NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "finishRecording", userInfo: nil, repeats: false)
+            NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "finishRecording", userInfo: nil, repeats: false)
     }
     
     func finishRecording() {
@@ -113,9 +113,15 @@ class followMe: UIViewController, accelRecorderDelegate  {
         }
     
         println("FINISHED")
-        println("aDbl: \(aDbl)")
-        println("pDbl: \(pDbl)")
         println("tDbl: \(tDbl)")
+        println("")
+        println("tDbl: \(aDbl)")
+        println("")
+        println("pDbl: \(pDbl)")
+        
+        
+        graph1.addGraph(tDbl, yVals: pDbl)
+        
     }
     
     

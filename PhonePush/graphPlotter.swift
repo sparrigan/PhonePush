@@ -94,6 +94,8 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         plotDic[plot as CPTPlot] = (xArray,yArray)
         
+        println("Number of entries in plotDic is: \(plotDic.count)")
+        
         
         self.initPlot()
         

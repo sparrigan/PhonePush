@@ -18,7 +18,7 @@ class followMe: UIViewController, accelRecorderDelegate  {
     let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     let button2   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     //Recorder instance
-    var aRec:accelRecorder = accelRecorder(tb: UITextField(frame: CGRectMake(0,0,0,0)))
+    var aRec:accelRecorder = accelRecorder()//tb: UITextField(frame: CGRectMake(0,0,0,0)))
     var calibcheck:Int = 0
     //THIS WILL BE THE VC FOR MANAGING THE RUNNING OF THIS ACTIVITY
     var tb = UITextField(frame: CGRect(x: 400, y: 400, width: 200, height: 40))
@@ -28,12 +28,17 @@ class followMe: UIViewController, accelRecorderDelegate  {
     var tDbl:[Double] = []
     var pDbl: [Double] = []
     
+    //Called when memory for instance is deallocated
+    deinit {
+        //aRec.delegate = nil
+        //println("followMe has been DEINITIALIZED")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        aRec = accelRecorder(tb: tb)
+        aRec = accelRecorder()//tb: tb)
         aRec.delegate = self
         
         var lala = qstnGraph.getXGraph(timeOfPlot, yLimit: 10.0, timeRes: 0.2)
@@ -80,6 +85,9 @@ class followMe: UIViewController, accelRecorderDelegate  {
         if let navi = self.navigationController {
             var VCstack = navi.viewControllers
             //Remove top VC root is at 0, top is at count
+            
+            println("Stack on navigation controller: \(VCstack)")
+            
             VCstack.removeLast()
             var restartGraph: followMe = followMe()
             //Add nextVC to top of stack
@@ -89,6 +97,7 @@ class followMe: UIViewController, accelRecorderDelegate  {
         }
 
     }
+    
     
     func record(sender:UIButton) {
         aRec.calibrate()
@@ -129,6 +138,13 @@ class followMe: UIViewController, accelRecorderDelegate  {
         //For debugging, AccelRecorder calls this function with calib data
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        println("******************************")
+        println("ARRRRRRR!!! MEMORY WARNING")
+        println("******************************")
+    }
     
     
 }

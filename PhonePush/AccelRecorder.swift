@@ -22,7 +22,7 @@ import UIKit
 import CoreMotion
 
 //Protocol for delegate that will receive information from calibration
-protocol accelRecorderDelegate {
+protocol accelRecorderDelegate: class {
     func getCalibration(accC: CGPoint, aCount: Double)
     var calibcheck:Int {get set}
     func endOfCalib()
@@ -39,8 +39,9 @@ class accelRecorder: NSObject {
     var posdir = CGPoint(x: 0,y: 0)
     var countav = 0
     var textField: UITextField = UITextField(frame: CGRectMake(0,0,0,0))
-    //Delegate for sending calilbration data to
-    var delegate: accelRecorderDelegate?
+    //Delegate for sending calilbration data to (need to make a weak reference to avoid
+    //a strong reference cycle)
+    weak var delegate: accelRecorderDelegate?
     //Calibration counting variables
     var accelCalib: CGPoint = CGPoint(x:0,y:0)
     var accelCalibTotal:Double = 0.0
@@ -57,12 +58,17 @@ class accelRecorder: NSObject {
     var firstnegaccel = 0
     var startConstAccel = 0.0
 
-    
+    /*
     //Get textfield from viewcontroller for displaying accel values
-    init(tb:UITextField) {
+    init() {
         
         textField = tb
         //integrate = integrator()
+    }
+*/
+    //This is called when memory location for instance is deallocated
+    deinit {
+        //println("accelRecorder has been DEINITIALIZED")
     }
     
     
@@ -86,7 +92,7 @@ class accelRecorder: NSObject {
                 data, error in
                 var vecsign = 1.0
                 //Display current acceleration magnitude in x-y plane
-                self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
+                //self.textField.text = String(format:"%f", sqrt(pow(data.acceleration.x,2.0)+pow(data.acceleration.y,2.0)))
                 
                 //println(vecsign*9.81*sqrt(pow(data.acceleration.x-Double(self.accelCalib.x),2.0)+pow(data.acceleration.y-Double(self.accelCalib.y),2.0)))
                 

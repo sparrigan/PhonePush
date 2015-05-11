@@ -29,7 +29,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
 
     var tb = UITextField(frame: CGRect(x: 100, y: 100, width: 200, height: 40))
     //Initialise with empty value
-    var aRec:accelRecorder = accelRecorder(tb: UITextField(frame: CGRectMake(0,0,0,0)))
+    var aRec:accelRecorder = accelRecorder()//(tb: UITextField(frame: CGRectMake(0,0,0,0)))
     var calibcheck:Int = 0
     let button   = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     let startButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
@@ -74,7 +74,7 @@ class PPcalibVC: UIViewController, UIDocumentInteractionControllerDelegate, acce
 
         //Instantiate accelerator recorder object
         
-        aRec = accelRecorder(tb: tb)
+        aRec = accelRecorder()//(tb: tb)
         aRec.delegate = self
         
         //Phone pushing prompts (all subsequent code follows from button press functions):

@@ -41,7 +41,8 @@ class followMe: UIViewController, accelRecorderDelegate  {
         aRec = accelRecorder()//tb: tb)
         aRec.delegate = self
         
-        var lala = qstnGraph.getXGraph(timeOfPlot, yLimit: 10.0, timeRes: 0.2)
+        //yLimit specifies the maximum y value that the generated plot will reach.
+        var lala = qstnGraph.getXGraph(timeOfPlot, yLimit: 1.0, timeRes: 0.2)
         
         var timeArray = lala.0
         //var timeArray:[Double] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]

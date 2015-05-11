@@ -73,8 +73,11 @@ class calcQstnGraph {
             lastCall = segResult.2
             
         }
+        
+        //Scale the set of yVals to fit within the yLimit specified
+        
         //Return time values and data points for all three segments combined
-        return (timeVals,yVals)
+        return (timeVals,scaleYValsDT(yVals,yLimit: yLimit))
     }
     
     
@@ -319,6 +322,22 @@ class calcQstnGraph {
         }
         //Return transition data
         return transitArray
+    }
+    
+    //Function for scaling graph as desired if Distance-Time plot (easier to find max val)
+    func scaleYValsDT(yVals: [Double], yLimit: Double) -> [Double] {
+        //Find scaling factor (max value of graph is last datapoint since 
+        //*distance*-time graph)
+        var scaleFactor = yLimit/yVals[yVals.count - 1]
+        
+        var yValsScaled:[Double] = []
+        
+        for ii in 0...yVals.count-1 {
+            yValsScaled.append(yVals[ii]*scaleFactor)
+        }
+        
+        return yValsScaled
+        
     }
     
     

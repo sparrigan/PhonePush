@@ -38,14 +38,16 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
     var hostView: CPTGraphHostingView = CPTGraphHostingView()
     var graph:CPTGraph!
     
-    func loadgraph() {
+    //Function called (externally) to load graphs
+    //Returns the plot object just added in case is needed
+    func loadgraph() -> CPTScatterPlot {
         //Setup hostview, make it same size as current view
         //hostView = CPTGraphHostingView(frame: CGRectMake(0,0,0,0))
         hostView = CPTGraphHostingView(frame: self.bounds)
         hostView.layer.cornerRadius = 10
         hostView.layer.borderColor = UIColor.grayColor().CGColor
         hostView.layer.borderWidth = 2.0
-        
+        hostView.collapsesLayers = false
         //Uncomment this for graph as large as whole screen
         //hostView = CPTGraphHostingView(frame: self.view.frame)
         
@@ -99,10 +101,13 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         self.initPlot()
         
+        return plot
+        
     }
     
     //Function for adding another plot to the existing graph
-    func addGraph(xVals:[Double], yVals: [Double]) {
+    //Returns the plot object just added in case is needed
+    func addGraph(xVals:[Double], yVals: [Double], col: CPTColor = CPTColor.greenColor()) -> CPTScatterPlot {
         
         
         var plot:CPTScatterPlot = CPTScatterPlot(frame: CGRectZero)
@@ -111,7 +116,7 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         //Change line style (note: need to create linestyle object first)
         var myLineStyle:CPTMutableLineStyle = CPTMutableLineStyle()
-        myLineStyle.lineColor = CPTColor.greenColor()
+        myLineStyle.lineColor = col
         myLineStyle.lineWidth = 2.0
         plot.dataLineStyle = myLineStyle
         
@@ -122,6 +127,11 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         //Call initPlot function that then calls various functions to set up plot
         plotDic[plot as CPTPlot] = (xVals,yVals)
+        
+        println("addded a graph")
+        println("NOw have \(plotDic.count) entries in plotDic")
+        
+        return plot
         
 
     }

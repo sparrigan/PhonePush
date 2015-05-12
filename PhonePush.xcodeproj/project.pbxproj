@@ -24,6 +24,7 @@
 		CE4D1C591ADA092E001E6D53 /* crossBox.png in Resources */ = {isa = PBXBuildFile; fileRef = CE4D1C581ADA092E001E6D53 /* crossBox.png */; };
 		CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296CE1AD97D69007117AD /* graphPlotter.swift */; };
 		CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA296D01AD97DE7007117AD /* graphQstns.swift */; };
+		CEA2CBE41B025FF3003D058D /* testRecAcc.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA2CBE31B025FF3003D058D /* testRecAcc.swift */; };
 		CEA3614C1ADF3A5300EC266A /* URITemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA3614B1ADF3A5300EC266A /* URITemplate.swift */; };
 		CEA6C37E1AE0BAE700B92A3C /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA6C37D1AE0BAE700B92A3C /* SwiftyJSON.swift */; };
 		CED1D0B01AE0A9C000B56442 /* DecayDiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED1D0AF1AE0A9C000B56442 /* DecayDiceVC.swift */; };
@@ -103,6 +104,7 @@
 		CEA296CD1AD97B32007117AD /* PhonePush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhonePush-Bridging-Header.h"; sourceTree = "<group>"; };
 		CEA296CE1AD97D69007117AD /* graphPlotter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphPlotter.swift; sourceTree = "<group>"; };
 		CEA296D01AD97DE7007117AD /* graphQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = graphQstns.swift; sourceTree = "<group>"; };
+		CEA2CBE31B025FF3003D058D /* testRecAcc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testRecAcc.swift; sourceTree = "<group>"; };
 		CEA3614B1ADF3A5300EC266A /* URITemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URITemplate.swift; sourceTree = "<group>"; };
 		CEA6C37D1AE0BAE700B92A3C /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		CED1D0AF1AE0A9C000B56442 /* DecayDiceVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecayDiceVC.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				CE18CDF91AF839DC00DC1109 /* followMe.swift */,
+				CEA2CBE31B025FF3003D058D /* testRecAcc.swift */,
 				CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */,
 			);
 			name = xvaGraphs;
@@ -498,6 +501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEA2CBE41B025FF3003D058D /* testRecAcc.swift in Sources */,
 				CE18CDF51AF573B300DC1109 /* findTextSize.swift in Sources */,
 				CED1D0B21AE0A9CC00B56442 /* dataViewController.swift in Sources */,
 				CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */,

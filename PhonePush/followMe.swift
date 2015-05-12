@@ -11,6 +11,7 @@ import UIKit
 
 class followMe: UIViewController, accelRecorderDelegate  {
     
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
     var timeOfPlot:Double = 30.0
     var qstnGraph:calcQstnGraph = calcQstnGraph()
     var graph1:graphPlotter = graphPlotter()
@@ -78,6 +79,8 @@ class followMe: UIViewController, accelRecorderDelegate  {
         
         self.view.addSubview(button)
         self.view.addSubview(button2)
+     
+        
         
     }
     
@@ -86,9 +89,6 @@ class followMe: UIViewController, accelRecorderDelegate  {
         if let navi = self.navigationController {
             var VCstack = navi.viewControllers
             //Remove top VC root is at 0, top is at count
-            
-            println("Stack on navigation controller: \(VCstack)")
-            
             VCstack.removeLast()
             var restartGraph: followMe = followMe()
             //Add nextVC to top of stack
@@ -125,13 +125,32 @@ class followMe: UIViewController, accelRecorderDelegate  {
         println("FINISHED")
         println("tDbl: \(tDbl)")
         println("")
-        println("tDbl: \(aDbl)")
+        println("aDbl: \(aDbl)")
+        println("")
+        println("vDbl: \(vDbl)")
         println("")
         println("pDbl: \(pDbl)")
         
         
         graph1.addGraph(tDbl, yVals: pDbl)
         
+        debugPlots(tDbl, vel: vDbl, accel: aDbl, position: pDbl)
+        
+    }
+    
+    //Function that plots graphs of a,v and x against t for debugging
+    func debugPlots(time: [Double], vel: [Double], accel: [Double], position: [Double]) {
+        
+        var graphA = graphPlotter(vSize: CGRectMake(10, 0, screenSize.width, 300), xArray: time, yArray: accel)
+        var graphV = graphPlotter(vSize: CGRectMake(10, screenSize.height/3, screenSize.width, 300), xArray: time, yArray: vel)
+        var graphP = graphPlotter(vSize: CGRectMake(10, screenSize.height*(2/3), screenSize.width, 300), xArray: time, yArray: position)
+        graphA.loadgraph()
+        graphV.loadgraph()
+        graphP.loadgraph()
+        self.view.addSubview(graphA)
+        self.view.addSubview(graphV)
+        self.view.addSubview(graphP)
+
     }
     
     

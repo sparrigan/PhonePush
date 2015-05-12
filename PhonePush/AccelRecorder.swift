@@ -198,6 +198,12 @@ class accelRecorder: NSObject {
     }
     
     
+    //TODO:
+    //1. SUBTRACT Z COMPONENT INTO X AND Y PLANE BASED ON CALLIBRATION
+    //2. ENSURE THAT GET EXACT CANCELLING OUT OF VELOCITIES WHEN START AND STOP (SEE 
+    //PAPER)
+    //3. SMOOTH OUT READINGS WITH ROLLING AVERAGE
+    
     //Method to start recording indiscriminately
     func startRecAll() {
         
@@ -269,19 +275,102 @@ class accelRecorder: NSObject {
                 //record (i.e. outside above conditional).
                 self.timesDbl += [data.timestamp - self.firstTime]
                 //println(self.timesDbl)
-                    
-
-                    
-                    
-                
-                
-                
                 
             })
         }
         //END OF RECORDING
     }
     
+    
+    
+    //This function is passed a coreplot plot and updates the plot with accelerometer data
+    //gP: the graphPlotter instance that are using to manage our plot
+    //plot: Array of three plots (within *SAME* gP) that we wish to send data to for 
+    //x,y,z accelerometer values
+    func updatePlot(gP:graphPlotter, plot: [CPTScatterPlot]) {
+        
+        //get accel data
+        //START RECORDING
+        if motionManager.accelerometerAvailable == true {
+            
+            
+            motionManager.accelerometerUpdateInterval = 0.1
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler:{
+                data, error in
+                
+                if self.firstTime == 0 {
+                    self.firstTime = data.timestamp
+                }
+                
+                //USE THE ACELLEROMETERUPDATEINTERVAL INSTEAD OF AN NSTIMER (AS 
+                //SETUP NSTIMERS EVERY ACCELUPDATEINTERVAL ANYWAY!!!
+                //run timer that updates function on call
+                
+                var time = data.timestamp - self.firstTime
+                
+                gP.plotDic[plot[0]]!.0.append(time)
+                gP.plotDic[plot[0]]!.1.append(data.acceleration.x)
+                
+                gP.plotDic[plot[1]]!.0.append(time)
+                gP.plotDic[plot[1]]!.1.append(data.acceleration.y)
+               
+                gP.plotDic[plot[2]]!.0.append(time)
+                gP.plotDic[plot[2]]!.1.append(data.acceleration.z)
+                
+                plot[0].insertDataAtIndex(UInt(gP.plotDic[plot[0]]!.0.count - 1), numberOfRecords: 1)
+                plot[1].insertDataAtIndex(UInt(gP.plotDic[plot[1]]!.0.count - 1), numberOfRecords: 1)
+                plot[2].insertDataAtIndex(UInt(gP.plotDic[plot[2]]!.0.count - 1), numberOfRecords: 1)
+                
+                if time > 30.0 {
+                    self.motionManager.stopAccelerometerUpdates()
+                }
+                
+            })
+        }
+        
+    }
+    
+    
+    //How to use NSTimer with userInfo to pass parameters :)
+    /*
+    NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateCall:", userInfo: [gP,(data.timestamp-self.firstTime),data.acceleration.x,plot], repeats: false)
+    
+    func updateCall(timer:NSTimer) {
+        
+        println("updated")
+        var arr = timer.userInfo as! [AnyObject]
+        
+        var gP = arr[0] as! graphPlotter
+        var time = arr[1] as! Double
+        var accel = arr[2] as! Double
+        var plot = arr[3] as! CPTScatterPlot
+
+        gP.plotDic[plot]!.0.append(time)
+        gP.plotDic[plot]!.1.append(accel)
+        
+        //gP.xArray.append(time)
+        //gP.yArray.append(accel)
+        
+        plot.insertDataAtIndex(UInt(gP.plotDic[plot]!.0.count - 1), numberOfRecords: 1)
+        
+        //dispatch_async(dispatch_get_main_queue()) {
+        
+        ////plot.reloadData()
+            
+        //}
+            
+            
+        //Remove timer if we go beyond 30 seconds
+        if time > 30.0 {
+            timer.invalidate()
+        }
+        
+        //println("Updated with \(time) and \(accel)")
+        //println("Size of x arrays in graph is \(gP.xArray.count)")
+        //println("Size of y arrays in graph is \(gP.yArray.count)")
+
+    }
+*/
     
     //Method that stops recording, finds vel and pos and returns the array of strings for CSV
     func stopRec() -> (aDbl: [Double], tDbl: [Double],startConstAccel: Double, vDbl: [Double], pDbl: [Double])? {

@@ -16,10 +16,14 @@ class guessIsotope: UIViewController {
     var checkViewAppearedForFirstTime = 0
     var textResizer:findTextSize?
     
+    var aas:atomArrayScene = atomArrayScene()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
     
+        
         
         
         //scene = AtomScene(sizeinput: CGSize(width: atomWidth, height: atomHeight), atomField: atomNums)
@@ -39,16 +43,36 @@ class guessIsotope: UIViewController {
         
         //skView.presentScene(scene)
 
-        var aas = atomArrayScene(sizeinput: CGRectMake(0,0,500,500))
         
-        
+        aas.backgroundColor = UIColor.greenColor()
+        aas.setTranslatesAutoresizingMaskIntoConstraints(false)
+        //var vDic = ["aas":aas]
         view.addSubview(aas)
+        
+        var vsAas = NSLayoutConstraint(item: aas, attribute: .Height, relatedBy: .Equal, toItem: aas.superview, attribute: .Height, multiplier: 1, constant: 0)
+        var hsAas = NSLayoutConstraint(item: aas, attribute: .Width, relatedBy: .Equal, toItem: aas.superview, attribute: .Width, multiplier: 1, constant: 0)
+        var vAas = NSLayoutConstraint(item: aas, attribute: .CenterY, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterY, multiplier: 1, constant: 0)
+        var hAas = NSLayoutConstraint(item: aas, attribute: .CenterX, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterX, multiplier: 1, constant: 0)
+        
+        
+        
+        self.view.addConstraints([hAas,vAas,vsAas,hsAas])
+        
+        //aas.layoutSubviews()
         
         setupViews()
     
         
         
     }
+    /*
+    override func viewDidLayoutSubviews() {
+        
+    aas = atomArrayScene()
+    
+    }
+*/
+    
     
     override func viewDidAppear(animated: Bool) {
         textResizer!.updateViewFont("")

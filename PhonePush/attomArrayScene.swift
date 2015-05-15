@@ -14,19 +14,39 @@ import UIKit
 class atomArrayScene: UIView {
     
     var initialSize: CGRect = CGRectZero
-    
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
+    var checkFirst = 0
+    /*
     init(sizeinput: CGRect) {
-        initialSize = sizeinput
+        //initialSize = sizeinput
         super.init(frame: sizeinput)
     }
+
+*/
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
     
     
     override func layoutSubviews() {
+    
+        //ADD ALL NECESSARY SUBVIEWS IN INIT
         
+        //ON EACH LAYOUTSUBVIEW, RECALCULATE NW AND NH, IF BIGGER THEN ADD MORE SUBVIEWS AS REQUIRED
+        
+        //THEN ON EACH LAYOUTSUBVIEW, IF THE SIZE OF PARENT VIEW IS DIFFERENT THEN *REMOVE* ALL
+        //EXISTING CONSTRAINTS, AND ADD NEW ONES APPROPRIATELY.
+        
+        if checkFirst == 0 {
+        
+            checkFirst = 1
+            
         self.backgroundColor = UIColor.blueColor()
         
         //Fraction of image size to use as the padding spacing
@@ -41,10 +61,13 @@ class atomArrayScene: UIView {
         
         var atomActualSize = (width: Double(tempAtomNode.bounds.width), height: Double(tempAtomNode.bounds.height))
         
-        
         //Figure out the number of atoms we should aim to use in a row and number of rows to use
         //in order to fit within requested size for this view.
-        var scalingData = calcNums(Double(initialSize.height), W: Double(initialSize.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
+        
+        
+        var scalingData = calcNums(Double(self.frame.height), W: Double(self.frame.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
+        
+        //var scalingData = calcNums(Double(initialSize.height), W: Double(initialSize.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
     
         //[PUT ALL BELOW IN NESTED LOOP - FOR ROWS, AND FOR ELEMENTS OF ROW]
         //create view for storing one row
@@ -52,13 +75,18 @@ class atomArrayScene: UIView {
         //Initialise view dictionary
         var viewsDictionary = Dictionary<String, UIImageView>()
         
+        //Metric dictionary
+        var metricDictionary = Dictionary<String, Double>()
+        metricDictionary["screenHeight"] = Double(screenSize.height)
+        metricDictionary["parentWidth"] = Double(self.frame.width)
+        
         //Array for holding row views
         var rowArray = [UIView]()
         
         for ii in 1...scalingData.Nh {
         
             //View for holding a single row of atoms
-            var rowView = UIView(frame: CGRectMake(0,0,500,200))
+            var rowView = UIView(frame: CGRectMake(0,0,self.frame.width,900))
             rowView.backgroundColor = UIColor.redColor()
             //Add new row view to array
             rowArray.append(rowView)
@@ -84,11 +112,20 @@ class atomArrayScene: UIView {
             //*Horizontal* constraints for atoms within one row:
             //Build string for horizontal constraints on atoms within this row. Make atoms all same
             //width and give standard spacing (could include custom spacing with metricsDictionary)
-            var constraintString = "H:|-[Atom1]"
+            var spViewLeft:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
+            var spViewRight:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
+            rowView.addSubview(spViewLeft)
+            rowView.addSubview(spViewRight)
+            spViewLeft.setTranslatesAutoresizingMaskIntoConstraints(false)
+            spViewRight.setTranslatesAutoresizingMaskIntoConstraints(false)
+            viewsDictionary["spViewLeft"] = spViewLeft
+            viewsDictionary["spViewRight"] = spViewRight
+            
+            var constraintString = "H:|-[spViewLeft(>=0@200)]-[Atom1]"
             for ii in 2...scalingData.Nw {
                 constraintString += "-[Atom\(ii)(==Atom1)]"
             }
-            constraintString += "-|"
+            constraintString += "-[spViewRight(==spViewLeft)]-|"
             let constraintsH:Array = NSLayoutConstraint.constraintsWithVisualFormat(constraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
 
             //*Vertical* constraints for atoms within one row:
@@ -123,7 +160,7 @@ class atomArrayScene: UIView {
             //Allow row view's height to vary up to screen size, so that it can fit down to size of
             //atom contents, due to vertical VFL constraint that atoms are flush with the rowview
             //!!!!!SET THE MAXIMUM HEIGHT OF A ROWVIEW TO BE SCREENSIZE? (OR SCREENSIZE DIVIDED BY NH)
-            let rowViewHeight = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=5)-[rowView\(ii+1)(<=999)]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary2)
+            let rowViewHeight = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=5)-[rowView\(ii+1)(<=screenHeight)]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionary2)
             //Center the row view vertically (!!!!REPLACE THIS WITH VFL FOR ALIGNING ALL ROWS 
             //VERTICALLY)
             
@@ -133,7 +170,7 @@ class atomArrayScene: UIView {
             //*Horizontal* constraints for row views:
             //Set width of row views to be equal to desired width of parent view
             //!!! SET THIS WIDTH TO BE PROGRAMATICALLY EQUAL TO PARENT VIEW WIDTH
-            let rowViewWidth = NSLayoutConstraint.constraintsWithVisualFormat("H:|[rowView\(ii+1)(==500)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary2)
+            let rowViewWidth = NSLayoutConstraint.constraintsWithVisualFormat("H:|[rowView\(ii+1)(==parentWidth)]|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionary2)
             //Add all constraints on row views
             self.addConstraints(rowViewHeight)
             self.addConstraints(rowViewWidth)
@@ -143,21 +180,25 @@ class atomArrayScene: UIView {
         //Generate constraints for all row views vertical alignment
         //Note that use spacer view (spView) to make sure sacrifice top and bottom padding equally
         //to fit all row views
-        var spViewTop:UIView = UIView(frame: CGRectZero)
-        var spViewBottom:UIView = UIView(frame: CGRectZero)
+        //(>=0@900)
+        var spViewTop:UIView = UIView(frame: CGRectMake(0,0,800,10))
+        var spViewBottom:UIView = UIView(frame: CGRectMake(0,0,800,10))
         self.addSubview(spViewTop)
         self.addSubview(spViewBottom)
         spViewTop.setTranslatesAutoresizingMaskIntoConstraints(false)
         spViewBottom.setTranslatesAutoresizingMaskIntoConstraints(false)
         viewsDictionary2["spViewTop"] = spViewTop
         viewsDictionary2["spViewBottom"] = spViewBottom
-        var rowConstraintString = "V:|-[rowView1]"
+        var rowConstraintString = "V:|-[spViewTop(>=0@100)]-[rowView1]"
         for ii in 2...rowArray.count {
             rowConstraintString += "-[rowView\(ii)(==rowView1)]"
         }
-        rowConstraintString += "-|"
+        rowConstraintString += "-[spViewBottom(==spViewTop)]-|"
         let rowConstraintsH:Array = NSLayoutConstraint.constraintsWithVisualFormat(rowConstraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary2)
         self.addConstraints(rowConstraintsH)
+        
+        }
+        
         
     }
     

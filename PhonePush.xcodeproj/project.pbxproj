@@ -13,6 +13,9 @@
 		CE18CDF51AF573B300DC1109 /* findTextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDF41AF573B300DC1109 /* findTextSize.swift */; };
 		CE18CDFA1AF839DC00DC1109 /* followMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDF91AF839DC00DC1109 /* followMe.swift */; };
 		CE18CDFD1AF83A9B00DC1109 /* calcQstnGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */; };
+		CE1F16AA1B037FDA00502576 /* nextQstnDD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F16A91B037FDA00502576 /* nextQstnDD.swift */; };
+		CE1F16AC1B037FFA00502576 /* guessIsotope.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F16AB1B037FFA00502576 /* guessIsotope.swift */; };
+		CE2DF58C1B03C06C00C7564C /* attomArrayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2DF58B1B03C06C00C7564C /* attomArrayScene.swift */; };
 		CE4090F91ADEBE5400D237B3 /* ViewControllerLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */; };
 		CE4090FB1ADECB1C00D237B3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4090FA1ADECB1C00D237B3 /* DataManager.swift */; };
 		CE4216E11AD180C6004EF105 /* calcQstns.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4216E01AD180C6004EF105 /* calcQstns.swift */; };
@@ -86,6 +89,9 @@
 		CE18CDF41AF573B300DC1109 /* findTextSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findTextSize.swift; sourceTree = "<group>"; };
 		CE18CDF91AF839DC00DC1109 /* followMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = followMe.swift; sourceTree = "<group>"; };
 		CE18CDFC1AF83A9B00DC1109 /* calcQstnGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstnGraph.swift; sourceTree = "<group>"; };
+		CE1F16A91B037FDA00502576 /* nextQstnDD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = nextQstnDD.swift; sourceTree = "<group>"; };
+		CE1F16AB1B037FFA00502576 /* guessIsotope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = guessIsotope.swift; sourceTree = "<group>"; };
+		CE2DF58B1B03C06C00C7564C /* attomArrayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = attomArrayScene.swift; sourceTree = "<group>"; };
 		CE4090F81ADEBE5400D237B3 /* ViewControllerLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerLogin.swift; sourceTree = "<group>"; };
 		CE4090FA1ADECB1C00D237B3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		CE4216E01AD180C6004EF105 /* calcQstns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calcQstns.swift; sourceTree = "<group>"; };
@@ -169,6 +175,16 @@
 			name = xvaGraphs;
 			sourceTree = "<group>";
 		};
+		CE1F16A81B037FA800502576 /* DecayDice */ = {
+			isa = PBXGroup;
+			children = (
+				CE1F16A91B037FDA00502576 /* nextQstnDD.swift */,
+				CE1F16AB1B037FFA00502576 /* guessIsotope.swift */,
+				CE2DF58B1B03C06C00C7564C /* attomArrayScene.swift */,
+			);
+			name = DecayDice;
+			sourceTree = "<group>";
+		};
 		CE463E261AADEE3C00427689 = {
 			isa = PBXGroup;
 			children = (
@@ -192,8 +208,9 @@
 		CE463E311AADEE3C00427689 /* PhonePush */ = {
 			isa = PBXGroup;
 			children = (
+				CE1F16A81B037FA800502576 /* DecayDice */,
 				CE18CDFB1AF839F800DC1109 /* xvaGraphs */,
-				CED1D0AE1AE0A99300B56442 /* DecayDice */,
+				CED1D0AE1AE0A99300B56442 /* DecayDiceOLD */,
 				CED1D0AD1AE0A5CB00B56442 /* AnswerPopUp */,
 				CED1D0AC1AE0A58B00B56442 /* LoginPage */,
 				CED1D0AB1AE0A55000B56442 /* Graphing */,
@@ -294,7 +311,7 @@
 			name = AnswerPopUp;
 			sourceTree = "<group>";
 		};
-		CED1D0AE1AE0A99300B56442 /* DecayDice */ = {
+		CED1D0AE1AE0A99300B56442 /* DecayDiceOLD */ = {
 			isa = PBXGroup;
 			children = (
 				CED1D0BD1AE0AA1A00B56442 /* Images */,
@@ -305,7 +322,7 @@
 				CED1D0B41AE0A9DA00B56442 /* atomNode.swift */,
 				CED1D0B11AE0A9CC00B56442 /* dataViewController.swift */,
 			);
-			name = DecayDice;
+			name = DecayDiceOLD;
 			sourceTree = "<group>";
 		};
 		CED1D0BD1AE0AA1A00B56442 /* Images */ = {
@@ -521,8 +538,11 @@
 				CEA296D11AD97DE7007117AD /* graphQstns.swift in Sources */,
 				CEA6C37E1AE0BAE700B92A3C /* SwiftyJSON.swift in Sources */,
 				CED1D0B01AE0A9C000B56442 /* DecayDiceVC.swift in Sources */,
+				CE2DF58C1B03C06C00C7564C /* attomArrayScene.swift in Sources */,
 				CEE8CE561AE191FA0089F5E1 /* nextQstn.swift in Sources */,
 				CEA296CF1AD97D69007117AD /* graphPlotter.swift in Sources */,
+				CE1F16AA1B037FDA00502576 /* nextQstnDD.swift in Sources */,
+				CE1F16AC1B037FFA00502576 /* guessIsotope.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -96,9 +96,6 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         plotDic[plot as CPTPlot] = (xArray,yArray)
         
-        println("Number of entries in plotDic is: \(plotDic.count)")
-        
-        
         self.initPlot()
         
         return plot
@@ -127,9 +124,6 @@ class graphPlotter: UIView, CPTPlotDataSource, CPTScatterPlotDelegate {
         
         //Call initPlot function that then calls various functions to set up plot
         plotDic[plot as CPTPlot] = (xVals,yVals)
-        
-        println("addded a graph")
-        println("NOw have \(plotDic.count) entries in plotDic")
         
         return plot
         

@@ -49,8 +49,8 @@ class guessIsotope: UIViewController {
         //var vDic = ["aas":aas]
         view.addSubview(aas)
         
-        var vsAas = NSLayoutConstraint(item: aas, attribute: .Height, relatedBy: .Equal, toItem: aas.superview, attribute: .Height, multiplier: 1, constant: 0)
-        var hsAas = NSLayoutConstraint(item: aas, attribute: .Width, relatedBy: .Equal, toItem: aas.superview, attribute: .Width, multiplier: 1, constant: 0)
+        var vsAas = NSLayoutConstraint(item: aas, attribute: .Height, relatedBy: .Equal, toItem: aas.superview, attribute: .Height, multiplier: 0.5, constant: 0)
+        var hsAas = NSLayoutConstraint(item: aas, attribute: .Width, relatedBy: .Equal, toItem: aas.superview, attribute: .Width, multiplier: 0.5, constant: 0)
         var vAas = NSLayoutConstraint(item: aas, attribute: .CenterY, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterY, multiplier: 1, constant: 0)
         var hAas = NSLayoutConstraint(item: aas, attribute: .CenterX, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterX, multiplier: 1, constant: 0)
         

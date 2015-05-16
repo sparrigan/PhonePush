@@ -16,13 +16,36 @@ class atomArrayScene: UIView {
     var initialSize: CGRect = CGRectZero
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var checkFirst = 0
-    /*
-    init(sizeinput: CGRect) {
-        //initialSize = sizeinput
-        super.init(frame: sizeinput)
-    }
-
-*/
+    var image = UIImage(named: "electronbg")
+    var atomActualSize = (width: 0.0,height: 0.0)
+    //Fraction of image size to use as the padding spacing
+    var R = 0.25
+    //Used to check whether size of view has changed and needs to re-layout
+    var oldThisViewSize = CGSize(width: 0.0, height: 0.0)
+    var oldAtomNumbers = (width: 0.0, height: 0.0)
+    //Initialise view dictionary
+    var viewsDictionary = Dictionary<String, UIImageView>()
+    //Metric dictionary
+    var metricDictionary = Dictionary<String, Double>()
+    //Array for holding row views
+    var rowArray = [UIView]()
+    var viewDicDic = Dictionary<Int,Dictionary<String,UIImageView>>()
+    //Spacer views used in autolayout for atoms
+    var spViewLeft:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
+    var spViewRight:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
+    var spViewTop:UIView = UIView(frame: CGRectMake(0,0,800,10))
+    var spViewBottom:UIView = UIView(frame: CGRectMake(0,0,800,10))
+    var constraintsH:[AnyObject] = []
+    var constraintsHIsAdded = 0
+    var atomHeightConstraints = Array<NSLayoutConstraint>()
+    var atomHeightConstraintsIsAdded = 0
+    var atomVCentConstraints:[[AnyObject]] = []
+    var atomVCentConstraintsIsAdded = 0
+    var viewsDictionaryRows = Dictionary<String, UIView>()
+    var rowViewWidthIsAdded = 0
+    var rowConstraintsHIsAdded = 0
+    var rowHeightConstraints:[[AnyObject]] = []
+    var rowConstraintsH:[AnyObject] = []
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,6 +54,31 @@ class atomArrayScene: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        
+        self.backgroundColor = UIColor.blueColor()
+        
+        //Get a test instance of atomNode to find its size
+        var tempAtomNode = UIImageView(image: image)
+        atomActualSize.width = Double(tempAtomNode.bounds.width)
+        atomActualSize.height = Double(tempAtomNode.bounds.height)
+        //Set up metric values for autolayout
+        metricDictionary["screenHeight"] = Double(screenSize.height)
+        metricDictionary["screenWidth"] = Double(screenSize.width)
+        metricDictionary["parentWidth"] = Double(self.frame.width)
+    
+        //Set spacer views ready for autolayout
+        spViewLeft.setTranslatesAutoresizingMaskIntoConstraints(false)
+        spViewRight.setTranslatesAutoresizingMaskIntoConstraints(false)
+        spViewTop.setTranslatesAutoresizingMaskIntoConstraints(false)
+        spViewBottom.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        //Setup Top and Bottom spacers for rows
+        self.addSubview(spViewTop)
+        self.addSubview(spViewBottom)
+        viewsDictionaryRows["spViewTop"] = spViewTop
+        viewsDictionaryRows["spViewBottom"] = spViewBottom
+        
     }
     
     
@@ -42,167 +90,218 @@ class atomArrayScene: UIView {
         
         //THEN ON EACH LAYOUTSUBVIEW, IF THE SIZE OF PARENT VIEW IS DIFFERENT THEN *REMOVE* ALL
         //EXISTING CONSTRAINTS, AND ADD NEW ONES APPROPRIATELY.
+        //THEN CALL LAYOUTIFNEEDED
+        //ADD CHECKVAR TO MAKE SURE THIS IS ONLY DONE ONCE FOR A GIVEN SIZE OF SUBVIEW
         
-        if checkFirst == 0 {
-        
-            checkFirst = 1
-            
-        self.backgroundColor = UIColor.blueColor()
-        
-        //Fraction of image size to use as the padding spacing
-        var R = 0.25
-        
-        //Get a test instance of atomNode to find its size
-        var imageName = "electronbg"
-        var image = UIImage(named: imageName)
-        var tempAtomNode = UIImageView(image: image)
-        
-        var tempAtomNode2 = UIImageView(image: image)
-        
-        var atomActualSize = (width: Double(tempAtomNode.bounds.width), height: Double(tempAtomNode.bounds.height))
-        
-        //Figure out the number of atoms we should aim to use in a row and number of rows to use
-        //in order to fit within requested size for this view.
+        //Check if size of parent view has changed
         
         
-        var scalingData = calcNums(Double(self.frame.height), W: Double(self.frame.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
-        
-        //var scalingData = calcNums(Double(initialSize.height), W: Double(initialSize.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
-    
-        //[PUT ALL BELOW IN NESTED LOOP - FOR ROWS, AND FOR ELEMENTS OF ROW]
-        //create view for storing one row
-    
-        //Initialise view dictionary
-        var viewsDictionary = Dictionary<String, UIImageView>()
-        
-        //Metric dictionary
-        var metricDictionary = Dictionary<String, Double>()
-        metricDictionary["screenHeight"] = Double(screenSize.height)
-        metricDictionary["parentWidth"] = Double(self.frame.width)
-        
-        //Array for holding row views
-        var rowArray = [UIView]()
-        
-        for ii in 1...scalingData.Nh {
-        
-            //View for holding a single row of atoms
-            var rowView = UIView(frame: CGRectMake(0,0,self.frame.width,900))
-            rowView.backgroundColor = UIColor.redColor()
-            //Add new row view to array
-            rowArray.append(rowView)
-            
-            //Dear autoformat: I'll handle these constraints, thank you very much.
-            rowView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-            //Generate Nw atomNodes and add to viewDic for autolayout and sub to current row view
-            for ii in 1...scalingData.Nw {
-                var tempAtomNode = UIImageView(image: image)
-                tempAtomNode.setTranslatesAutoresizingMaskIntoConstraints(false)
-                viewsDictionary["Atom"+String(ii)] = tempAtomNode
-                rowView.addSubview(tempAtomNode)
-            }
-            
-            //Sub current row view to main view (think we need to do before some of 
-            //below constraining)
-            self.addSubview(rowView)
-            
-            //var newSize = row1View.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
-            
-            //CONSTRAINTS BETWEEN ATOMS AND ROW VIEW
-            //*Horizontal* constraints for atoms within one row:
-            //Build string for horizontal constraints on atoms within this row. Make atoms all same
-            //width and give standard spacing (could include custom spacing with metricsDictionary)
-            var spViewLeft:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
-            var spViewRight:UIImageView = UIImageView(frame: CGRectMake(0,0,10,800))
-            rowView.addSubview(spViewLeft)
-            rowView.addSubview(spViewRight)
-            spViewLeft.setTranslatesAutoresizingMaskIntoConstraints(false)
-            spViewRight.setTranslatesAutoresizingMaskIntoConstraints(false)
-            viewsDictionary["spViewLeft"] = spViewLeft
-            viewsDictionary["spViewRight"] = spViewRight
-            
-            var constraintString = "H:|-[spViewLeft(>=0@200)]-[Atom1]"
-            for ii in 2...scalingData.Nw {
-                constraintString += "-[Atom\(ii)(==Atom1)]"
-            }
-            constraintString += "-[spViewRight(==spViewLeft)]-|"
-            let constraintsH:Array = NSLayoutConstraint.constraintsWithVisualFormat(constraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
+        if self.frame.height != oldThisViewSize.height || self.frame.width != oldThisViewSize.width {
+            oldThisViewSize.height = self.frame.height
+            oldThisViewSize.width = self.frame.width
 
-            //*Vertical* constraints for atoms within one row:
-            //Single constraints to keep heights of atoms same as widths
-            var atomHeightConstraints = Array<NSLayoutConstraint>()
-            for ii in 1...scalingData.Nw {
-                atomHeightConstraints.append(NSLayoutConstraint(item: viewsDictionary["Atom\(ii)"]!, attribute: .Height, relatedBy: .Equal, toItem: viewsDictionary["Atom\(ii)"]!, attribute: .Width, multiplier: 1.0, constant: 0))
+            //Find number of atoms for a row/column for requested size of this view.
+            var scalingData = calcNums(Double(self.frame.height), W: Double(self.frame.width), ha: atomActualSize.height, wa: atomActualSize.width, R: R)
+            
+            //Check if number of atoms changed (if not then autolayout takes care of everything)
+            if Double(scalingData.Nw) != oldAtomNumbers.width || Double(scalingData.Nh) != oldAtomNumbers.height {
+                //Update old values for numbers of atoms
+                oldAtomNumbers.width = Double(scalingData.Nw)
+                oldAtomNumbers.height = Double(scalingData.Nh)
+                
+                //If only Nh is different then just add new rows at Nh-NhOLD (each with Nw)
+                //Otherwise loop through all Nh, checking each row for how many atoms it has and 
+                //adding if necessary (existing ones might need some, new ones will need all)
+                
+                //If new Nh is less than previous then remove extra rows from rowArray first
+                if scalingData.Nh < rowArray.count {
+                    for var ii = rowArray.count-1; ii > scalingData.Nh-1; --ii {
+                        rowArray[ii].removeFromSuperview()
+                        rowArray.removeAtIndex(ii)
+                        //Remove this row from the row viewDic
+                        viewsDictionaryRows.removeValueForKey("rowView\(ii+1)")
+                        //Remove atoms viewDic for this row from dictionary
+                        viewDicDic.removeValueForKey(ii)
+                    }
+                }
+                
+                //Now loop through rows and add/remove atoms as necessary
+                for ii in 1...scalingData.Nh {
+                    var rowView = UIView()
+    
+                    //Check whether rowView already exists at this index & if not add a new rowView
+                    if ii > rowArray.count {
+                        //View for holding a single row of atoms
+                        rowView = UIView(frame: CGRectMake(0,0,self.frame.width,900))
+                        rowView.backgroundColor = UIColor.redColor()
+                        //Add new row view to array
+                        rowArray.append(rowView)
+                        //Add the row to the row viewDic (used for inter-row autolayouts)
+                        viewsDictionaryRows["rowView\(ii+1)"] = rowArray[ii]
+                        //Create a viewDic for the atoms in the row and include spacer views
+                        viewDicDic[ii] = Dictionary<String,UIImageView>()
+                        viewDicDic[ii]!["spViewLeft"] = spViewLeft
+                        viewDicDic[ii]!["spViewRight"] = spViewRight
+                        rowView.addSubview(spViewLeft)
+                        rowView.addSubview(spViewRight)
+                        //Dear autoformat: I'll handle these constraints, thank you very much.
+                        rowView.setTranslatesAutoresizingMaskIntoConstraints(false)
+                        self.addSubview(rowView)
+                    } else {
+                        rowView = rowArray[ii-1]
+                    }
+                    
+                    //Check if need to add/remove atoms & constraints to this row
+                    //Case for adding atoms:
+                    if Double(scalingData.Nw) > oldAtomNumbers.width {
+                
+                        //Generate Nw atomNodes and add to viewDic for autolayout and sub to current row view
+                        for jj in (Int(oldAtomNumbers.width)+1)...scalingData.Nw {
+                            var tempAtomNode = UIImageView(image: image)
+                            tempAtomNode.setTranslatesAutoresizingMaskIntoConstraints(false)
+                            //Add reference to new atom to viewDic for this row
+                            //COME BACK AND OUT HANDLER FOR IF NO ELEMENT!
+                            viewDicDic[ii]!["Atom"+String(jj)] = tempAtomNode
+                            rowView.addSubview(tempAtomNode)
+                        }
+                   
+                    //Case for removing atoms
+                    } else if Double(scalingData.Nw) < oldAtomNumbers.width {
+                        for var jj = Int(oldAtomNumbers.width); jj > scalingData.Nw; --jj {
+                            //Remove excess atom from rowview and from relevant viewDic
+                            //COME BACK AND OUT HANDLER FOR IF NO ELEMENT!
+                            viewDicDic[ii]!["Atom"+String(jj)]!.removeFromSuperview()
+                            viewDicDic[ii]!.removeValueForKey("Atom"+String(jj))
+                        }
+                    }
+                    
+                    //Now have the correct number of atoms in this rowView, update constraints
+                    
+                    //CONSTRAINTS BETWEEN ATOMS AND ROW VIEW
+                    //*Horizontal* constraints for atoms within one row:
+                    //Build string for horizontal constraints on atoms within this row. Make atoms all same
+                    //width and give standard spacing (could include custom spacing with metricsDictionary)
+                    
+                    //!!!!NEED TO MAKE SURE WE HAVE REMOVED CONSTRAINTS BEFORE ADDING THEM ON AGAIN
+                    var constraintString = buildAtomConstraint(scalingData.Nw)
+                    
+                    //Remove old constraint
+                    if constraintsHIsAdded != 0 {
+                        rowView.removeConstraints(constraintsH)
+                    }
+                    //Generate new constraint
+                    constraintsH = NSLayoutConstraint.constraintsWithVisualFormat(constraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewDicDic[ii]!)
+                    //Add new constraint
+                    rowView.addConstraints(constraintsH)
+                    constraintsHIsAdded = 1
+                    
+                    //*Vertical* constraints for atoms within one row:
+                    //Single constraints to keep heights of atoms same as widths
+                    //Remove constraints if they have already been added
+                    if atomHeightConstraintsIsAdded != 0 {
+                        rowView.removeConstraints(atomHeightConstraints)
+                        atomHeightConstraints = []
+                    }
+                    //Create new constraints
+                    for jj in 1...scalingData.Nw {
+                        atomHeightConstraints.append(NSLayoutConstraint(item: viewDicDic[ii]!["Atom\(jj)"]!, attribute: .Height, relatedBy: .Equal, toItem: viewDicDic[ii]!["Atom\(jj)"]!, attribute: .Width, multiplier: 1.0, constant: 0))
+                    }
+                    
+                    rowView.addConstraints(atomHeightConstraints)
+                    atomHeightConstraintsIsAdded = 1
+                    
+                    //Vertical centering constraints for each atom in the row view
+                    //Remove constraints if they have already been added
+                    if atomVCentConstraintsIsAdded != 0 {
+                        for jj in 0...(atomVCentConstraints.count-1) {
+                            rowView.removeConstraints(atomVCentConstraints[jj])
+                        }
+                        atomVCentConstraints = []
+                    }
+                    //Create new constraints
+                    for jj in 1...scalingData.Nw {
+                        atomVCentConstraints.append(NSLayoutConstraint.constraintsWithVisualFormat("V:|[Atom\(jj)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewDicDic[ii]!))
+                    }
+                    //Add all constraints on atoms within rowview
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //CANT WE DO THIS BY JUST ADDING THE WHOLE ARRAY ATOMVCENTCONSTRAINTS ONCE?
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    for jj in 1...scalingData.Nw {
+                        rowView.addConstraints(atomVCentConstraints[jj-1])
+                    }
+                
+                }
+                
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //REMOVE ROW-LEVEL CONSTRAINTS HERE WITH CHECKVARS
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                
+                
+                //CONSTRAINTS BETWEEN ROW VIEWS AND HOLDING SUPERVIEW
+                //*Horizontal* constraints for row views:
+                //Remove exsiting row constraints if they exist
+                if rowViewWidthIsAdded != 0 {
+                    self.removeConstraints(rowHeightConstraints)
+                    rowHeightConstraints = []
+                }
+                //Loop through views
+                for ii in 0...rowArray.count-1 {
+
+                    //Allow rowview's height can vary up to screensize to ensure fits to atoms
+                    //(Atoms have V:|[Atom]|)
+                    //DELETED THIS! DONT THINK WE NEED IT ANYMORE:
+                    //let rowViewHeight = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=5)-[rowView\(ii+1)(<=screenHeight)]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionary2)
+                    //*Horizontal* constraints for row views:
+                    //Set width of row views to be equal to desired width of parent view
+                    rowHeightConstraints.append(NSLayoutConstraint.constraintsWithVisualFormat("H:|[rowView\(ii+1)(<=screenWidth)]|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionaryRows))
+                    //Add all constraints on row views
+                    //COMMENTED OUT:
+                    //self.addConstraints(rowViewHeight)
+                    
+                }
+                self.addConstraints(rowHeightConstraints)
+                rowViewWidthIsAdded = 1
+                
+                //*Vertical* constraints for row views:
+                //Remove exsiting row constraints if they exist
+                if rowConstraintsHIsAdded != 0 {
+                    self.removeConstraints(rowConstraintsH)
+                    rowHeightConstraints = []
+                }
+                //Generate string of VFL constraints for all row views vertical alignment
+                var rowConstraintString = buildRowConstraint(rowArray.count)
+                //Add constraint
+                rowConstraintsH = NSLayoutConstraint.constraintsWithVisualFormat(rowConstraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionaryRows)
+                self.addConstraints(rowConstraintsH)
+                rowConstraintsHIsAdded = 1
+                
             }
-            //Vertical centering constraints for each atom in the row view
-            var atomVCentConstraints:[[AnyObject]] = []
-            for ii in 1...scalingData.Nw {
-                atomVCentConstraints.append(NSLayoutConstraint.constraintsWithVisualFormat("V:|[Atom\(ii)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-            }
-            //Add all constraints on atoms within roview
-            for ii in 1...scalingData.Nw {
-                rowView.addConstraints(atomVCentConstraints[ii-1])
-            }
-            rowView.addConstraints(atomHeightConstraints)
-            rowView.addConstraints(constraintsH)
-       
         }
-        
-        var viewsDictionary2 = Dictionary<String, UIView>()
-        
-        //CONSTRAINTS BETWEEN ROW VIEWS AND HOLDING SUPERVIEW
-        //Loop through views
-        for ii in 0...rowArray.count-1 {
-            //Add row view(s) to view dictionary
-            //!!!!! MAKE SINGLE DICTIONARY WORK WITH BOTH UIVIEW AND UIIMAGEVIEWS (DOWNCAST)
-            viewsDictionary2["rowView\(ii+1)"] = rowArray[ii]
-            //*Vertical* constraints for row views:
-            //Allow row view's height to vary up to screen size, so that it can fit down to size of
-            //atom contents, due to vertical VFL constraint that atoms are flush with the rowview
-            //!!!!!SET THE MAXIMUM HEIGHT OF A ROWVIEW TO BE SCREENSIZE? (OR SCREENSIZE DIVIDED BY NH)
-            let rowViewHeight = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=5)-[rowView\(ii+1)(<=screenHeight)]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionary2)
-            //Center the row view vertically (!!!!REPLACE THIS WITH VFL FOR ALIGNING ALL ROWS 
-            //VERTICALLY)
-            
-            
-            
-            //let rowConstraintY =  NSLayoutConstraint(item: rowArray[ii], attribute: .CenterY, relatedBy: .Equal, toItem: rowArray[ii].superview, attribute: .CenterY, multiplier: 1, constant: 0)
-            //*Horizontal* constraints for row views:
-            //Set width of row views to be equal to desired width of parent view
-            //!!! SET THIS WIDTH TO BE PROGRAMATICALLY EQUAL TO PARENT VIEW WIDTH
-            let rowViewWidth = NSLayoutConstraint.constraintsWithVisualFormat("H:|[rowView\(ii+1)(==parentWidth)]|", options: NSLayoutFormatOptions(0), metrics: metricDictionary, views: viewsDictionary2)
-            //Add all constraints on row views
-            self.addConstraints(rowViewHeight)
-            self.addConstraints(rowViewWidth)
-        
+    }
+    
+    //Adds or removes atoms to constraint string for a rowView
+    func buildAtomConstraint(numbAtoms:Int) -> String {
+    
+        var constraintString = "H:|-[spViewLeft(>=0@200)]-[Atom1]"
+        for jj in 2...numbAtoms {
+            constraintString += "-[Atom\(jj)(==Atom1)]"
         }
-        
-        //Generate constraints for all row views vertical alignment
-        //Note that use spacer view (spView) to make sure sacrifice top and bottom padding equally
-        //to fit all row views
-        //(>=0@900)
-        var spViewTop:UIView = UIView(frame: CGRectMake(0,0,800,10))
-        var spViewBottom:UIView = UIView(frame: CGRectMake(0,0,800,10))
-        self.addSubview(spViewTop)
-        self.addSubview(spViewBottom)
-        spViewTop.setTranslatesAutoresizingMaskIntoConstraints(false)
-        spViewBottom.setTranslatesAutoresizingMaskIntoConstraints(false)
-        viewsDictionary2["spViewTop"] = spViewTop
-        viewsDictionary2["spViewBottom"] = spViewBottom
+        constraintString += "-[spViewRight(==spViewLeft)]-|"
+    
+        return constraintString
+    }
+    
+    func buildRowConstraint(numbRows:Int) -> String {
+        //(Use spacer view (spView) to sacrifice top and bottom padding equally)
         var rowConstraintString = "V:|-[spViewTop(>=0@100)]-[rowView1]"
-        for ii in 2...rowArray.count {
+        for ii in 2...numbRows {
             rowConstraintString += "-[rowView\(ii)(==rowView1)]"
         }
         rowConstraintString += "-[spViewBottom(==spViewTop)]-|"
-        let rowConstraintsH:Array = NSLayoutConstraint.constraintsWithVisualFormat(rowConstraintString, options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary2)
-        self.addConstraints(rowConstraintsH)
-        
-        }
-        
-        
+    
+        return rowConstraintString
     }
     
-
     
     //Finds the parameters for spacing out sprites
     func calcNums(H: Double, W: Double, ha: Double, wa: Double, R: Double) -> (Nw: Int, Nh: Int, rscale: Double) {

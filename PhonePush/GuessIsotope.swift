@@ -24,8 +24,9 @@ class guessIsotope: UIViewController {
         self.view.backgroundColor = UIColor.whiteColor()
     
         
-        
-        
+        println("======================")
+        println("RAN PARENT VIEWDIDLOAD")
+        println("======================")
         //scene = AtomScene(sizeinput: CGSize(width: atomWidth, height: atomHeight), atomField: atomNums)
         
         
@@ -65,6 +66,7 @@ class guessIsotope: UIViewController {
         
         
     }
+    
     /*
     override func viewDidLayoutSubviews() {
         

@@ -44,7 +44,7 @@ class ViewControllerLogin: UIViewController {
         //teacherSelection()
         
         //UNCOMMENT THIS FOR DEBUGGING - goes straight to chosen activity:
-        self.openChosenActivity("guessIsotope",teacherChosen: nil)
+        self.openChosenActivity("tViewTest",teacherChosen: nil)
     }
     
     
@@ -262,6 +262,9 @@ class ViewControllerLogin: UIViewController {
         } else if activityName == "guessIsotope" {
             var GI:guessIsotope = guessIsotope()
             self.navigationController?.pushViewController(GI, animated: true)
+        } else if activityName == "tViewTest" {
+            var TVT:tViewTest = tViewTest()
+            self.navigationController?.pushViewController(TVT, animated: true)
         } else {
             //Code here for if no activity stored for teacher
             let alertController = UIAlertController(title: "No activity found for teacher", message: "Your teacher does not have an activity ready for you at this time. \n Click below to check again.", preferredStyle: .Alert)

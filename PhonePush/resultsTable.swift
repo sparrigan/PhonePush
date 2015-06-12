@@ -1,5 +1,5 @@
 //
-//  tViewText.swift
+//  resultsTable.swift
 //  PhonePush
 //
 //  Created by Nicholas Harrigan on 19/05/2015.
@@ -8,41 +8,47 @@
 
 import UIKit
 
-class tViewTest: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class resultsTable: UIViewController, UITableViewDelegate {
     
     var titleView = UIView()
-    var hlTitle = UILabel()
-    var isotopeTitle = UILabel()
+    var indVarTitle = UILabel()
+    var dependentVarTitle = UILabel()
     var tView = UITableView(frame: CGRectMake(0,0,500,500), style: UITableViewStyle.Plain)
     var tableData:[String] = ["4 years","235 seconds","23 months","2.5 years"]
     var tableData2:[String] = ["Uranium-235","Polonium-82","Helium-4","Nitrogen-2","Lalalal-23"]
+    var tViewDataSource: UITableViewDataSource
     
-    init() {
-        
+    init(tViewDataSource: UITableViewDataSource) {
+        self.tViewDataSource = tViewDataSource
         super.init(nibName: nil, bundle: nil)
         self.view.backgroundColor = UIColor.whiteColor()
         
     }
-    //DON'T NEED THIS CONVENIENCE INIT ANYMORE, AS DEAL WITH
-    //INCREMENTING QUESTION NUMBER IN NEXTQSTN CLASS
-    convenience init(cQstn: Int) {
-        self.init()
-    }
+    
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: animated);
+        super.viewWillDisappear(animated)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //var tempCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "ss")
-        
+        //Show navigation bar for going back to main activity view
+        //navigationController?.setNavigationBarHidden(false, animated: true)
+       
+        //Instance of decayHandler to set as dataSource delegate for tableView
+       
+       
         //self.tView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "testCell")
         self.tView.registerClass(MyCell.self, forCellReuseIdentifier: "testCell")
         tView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.tView.delegate = self
-        self.tView.dataSource = self
+        self.tView.dataSource = tViewDataSource
         self.tView.tableFooterView = UIView(frame: CGRectZero)
         self.view.addSubview(tView)
         self.tView.rowHeight = UITableViewAutomaticDimension
@@ -58,24 +64,24 @@ class tViewTest: UIViewController, UITableViewDataSource, UITableViewDelegate {
      
         
         var titleviewsDic = Dictionary<String,UIView>()
-        titleviewsDic["hlTitle"] = hlTitle
-        titleviewsDic["isotopeTitle"] = isotopeTitle
+        titleviewsDic["indVarTitle"] = indVarTitle
+        titleviewsDic["dependentVarTitle"] = dependentVarTitle
         var metricDic = Dictionary<String,Double>()
         metricDic["fudge"] = 220.0
         
         
         titleView.backgroundColor = UIColor.lightGrayColor()
-        hlTitle.text = "Half-life"
-        hlTitle.font = UIFont(name: "Arial", size: 40)
-        isotopeTitle.text = "Isotope"
-        isotopeTitle.font = UIFont(name: "Arial", size: 40)
-        hlTitle.setTranslatesAutoresizingMaskIntoConstraints(false)
-        isotopeTitle.setTranslatesAutoresizingMaskIntoConstraints(false)
-        titleView.addSubview(hlTitle)
-        titleView.addSubview(isotopeTitle)
-        var titleH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(50)-[hlTitle]-(>=50)-[isotopeTitle]-(fudge@200)-|", options: NSLayoutFormatOptions(0), metrics: metricDic, views: titleviewsDic)
-        var titleV1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[hlTitle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: titleviewsDic)
-        var titleV2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[isotopeTitle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: titleviewsDic)
+        indVarTitle.text = "t"
+        indVarTitle.font = UIFont(name: "Arial", size: 40)
+        dependentVarTitle.text = "N(t)"
+        dependentVarTitle.font = UIFont(name: "Arial", size: 40)
+        indVarTitle.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dependentVarTitle.setTranslatesAutoresizingMaskIntoConstraints(false)
+        titleView.addSubview(indVarTitle)
+        titleView.addSubview(dependentVarTitle)
+        var titleH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(50)-[indVarTitle]-(>=50)-[dependentVarTitle]-(fudge@200)-|", options: NSLayoutFormatOptions(0), metrics: metricDic, views: titleviewsDic)
+        var titleV1 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[indVarTitle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: titleviewsDic)
+        var titleV2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[dependentVarTitle]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: titleviewsDic)
         
         titleView.addConstraints(titleH+titleV1+titleV2)
         
@@ -84,50 +90,7 @@ class tViewTest: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     //TABLEVIEW DELEGATE METHODS
     
-    //Tells the tableview how many sections we have in table (should default to one anyway)
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
     
-    //Tells the tableview how many rows we have in a given section (only 1 section here)
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        println(tableData.count)
-        return tableData.count
-    }
-    
-    //Method called to pass tavbleview data for requested index
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        var cell:MyCell? =
-        tableView.dequeueReusableCellWithIdentifier("testCell") as? MyCell
-        /*
-        if (cell != nil)
-        {
-            //cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "testCell")
-            cell = MyCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "testCell")
-        }
-*/
-        // At this point, we definitely have a cell -- either dequeued or newly created,
-        // so let's force unwrap the optional into a UITableViewCell
-        cell!.isotopeName.text = self.tableData[indexPath.row]
-        cell!.isotopeName.font = UIFont(name: "Arial", size: 50)
-        cell!.isotopeData.text = self.tableData2[indexPath.row]
-        cell!.isotopeData.font = UIFont(name: "Arial", size: 30)
-        //cell!.textLabel!.text = self.tableData[indexPath.row]
-        //cell!.textLabel!.font = UIFont(name: "Arial", size: 50)
-        //cell!.detailTextLabel!.text = "Look at this subtitle text"
-        //cell!.detailTextLabel!.textAlignment = NSTextAlignment.Left
-        //cell!.imageView!.image = UIImage(named: "electronbg")
-        cell!.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
-        
-        //var cell = tableView.dequeueReusableCellWithIdentifier("testCell") as! UITableViewCell
-        //Edit text of UITableViewCell that we will return, getting info from tableData.
-        //Note that indexPath has .row and .section indicies.
-        //cell.textLabel!.text = self.tableData[indexPath.row]
-        //cell.detailTextLabel!.text = "Look at all this information"
-        return cell!
-    }
  
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return titleView

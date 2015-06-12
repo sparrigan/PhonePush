@@ -76,13 +76,13 @@ class findTextSize {
             //First double check that the UIView actually has an element in the dictionary!
             if var ttt = fontSizeDic[currentView] {
                 
-                println("Checking what's there, and it's: \(ttt[jj])")
+                //println("Checking what's there, and it's: \(ttt[jj])")
                 
                 //Check whether there is already a value in the dictionary for this view in
                 //this orientation (specified by ii)
                 if ttt[jj] != 0 {
                 
-                    println("Already had a value there - AWESOME!")
+                    //println("Already had a value there - AWESOME!")
                     
                     //Return the font size that we already have
                     newSizes[currentView] = ttt[jj]
@@ -96,7 +96,7 @@ class findTextSize {
                          //It was a button
                         checkType.titleLabel!.font = UIFont(name: checkType.titleLabel!.font.fontName, size: CGFloat(ttt[jj]))
                     } else {
-                        println("It was something else")
+                        //println("It was something else")
                     }
                     
                     
@@ -126,14 +126,14 @@ class findTextSize {
                         
                         fontSizeDic[currentView]![jj] = Double(sizeFontToUITextView(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0, noChange: shouldChange))
                     } else if let checkType = currentView as? UIButton {
-                        println("It was a button")
+                        //println("It was a button")
                         //It was a button
                         fontSizeDic[currentView]![jj] = Double(sizeFontToUIButton(currentView as! UIButton, maxFontSize:500.0, minFontSize: 5.0, noChange:shouldChange))
                     } else {
-                        println("It was something else")
+                        //println("It was something else")
                     }
                     
-                    println("JUST ASSIGNED A VALUE TO \(jj) ELEMENT OF DIC")
+                    //println("JUST ASSIGNED A VALUE TO \(jj) ELEMENT OF DIC")
                     
                     //Add calculated value to return array
                     newSizes[currentView] = fontSizeDic[currentView]![jj]
@@ -171,11 +171,11 @@ class findTextSize {
                     
                      newSizes[currentView] = Double(sizeFontToUITextView(currentView as! UITextView, maxFontSize:500.0, minFontSize: 5.0, noChange: shouldChange))
                 } else if let checkType = currentView as? UIButton {
-                    println("It was a button")
+                    //println("It was a button")
                     //It was a button
                      newSizes[currentView] = Double(sizeFontToUIButton(currentView as! UIButton, maxFontSize:500.0, minFontSize: 5.0, noChange:shouldChange))
                 } else {
-                    println("It was something else")
+                    //println("It was something else")
                 }
                 
                 
@@ -193,7 +193,7 @@ class findTextSize {
     //previous calculation
     private func sizeFontToUITextView(tempView:UITextView,maxFontSize:Double = 500,minFontSize:Double = 5,noChange:Bool = false) -> CGFloat {
         
-        println("Called the intesive function")
+        //println("Called the intesive function")
         
         var tView:UITextView
         
@@ -235,7 +235,7 @@ class findTextSize {
             attributes: attrs,
             context: nil).size
         
-            println("Size of view to match is width:\(tallerSize.width), height:\(tallerSize.height)")
+            //println("Size of view to match is width:\(tallerSize.width), height:\(tallerSize.height)")
         
         //Loop reducing font until will fit by removing or adding a half of it's current
         //value until either get within 20 pixels of desired height, or more than 15 iterations
@@ -286,7 +286,7 @@ class findTextSize {
             }
             
         
-            println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
+            //println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
             return tView.font.pointSize
         } else {
             
@@ -302,14 +302,14 @@ class findTextSize {
                     options: NSStringDrawingOptions.UsesLineFragmentOrigin,
                     attributes: attrs,
                     context: nil).size
-                println("IN LOOP: stringsize:\(stringSize.height) tView:\(tView.frame.size.height) Fontsize:\(tView.font.pointSize)")
+                //println("IN LOOP: stringsize:\(stringSize.height) tView:\(tView.frame.size.height) Fontsize:\(tView.font.pointSize)")
             }
             //Above loop will have stopped when we arrive just *above* what fits, so go back
             //down one point in font size
             fontSize -= 1.0
             tView.font = UIFont(name: tView.font.fontName,size: CGFloat(fontSize))
             
-            println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
+            //println("Returning with stringsize height of \(stringSize.height) and a tView height of \(tView.frame.size.height). Fontsize of \(tView.font.pointSize)")
             return tView.font.pointSize
         }
     }
@@ -317,7 +317,7 @@ class findTextSize {
     //Function for binary search for font-size for SINLE LINE button text (using binary search)
     private func sizeFontToUIButton(tempView:UIButton,maxFontSize:Double = 500,minFontSize:Double = 5, noChange:Bool = false) -> CGFloat {
         
-        println("Called the intesive function")
+        //println("Called the intesive function")
         
         var tView:UIButton
         
@@ -407,7 +407,7 @@ class findTextSize {
                 stringSize = fitString.sizeWithAttributes([NSFontAttributeName: tView.titleLabel!.font])
             }
             
-            println(tView.titleLabel!.font.pointSize)
+            //println(tView.titleLabel!.font.pointSize)
             return tView.titleLabel!.font.pointSize
         
         } else {
@@ -427,7 +427,7 @@ class findTextSize {
             fontSize -= 1.0
             tView.titleLabel!.font = UIFont(name: tView.titleLabel!.font.fontName,size: CGFloat(fontSize))
             
-            println(tView.titleLabel!.font.pointSize)
+            //println(tView.titleLabel!.font.pointSize)
             return tView.titleLabel!.font.pointSize
         }
     }

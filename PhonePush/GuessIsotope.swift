@@ -8,61 +8,60 @@
 
 import UIKit
 
-class guessIsotope: UIViewController {
+class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    var questionText = UITextView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    var questionText = UITextView(frame: CGRect(x: 200, y: 200, width: 400, height: 200))
     var submitButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var checkViewAppearedForFirstTime = 0
     var textResizer:findTextSize?
+    var Natoms = 100
+    var collectionView:UICollectionView?
+    var layout: atomCVLayout = atomCVLayout()
+    var nucleusImage = UIImage(named: "nucleus")
+    var clockImage = UIImage(named: "alarm_clock")
+    var resultsIconImage = UIImage(named: "resultsIcon")
+    var navBarView:UIView = UIView()
+    var singleArrowRight = UIImage(named: "singleArrowRight")
+    var singleArrowLeft = UIImage(named: "singleArrowLeft")
+    var doubleArrowLeft = UIImage(named: "doubleArrowLeft")
+    var doubleArrowRight = UIImage(named: "doubleArrowRight")
+    var resultsIconView = UIButton()
+    var clockImageView = UIImageView(frame: CGRectMake(0,0,20,20))
+    var currentTimeView = UILabel(frame: CGRectZero)
+    var timeTextView = UILabel(frame:CGRectZero)
+    var singleArrowLeftView = UIButton(frame: CGRectZero)
+    var singleArrowRightView = UIButton(frame: CGRectZero)
+    var doubleArrowLeftView = UIButton(frame: CGRectZero)
+    var doubleArrowRightView = UIButton(frame: CGRectZero)
+    var questionView = UIView(frame: CGRectMake(10,80,350,50))
+    var timerView = UIView(frame: CGRectMake(10,80,350,50))
+    var pickerView = UIPickerView(frame: CGRectMake(0,0,100,100))
+    var isotopesDic:Array<[AnyObject]> = [["Carbon-15",2.45], ["Carbon-10",19.29], ["Nobelium-253",97], ["Fluorine-18", 6.586E3], ["Erbium-165", 37.3E3]]
+    var nucleiArray:[UIImageView] = []
+    //Instance of decayHandler
+    var decayNuclei:decayHandler?
+    var decayProb:Double = 0.003
+    //Counts current time in smallest unit used
+    var currentTime:Int = 0
     
-    var aas:atomArrayScene = atomArrayScene()
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: animated);
+        super.viewWillDisappear(animated)
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
-    
         
-        println("======================")
-        println("RAN PARENT VIEWDIDLOAD")
-        println("======================")
-        //scene = AtomScene(sizeinput: CGSize(width: atomWidth, height: atomHeight), atomField: atomNums)
+        self.automaticallyAdjustsScrollViewInsets = false
         
-        
-        
-        //let skView = SKView(frame: CGRect(x: (view.bounds.size.width-atomWidth)/2,y: (view.bounds.size.height-atomHeight)/2, width: atomWidth, height: atomHeight))
-        
-        //println(atomWidth)
-        
-        // println("skView width: \(skView.frame.width). skview x: \((view.bounds.size.width-atomWidth)/2). Whole view width: \(view.bounds.size.width)")
-        
-        
-        //let skView = SKView(frame: view.bounds)
-        
-        //self.view.addSubview(skView)
-        
-        //skView.presentScene(scene)
-
-        
-        aas.backgroundColor = UIColor.greenColor()
-        aas.setTranslatesAutoresizingMaskIntoConstraints(false)
-        //var vDic = ["aas":aas]
-        view.addSubview(aas)
-        
-        var vsAas = NSLayoutConstraint(item: aas, attribute: .Height, relatedBy: .Equal, toItem: aas.superview, attribute: .Height, multiplier: 0.5, constant: 0)
-        var hsAas = NSLayoutConstraint(item: aas, attribute: .Width, relatedBy: .Equal, toItem: aas.superview, attribute: .Width, multiplier: 0.5, constant: 0)
-        var vAas = NSLayoutConstraint(item: aas, attribute: .CenterY, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterY, multiplier: 1, constant: 0)
-        var hAas = NSLayoutConstraint(item: aas, attribute: .CenterX, relatedBy: .Equal, toItem: aas.superview, attribute: .CenterX, multiplier: 1, constant: 0)
-        
-        
-        
-        self.view.addConstraints([hAas,vAas,vsAas,hsAas])
-        
-        //aas.layoutSubviews()
+        //navigationController?.setNavigationBarHidden(false, animated: true)
         
         setupViews()
     
+        setupConstraints()
         
         
     }
@@ -77,21 +76,98 @@ class guessIsotope: UIViewController {
     
     
     override func viewDidAppear(animated: Bool) {
-        textResizer!.updateViewFont("")
+       
         
+        questionText.editable = true
+        var newSize = textResizer!.updateViewFont("")
+        questionText.editable = false
+
+        //questionText.editable = true
+        //questionText.font = UIFont(name: questionText.font.fontName, size: CGFloat(newSize[questionText]!))
+        //questionText.editable = false
         checkViewAppearedForFirstTime = 1
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        //Initialise decayHandler only when collectionView has laid out all nuclei
+        //and only once.
+        if collectionView != nil && nucleiArray.count == Natoms && decayNuclei == nil {
+            println("==FOR COLLECTION VIEW: \(collectionView!.numberOfItemsInSection(0))")
+            println(nucleiArray.count)
+            decayNuclei = decayHandler(nucleiArray: nucleiArray,decayProb: decayProb)
+        }
+        
+        //Need this first check to prevent crashes (orientation doesn't exist at start?)
+        if checkViewAppearedForFirstTime == 1 {
+            
+            
+            
+            //Now check for device orientation
+            if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
+            {
+                //Check whether there is already a value for that view set in dictionary?
+                //println("landscape")
+                questionText.editable = true
+                textResizer!.updateViewFont("Landscape")
+                questionText.editable = false
+            }
+            if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation))
+            {
+                //println("Portrait")
+                questionText.editable = true
+                textResizer!.updateViewFont("Portrait")
+                questionText.editable = false
+            }
+        }
         
     }
     
     func setupViews() {
         
-        //Ask question based on data according to mock setting
-        questionText = UITextView(frame: CGRect(x: 50, y: 25, width: screenSize.width-100, height: 200.00));
-        questionText.font = UIFont(name: "Arial", size: 60)
+        //Setting up navigationBar view for activity
+        navBarView.backgroundColor = UIColor.lightGrayColor()
+        navBarView.alpha = 0.5
+        
+        
+        //Setup buttons for navigationBar view
+        resultsIconView.contentMode = UIViewContentMode.ScaleAspectFit
+        resultsIconView.setImage(resultsIconImage, forState: UIControlState.Normal)
+        resultsIconView.addTarget(self, action: "goToResultsTable:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        //Setup collection view for atoms
+        layout = atomCVLayout(atomSize: CGSizeMake(10,10), numAtoms:Natoms)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        collectionView = UICollectionView(frame: CGRectMake(0,0,500,600), collectionViewLayout: layout)
+        collectionView!.delegate = self
+        collectionView!.dataSource = self
+        collectionView!.backgroundColor = UIColor.clearColor()
+        collectionView!.scrollEnabled = false
+        collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "myCell")
+
+        
+        //View for containing title and picker
+        questionView.clipsToBounds = true
+        
+        //View for containing timer control
+        timerView.clipsToBounds = true
+        //timerView.backgroundColor = UIColor.blueColor()
+        
+        //Setup pickerview
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        
+        
+        
+        //Ask question
+        questionText = UITextView(frame: CGRect(x: 50, y: 100, width: 300, height: 50));
+        questionText.font = UIFont(name: "Arial", size: 10)
         questionText.backgroundColor = UIColor.clearColor()
         questionText.editable = false
         questionText.text = "This Isotope is...."
-        //questionText.backgroundColor = UIColor.greenColor()
+        questionText.backgroundColor = UIColor.greenColor()
         
         
         //Answer submit button
@@ -105,89 +181,238 @@ class guessIsotope: UIViewController {
         submitButton.addTarget(self, action: "submitAnswer:", forControlEvents: .TouchUpInside)
         submitButton.titleLabel!.adjustsFontSizeToFitWidth = true
         
+        //Setup clock image view
+        clockImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        clockImageView.image = clockImage
+        //clockImageView.backgroundColor = UIColor.redColor()
+        currentTimeView.text = "0m 0s"
+        
+        
+        //Setup clock buttons
+        singleArrowLeftView.contentMode = UIViewContentMode.ScaleAspectFit
+        singleArrowRightView.contentMode = UIViewContentMode.ScaleAspectFit
+        doubleArrowLeftView.contentMode = UIViewContentMode.ScaleAspectFit
+        doubleArrowRightView.contentMode = UIViewContentMode.ScaleAspectFit
+
+        singleArrowLeftView.setImage(singleArrowLeft, forState: UIControlState.Normal)
+        singleArrowRightView.setImage(singleArrowRight, forState: UIControlState.Normal)
+        doubleArrowLeftView.setImage(doubleArrowLeft, forState: UIControlState.Normal)
+        doubleArrowRightView.setImage(doubleArrowRight, forState: UIControlState.Normal)
+        singleArrowRightView.addTarget(self, action: "forwardsTimeSmallUnit:", forControlEvents: UIControlEvents.TouchUpInside)
+        singleArrowLeftView.addTarget(self, action: "backwardsTimeSmallUnit:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        var test = UIButton(frame: CGRectZero)
+        
+
+        /*
+        singleArrowLeftView.backgroundColor = UIColor.redColor()
+        singleArrowRightView.backgroundColor = UIColor.redColor()
+        doubleArrowLeftView.backgroundColor = UIColor.redColor()
+        doubleArrowRightView.backgroundColor = UIColor.redColor()
+        */
+        
         //Stop swift from adding its own constraints for all views in use by autolayout
         questionText.setTranslatesAutoresizingMaskIntoConstraints(false)
         submitButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        collectionView!.setTranslatesAutoresizingMaskIntoConstraints(false)
+        pickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        questionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        timerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        clockImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        singleArrowLeftView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        singleArrowRightView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        doubleArrowLeftView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        doubleArrowRightView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        currentTimeView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        timeTextView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        navBarView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        resultsIconView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
+        //Add subviews to main view
+        self.view.addSubview(questionView)
+        self.view.addSubview(collectionView!)
+        self.view.addSubview(timerView)
+        self.view.addSubview(navBarView)
+        //Add subviews to question view
+        self.questionView.addSubview(questionText)
+        self.questionView.addSubview(pickerView)
+        self.questionView.addSubview(submitButton)
+        //self.view.addSubview(questionText)
+        //Add subviews to clock and time view
+        //self.currentTimeView.addSubview(timeTextView)
+        //self.currentTimeView.addSubview(clockImageView)
+        //Add subviews to timer view that contains buttons as well
+        self.timerView.addSubview(currentTimeView)
+        self.timerView.addSubview(singleArrowLeftView)
+        self.timerView.addSubview(singleArrowRightView)
+        self.timerView.addSubview(doubleArrowLeftView)
+        self.timerView.addSubview(doubleArrowRightView)
+        self.navBarView.addSubview(resultsIconView)
         
-        //Add subviews to relevant parent views.
-        self.view.addSubview(questionText)
-        self.view.addSubview(submitButton)
-        //add graphs as subviews to graphView UIView
-        
-        //MAKE A VIEW FOR STORING BUTTONS FOR GETTING GRAPH ETC... (MIGHT LATER USE NAVI-
-        //CONTROLLER FRAME???
-        
-        //NOW SETUP THE ATOMS IN THEIR OWN VIEW, WHERE WE CALCULATE THE LAYOUT USING 
-        //QUADRATIC FORMULA PREVIOUSLY DERIVED, AND THEN PLACE EACH ROW INTO A VIEW 
-        //(WITH ATOMS AUTOLAYOUTED INSIDE), AND THEN AUTOLAYOUT EACH ROW-VIEW VERTICALLY
-        //WITHIN VIEW CONTAINING THE ATOMS
-        
-        
+    }
+    
+    func setupConstraints() {
         //Dictionary for all views to be managed by autolayout
-        let viewsDictionary = ["questionText":questionText,"submitButton":submitButton]
+        let viewsDic = ["questionText":questionText,"submitButton":submitButton, "collectionView":collectionView!, "pickerView":pickerView, "questionView": questionView,"timerView":timerView,"clockImageView":clockImageView,"singleArrowLeftView":singleArrowLeftView,"singleArrowRightView":singleArrowRightView,"doubleArrowLeftView":doubleArrowLeftView,"doubleArrowRightView":doubleArrowRightView, "currentTimeView":currentTimeView,"timeTextView":timeTextView,"navBarView":navBarView,"resultsIconView":resultsIconView]
+        
         //Metrics used by autolayout
         let metricsDictionary = ["minGraphWidth": 20]
-        
-        //CONSTRAINT FOR SELF.VIEW
-        
-        //let constraintsV:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(5)-[questionText]-(<=20)-[graphView]-[ansButtonsView]-(<=30)-[submitButton]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        
-        //QUESTIONTEXT specific contraints
-        /*
-        let wConstraint = NSLayoutConstraint(item: questionText, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
-        let centConstraint = NSLayoutConstraint(item: questionText, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-        let hConstraint = NSLayoutConstraint(item: questionText, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.25, constant: 0)
 
-        //GRAPHVIEW specific constraints
-        let wGraphConstraint = NSLayoutConstraint(item: graphView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
-        let hGraphConstraint = NSLayoutConstraint(item: graphView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.4, constant: 0)
-        //ANSBUTTONS specific constraints
-        let wAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
-        let hAnsConstraint = NSLayoutConstraint(item: ansButtonsView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
-        let hSubmitButtonConstraint = NSLayoutConstraint(item: submitButton, attribute: .Height, relatedBy: .LessThanOrEqual, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
-        let sumbitCentConstraint = NSLayoutConstraint(item: submitButton, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-        */
-        //Add constraints to self.view
-        //self.view.addConstraints(constraintsV+[wConstraint,centConstraint,hConstraint,wGraphConstraint, hGraphConstraint,wAnsConstraint,hAnsConstraint,hSubmitButtonConstraint,sumbitCentConstraint])
+        //Constraints within currentTimeView
         
-        //CONSTRAINTS FOR GRAPHVIEW
-        //Heights of graphs within graphView
-        /*
-        let hgDConstraint = NSLayoutConstraint(item: gD, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
-        let hgD2Constraint = NSLayoutConstraint(item: gD2, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
-        let hgD3Constraint = NSLayoutConstraint(item: gD3, attribute: .Height, relatedBy: .Equal, toItem: graphView, attribute: .Height, multiplier: 1.0, constant: 0)
-        //Center vertically in graphView
-        let gDcentConstraint = NSLayoutConstraint(item: gD, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
-        let gD2centConstraint = NSLayoutConstraint(item: gD2, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
-        let gD3centConstraint = NSLayoutConstraint(item: gD3, attribute: .CenterY, relatedBy: .Equal, toItem: graphView, attribute: .CenterY, multiplier: 1, constant: 0)
-        //layout within graphView (including widths - min as set in metric, but fill out to
-        //view with equal widths)
-        let gDconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[gD(>=minGraphWidth)]-[gD2(==gD)]-[gD3(==gD)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        //Add constraints to graphView
-        graphView.addConstraints([hgDConstraint,hgD2Constraint,hgD3Constraint,gDcentConstraint,gD2centConstraint,gD3centConstraint]+gDconstraintH)
+        //var timeTextV = NSLayoutConstraint.constraintsWithVisualFormat("H:|[timeTextView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var clockImageViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[clockImageView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var internalCurrentTimeViewH = NSLayoutConstraint.constraintsWithVisualFormat("H:|[clockImageView(>=10)]-[timeTextView(>=10)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
         
-        //CONSTRAINTS FOR ANSBUTTONSVIEW
-        //Heights of answer textfields within ansbuttonsview
-        let hAns1Constraint = NSLayoutConstraint(item: ansTxt1, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
-        let hAns2Constraint = NSLayoutConstraint(item: ansTxt2, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
-        let hAns3Constraint = NSLayoutConstraint(item: ansTxt3, attribute: .Height, relatedBy: .Equal, toItem: ansButtonsView, attribute: .Height, multiplier: 1.0, constant: 0)
-        //Center vertically in ansbuttonsview
-        let ans1centConstraint = NSLayoutConstraint(item: ansTxt1, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
-        let ans2centConstraint = NSLayoutConstraint(item: ansTxt2, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
-        let ans3centConstraint = NSLayoutConstraint(item: ansTxt3, attribute: .CenterY, relatedBy: .Equal, toItem: ansButtonsView, attribute: .CenterY, multiplier: 1, constant: 0)
-        //layout within ansbuttonsview (including widths - min as set in metric, but fill out
-        //to view with equal widths)
-        let ansTxtconstraintH:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[ansTxt1(>=minGraphWidth)]-[ansTxt2(==ansTxt1)]-[ansTxt3(==ansTxt1)]-|", options: NSLayoutFormatOptions(0), metrics: metricsDictionary, views: viewsDictionary)
-        //Add constraints to ansbuttonsview
-        ansButtonsView.addConstraints([hAns1Constraint,hAns2Constraint,hAns3Constraint,ans1centConstraint,ans2centConstraint,ans3centConstraint]+ansTxtconstraintH)
-        */
-        //Font resizing function: send list of views for resizing to font resizer object
+
+        //Constraints within questionView
+        var questionTextV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[questionText]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var pickerViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[pickerView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var submitButtonV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[submitButton]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var questionViewInternalH = NSLayoutConstraint.constraintsWithVisualFormat("H:|[questionText(>=130)]-[pickerView(>=70,<=200)]-[submitButton(>=50)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        //let submitButtonHeightPercent = NSLayoutConstraint(item: submitButton, attribute: .Height, relatedBy: .Equal, toItem: submitButton, attribute: .Width, multiplier: 0.5, constant: 0)
+        
+        //Constraints within timerView
+        var currentTimeViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[currentTimeView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var singleArrowLeftViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[singleArrowLeftView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var singleArrowRightViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[singleArrowRightView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var doubleArrowLeftViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[doubleArrowLeftView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var doubleArrowRightViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[doubleArrowRightView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        //Constraints to maintain aspect ratios of icons within timerView
+        var singleArrowLeftAR:CGFloat = singleArrowLeft!.size.width/singleArrowLeft!.size.height
+        var singleArrowRightAR:CGFloat = singleArrowRight!.size.width/singleArrowRight!.size.height
+        var doubleArrowLeftAR:CGFloat = doubleArrowLeft!.size.width/doubleArrowLeft!.size.height
+        var doubleArrowRightAR:CGFloat = doubleArrowRight!.size.width/doubleArrowRight!.size.height
+        let sALConstraintAR = NSLayoutConstraint(item: singleArrowLeftView, attribute: .Width, relatedBy: .Equal, toItem: singleArrowLeftView, attribute: .Height, multiplier: singleArrowLeftAR, constant: 0)
+        let sARConstraintAR = NSLayoutConstraint(item: singleArrowRightView, attribute: .Width, relatedBy: .Equal, toItem: singleArrowRightView, attribute: .Height, multiplier: singleArrowRightAR, constant: 0)
+        let dALConstraintAR = NSLayoutConstraint(item: doubleArrowLeftView, attribute: .Width, relatedBy: .Equal, toItem: doubleArrowLeftView, attribute: .Height, multiplier: doubleArrowLeftAR, constant: 0)
+        let dARConstraintAR = NSLayoutConstraint(item: doubleArrowRightView, attribute: .Width, relatedBy: .Equal, toItem: doubleArrowRightView, attribute: .Height, multiplier: doubleArrowRightAR, constant: 0)
+        
+        
+        let currentTimeViewH = NSLayoutConstraint(item: currentTimeView, attribute: .Width, relatedBy: .Equal, toItem: currentTimeView, attribute: .Height, multiplier: 1.0, constant: 0)
+        var clockAndArrowsH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(50@100)-[doubleArrowLeftView]-[singleArrowLeftView]-[currentTimeView]-[singleArrowRightView]-[doubleArrowRightView]-(50@100)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        
+        //Constraints within navBarView
+        var navBarViewHConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=20)-[resultsIconView]-(>=20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var resultsIconViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(20)-[resultsIconView]-(20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        //Constraints to keep navBarView icons with correct aspect ratio
+        var resultsIconAR:CGFloat = resultsIconImage!.size.width/resultsIconImage!.size.height
+        let resultsIconConstraintAR = NSLayoutConstraint(item: resultsIconView, attribute: .Width, relatedBy: .Equal, toItem: resultsIconView, attribute: .Height, multiplier: resultsIconAR, constant: 0)
+        
+        
+        //Constraints within main view
+        var mainHConstraintsNavBarView = NSLayoutConstraint.constraintsWithVisualFormat("H:|[navBarView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var mainHConstraintsQview = NSLayoutConstraint.constraintsWithVisualFormat("H:|[questionView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        let timerViewCenterH = NSLayoutConstraint(item: timerView, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        var mainHConstraintsCV = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[collectionView]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var mainVConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[navBarView(80)]-[timerView(<=50,>=30)]-[collectionView]-[questionView]-(>=5)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        
+        //Constraints for setting the views on self as a percentage of screensize
+        let qViewHeightPercent = NSLayoutConstraint(item: questionView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.15, constant: 0)
+        let cViewHeightPercent = NSLayoutConstraint(item: collectionView!, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 0.75, constant: 0)
+        //qViewHeightPercent.priority = 100.0
+        cViewHeightPercent.priority = 100.0
+        
+        //Add constraints to relevant view
+        self.questionView.addConstraints(questionTextV+pickerViewV+questionViewInternalH+submitButtonV)
+        self.view.addConstraints(mainHConstraintsQview+mainHConstraintsCV)
+        self.view.addConstraints(mainVConstraints+[qViewHeightPercent,cViewHeightPercent])
+        self.view.addConstraint(timerViewCenterH)
+        self.view.addConstraints(mainHConstraintsNavBarView)
+        self.timerView.addConstraints(currentTimeViewV)
+        self.timerView.addConstraint(currentTimeViewH)
+        self.timerView.addConstraints(singleArrowLeftViewV+singleArrowRightViewV+doubleArrowLeftViewV+doubleArrowRightViewV)
+        self.timerView.addConstraints([sALConstraintAR,sARConstraintAR,dALConstraintAR,dARConstraintAR])
+        self.timerView.addConstraints(clockAndArrowsH)
+        self.navBarView.addConstraints(navBarViewHConstraints+[resultsIconConstraintAR]+resultsIconViewV)
+        //self.currentTimeView.addConstraints(internalCurrentTimeViewH+clockImageViewV+timeTextV)
+        
+        //Size font in title to fit
         textResizer = findTextSize(vArray: [questionText])
+       
+        
+    }
+    
+    //Button target functions
+    
+    func forwardsTimeSmallUnit(sender: UIButton) {
+        //Only continue if there are any nuclei left to decay
+        if decayNuclei?.activeNuclei.count > 0 {
+            //Call method to deal update the nuclei in collectionView
+            decayNuclei?.forwardTimeStep(currentTime)
+            //Update the time counter
+            currentTime += 1
+            //Call function to update current time display (converting to big unit as well)
+            updateCurrentTimeView()
+        }
+    }
+    
+    func backwardsTimeSmallUnit(sender:UIButton) {
+        //Only go backwards if not yet at first time-step
+        if currentTime > 0 {
+            decayNuclei?.backwardTimeStep(currentTime)
+            currentTime -= 1
+            updateCurrentTimeView()
+        }
+    }
+    
+    func goToResultsTable(sender:UIButton) {
+        var resultsTableVC:resultsTable = resultsTable(tViewDataSource: decayNuclei!)
+        self.navigationController?.pushViewController(resultsTableVC, animated: true)
+    }
+    
+    
+    //Updates currentTimeView text (small+big unit) given the currentTime in smallest Unit
+    func updateCurrentTimeView() {
+        currentTimeView.text = "\(currentTime/60)m \(currentTime%60)s"
+    }
+
+    //Delegate methods for UICollectionView
+    
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Natoms
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        //Produce nucleus UIImageView for this cell of the collectionView
+        var nucleus = UIImageView(frame: CGRectMake(0,0,20,20))
+        nucleus.contentMode = UIViewContentMode.ScaleAspectFit
+        nucleus.contentMode = UIViewContentMode.ScaleAspectFit
+        nucleus.image = nucleusImage
+        //Assign to cell in collectionView
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("myCell", forIndexPath: indexPath) as! UICollectionViewCell
+        cell.contentView.addSubview(nucleus)
+        nucleus.setTranslatesAutoresizingMaskIntoConstraints(false)
+        //Store reference to this UIImageView in array that we will use to decay nuclei
+        nucleiArray.append(nucleus)
+        
+        
+        var tConH = NSLayoutConstraint.constraintsWithVisualFormat("H:|[nucleus]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["nucleus":nucleus])
+        var tConV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[nucleus]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["nucleus":nucleus])
+        cell.addConstraints(tConH + tConV)
+        
+        return cell
         
     }
     
     
+    //UIpickerView delegate and datasource methods
+    //Data source methods
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return isotopesDic.count
+    }
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    //Delegate methods
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return isotopesDic[row][0] as! String
+    }
     
-
+    
 }

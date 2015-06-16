@@ -7,7 +7,7 @@
 //
 
 import UIKit
-/*
+
 class  IsotopeEncyclopedia: UIViewController, UITableViewDataSource, UITableViewDelegate {
   
     var titleView = UIView()
@@ -23,10 +23,12 @@ class  IsotopeEncyclopedia: UIViewController, UITableViewDataSource, UITableView
         self.view.backgroundColor = UIColor.whiteColor()
         
     }
-    
-    convenience init(cQstn: Int) {
+   
+    /*
+    convenience init() {
         self.init()
     }
+    */
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -149,7 +151,7 @@ class  IsotopeEncyclopedia: UIViewController, UITableViewDataSource, UITableView
 
 
 //Custom UITableViewCell class
-
+/*
 class MyCell: UITableViewCell {
     
     var isotopeName = UILabel()
@@ -196,7 +198,6 @@ class MyCell: UITableViewCell {
     }
 }
 */
-
 
 
 

@@ -86,6 +86,76 @@ class decayHandler: NSObject, UITableViewDataSource {
         }
     }
     
+    //Decay nuclei and update relevant arrays for one large timestep forwards
+    func forwardLargeTimeStep(currentTime:Int) {
+        //First check whether any of the small timesteps between now and now +largeTimeStep
+        //are already filled in, and if so then deal decays from then on by poisson sampling
+        
+        //Find the highest timeDic entry within the large timestep about to take
+        //Note relies on always having up to current value
+        var lowestExistingValueInRange = min(60,timeDic.count-currentTime)+currentTime
+        
+        //Update activeNuclei array to highest currently populated time within timestep
+        //Combine all the arrays for each timeDic in the range and then
+        //change nuclei images and adapt activeNuclei
+        if lowestExistingValueInRange > currentTime {
+            var deadNuclei:[Int] = []
+            //Collect together all the nuclei that need to decay over range considered
+            for jj in currentTime+1...lowestExistingValueInRange {
+                if let currentDead = timeDic[jj]! {
+                    deadNuclei += currentDead
+                }
+            }
+            //Change images and update activeNuclei array
+            for ii in deadNuclei {
+                //Kill the nuclei to bring up to date
+                nucleiArray[ii].image = UIImage(named: "nucleus_fade")
+                //Remove these indicies from activeNuclei array
+                activeNuclei = activeNuclei.filter {$0 != ii}
+            }
+        }
+        
+        if lowestExistingValueInRange < currentTime+60 {
+            for timeToCalcFor in lowestExistingValueInRange+1...currentTime+60 {
+                println("Will run calculation for filling in dic at \(timeToCalcFor)")
+                //Get a random number to decay this timestep according to Poisson distribution
+                var numToDecay = poissonRandomNum(decayProb*Double(activeNuclei.count))
+                //Assign timeDic value for this new (small)timestep.
+                timeDic[timeToCalcFor] = [Int]?()
+                //Randomly (uniformly) choose this many active nuclei to decay this timestep
+                if numToDecay > 0 {
+                    timeDic[timeToCalcFor] = []
+                    for jj in 1...numToDecay {
+                        var decayNucleiWithThisArrayIndex = Int(round(randomNum(0,Double(activeNuclei.count-1))))
+                        var nucleusToDecay:Int = activeNuclei[decayNucleiWithThisArrayIndex]
+                        nucleiArray[nucleusToDecay].image = UIImage(named: "nucleus_fade")
+                        timeDic[timeToCalcFor]!!.append(nucleusToDecay)
+                        activeNuclei.removeAtIndex(decayNucleiWithThisArrayIndex)
+                        
+                    }
+                }
+                //If there is no decays then timeDic entry will remain as [Int]? nil value
+                
+                //Update the numberCount for this new number of decayed nuclei at a timestep
+                numberCount.append(activeNuclei.count)
+                
+                println("New timeDic at \(timeToCalcFor) is \(timeDic[timeToCalcFor])")
+            }
+        }
+        
+        /*
+        for timeConsidered in currentTime+1...currentTime+60 {
+            if timeConsidered <= timeDic.count-1 {
+                
+            } else {
+                break
+            }
+        }
+        */
+
+    }
+    
+    
     //Returns a list of currently active nuclei that should decay given currently active nuclei
     //and decay probability for this element. Returns nil if no nuclei decayed.
     func decayWithProb() -> [Int]? {
@@ -106,6 +176,7 @@ class decayHandler: NSObject, UITableViewDataSource {
         return returnArray
     }
     
+    /*
     func randomNum() -> Double {
         return Double(Float(arc4random()) / 0xFFFFFFFF)
     }
@@ -113,6 +184,7 @@ class decayHandler: NSObject, UITableViewDataSource {
     func randomNum(min: Double, max: Double) -> Double {
         return randomNum() * (max-min) + min
     }
+    */
     
     
     

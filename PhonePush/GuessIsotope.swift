@@ -21,12 +21,16 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     var nucleusImage = UIImage(named: "nucleus")
     var clockImage = UIImage(named: "alarm_clock")
     var resultsIconImage = UIImage(named: "resultsIcon")
+    var graphIconImage = UIImage(named: "graphIcon")
+    var isotopeEncyclopediaIconImage = UIImage(named: "isotopeEncyclopediaIcon")
     var navBarView:UIView = UIView()
     var singleArrowRight = UIImage(named: "singleArrowRight")
     var singleArrowLeft = UIImage(named: "singleArrowLeft")
     var doubleArrowLeft = UIImage(named: "doubleArrowLeft")
     var doubleArrowRight = UIImage(named: "doubleArrowRight")
     var resultsIconView = UIButton()
+    var isotopeEncyclopediaIconView = UIButton()
+    var graphIconView = UIButton()
     var clockImageView = UIImageView(frame: CGRectMake(0,0,20,20))
     var currentTimeView = UILabel(frame: CGRectZero)
     var timeTextView = UILabel(frame:CGRectZero)
@@ -41,9 +45,11 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     var nucleiArray:[UIImageView] = []
     //Instance of decayHandler
     var decayNuclei:decayHandler?
-    var decayProb:Double = 0.003
+    var decayProb:Double = 0.03
     //Counts current time in smallest unit used
     var currentTime:Int = 0
+    var currentIsotope: [AnyObject]?
+    var unusedAnswerIsotopes:[Int] = []
     
     override func viewWillDisappear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated);
@@ -54,8 +60,12 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
-        
         self.automaticallyAdjustsScrollViewInsets = false
+        //Setup array of indicies for all isotopes that haven't yet been used as an answer
+        for ii in 0...isotopesDic.count-1 {unusedAnswerIsotopes.append(ii)}
+        
+        //Randomly choose an isotope for the first question and set probabilities etc...
+        chooseAnswerIsotope()
         
         //navigationController?.setNavigationBarHidden(false, animated: true)
         
@@ -64,6 +74,23 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         setupConstraints()
         
         
+    }
+    
+    func chooseAnswerIsotope() {
+        //Randomly choose an isotope as corect asnwer this time
+        var currentUnusedIsotopeIndex = Int(arc4random_uniform(UInt32(unusedAnswerIsotopes.count)))
+        var currentIsotopeDicIndex = unusedAnswerIsotopes[currentUnusedIsotopeIndex]
+        //Remove isotope from unusedanswerIsotopes as it is now 'used'
+        unusedAnswerIsotopes.removeAtIndex(currentUnusedIsotopeIndex)
+        //Set decay probability according to currentIsotope
+        decayProb = halfLifeToProb(isotopesDic[currentIsotopeDicIndex][1] as! Double)
+        //Set small and big units according to half-life of isotope
+        
+        
+        println("currentUnusedIsotopeIndex \(currentUnusedIsotopeIndex)")
+        println("currentIsotopeDicIndex \(currentIsotopeDicIndex)")
+        println("decayProb \(decayProb)")
+        println("Current isotope info: \(isotopesDic[currentIsotopeDicIndex])")
     }
     
     /*
@@ -135,7 +162,15 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         resultsIconView.contentMode = UIViewContentMode.ScaleAspectFit
         resultsIconView.setImage(resultsIconImage, forState: UIControlState.Normal)
         resultsIconView.addTarget(self, action: "goToResultsTable:", forControlEvents: UIControlEvents.TouchUpInside)
+        graphIconView.contentMode = UIViewContentMode.ScaleAspectFit
+        graphIconView.setImage(graphIconImage, forState: UIControlState.Normal)
+        graphIconView.addTarget(self, action: "goToResultsGraph:", forControlEvents: UIControlEvents.TouchUpInside)
+        isotopeEncyclopediaIconView.contentMode = UIViewContentMode.ScaleAspectFit
+        isotopeEncyclopediaIconView.setImage(isotopeEncyclopediaIconImage, forState: UIControlState.Normal)
+        isotopeEncyclopediaIconView.addTarget(self, action: "goToIsotopeEncyclopedia:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        
+       
         //Setup collection view for atoms
         layout = atomCVLayout(atomSize: CGSizeMake(10,10), numAtoms:Natoms)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -167,7 +202,7 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         questionText.backgroundColor = UIColor.clearColor()
         questionText.editable = false
         questionText.text = "This Isotope is...."
-        questionText.backgroundColor = UIColor.greenColor()
+        //questionText.backgroundColor = UIColor.greenColor()
         
         
         //Answer submit button
@@ -184,9 +219,8 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //Setup clock image view
         clockImageView.contentMode = UIViewContentMode.ScaleAspectFit
         clockImageView.image = clockImage
-        //clockImageView.backgroundColor = UIColor.redColor()
         currentTimeView.text = "0m 0s"
-        
+        currentTimeView.sizeToFit()
         
         //Setup clock buttons
         singleArrowLeftView.contentMode = UIViewContentMode.ScaleAspectFit
@@ -200,6 +234,8 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         doubleArrowRightView.setImage(doubleArrowRight, forState: UIControlState.Normal)
         singleArrowRightView.addTarget(self, action: "forwardsTimeSmallUnit:", forControlEvents: UIControlEvents.TouchUpInside)
         singleArrowLeftView.addTarget(self, action: "backwardsTimeSmallUnit:", forControlEvents: UIControlEvents.TouchUpInside)
+        doubleArrowRightView.addTarget(self, action: "forwardsTimeBigUnit:", forControlEvents: UIControlEvents.TouchUpInside)
+        
         
         var test = UIButton(frame: CGRectZero)
         
@@ -227,6 +263,8 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         timeTextView.setTranslatesAutoresizingMaskIntoConstraints(false)
         navBarView.setTranslatesAutoresizingMaskIntoConstraints(false)
         resultsIconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        graphIconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        isotopeEncyclopediaIconView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         //Add subviews to main view
         self.view.addSubview(questionView)
@@ -248,12 +286,13 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         self.timerView.addSubview(doubleArrowLeftView)
         self.timerView.addSubview(doubleArrowRightView)
         self.navBarView.addSubview(resultsIconView)
-        
+        self.navBarView.addSubview(graphIconView)
+        self.navBarView.addSubview(isotopeEncyclopediaIconView)
     }
     
     func setupConstraints() {
         //Dictionary for all views to be managed by autolayout
-        let viewsDic = ["questionText":questionText,"submitButton":submitButton, "collectionView":collectionView!, "pickerView":pickerView, "questionView": questionView,"timerView":timerView,"clockImageView":clockImageView,"singleArrowLeftView":singleArrowLeftView,"singleArrowRightView":singleArrowRightView,"doubleArrowLeftView":doubleArrowLeftView,"doubleArrowRightView":doubleArrowRightView, "currentTimeView":currentTimeView,"timeTextView":timeTextView,"navBarView":navBarView,"resultsIconView":resultsIconView]
+        let viewsDic = ["questionText":questionText,"submitButton":submitButton, "collectionView":collectionView!, "pickerView":pickerView, "questionView": questionView,"timerView":timerView,"clockImageView":clockImageView,"singleArrowLeftView":singleArrowLeftView,"singleArrowRightView":singleArrowRightView,"doubleArrowLeftView":doubleArrowLeftView,"doubleArrowRightView":doubleArrowRightView, "currentTimeView":currentTimeView,"timeTextView":timeTextView,"navBarView":navBarView,"resultsIconView":resultsIconView,"graphIconView":graphIconView,"isotopeEncyclopediaIconView":isotopeEncyclopediaIconView]
         
         //Metrics used by autolayout
         let metricsDictionary = ["minGraphWidth": 20]
@@ -261,8 +300,8 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //Constraints within currentTimeView
         
         //var timeTextV = NSLayoutConstraint.constraintsWithVisualFormat("H:|[timeTextView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
-        var clockImageViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[clockImageView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
-        var internalCurrentTimeViewH = NSLayoutConstraint.constraintsWithVisualFormat("H:|[clockImageView(>=10)]-[timeTextView(>=10)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+       // var clockImageViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|[clockImageView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+       // var internalCurrentTimeViewH = NSLayoutConstraint.constraintsWithVisualFormat("H:|[clockImageView(>=10)]-[timeTextView(>=10)]|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
         
 
         //Constraints within questionView
@@ -293,11 +332,17 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         var clockAndArrowsH = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(50@100)-[doubleArrowLeftView]-[singleArrowLeftView]-[currentTimeView]-[singleArrowRightView]-[doubleArrowRightView]-(50@100)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
         
         //Constraints within navBarView
-        var navBarViewHConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=20)-[resultsIconView]-(>=20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var navBarViewHConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=20)-[isotopeEncyclopediaIconView]-(100)-[resultsIconView]-(100)-[graphIconView]-(>=20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
         var resultsIconViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(20)-[resultsIconView]-(20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var graphIconViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(20)-[graphIconView]-(20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
+        var isotopeEncyclopediaIconViewV = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(20)-[isotopeEncyclopediaIconView]-(20)-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDic)
         //Constraints to keep navBarView icons with correct aspect ratio
         var resultsIconAR:CGFloat = resultsIconImage!.size.width/resultsIconImage!.size.height
+        var graphIconAR:CGFloat = graphIconImage!.size.width/graphIconImage!.size.height
+        var isotopeEncyclopediaIconAR:CGFloat = isotopeEncyclopediaIconImage!.size.width/isotopeEncyclopediaIconImage!.size.height
         let resultsIconConstraintAR = NSLayoutConstraint(item: resultsIconView, attribute: .Width, relatedBy: .Equal, toItem: resultsIconView, attribute: .Height, multiplier: resultsIconAR, constant: 0)
+        let graphIconConstraintAR = NSLayoutConstraint(item: graphIconView, attribute: .Width, relatedBy: .Equal, toItem: graphIconView, attribute: .Height, multiplier: graphIconAR, constant: 0)
+        let isotopeEncyclopediaIconConstraintAR = NSLayoutConstraint(item: isotopeEncyclopediaIconView, attribute: .Width, relatedBy: .Equal, toItem: isotopeEncyclopediaIconView, attribute: .Height, multiplier: isotopeEncyclopediaIconAR, constant: 0)
         
         
         //Constraints within main view
@@ -325,6 +370,8 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         self.timerView.addConstraints([sALConstraintAR,sARConstraintAR,dALConstraintAR,dARConstraintAR])
         self.timerView.addConstraints(clockAndArrowsH)
         self.navBarView.addConstraints(navBarViewHConstraints+[resultsIconConstraintAR]+resultsIconViewV)
+        self.navBarView.addConstraints(graphIconViewV+[graphIconConstraintAR])
+        self.navBarView.addConstraints(isotopeEncyclopediaIconViewV+[isotopeEncyclopediaIconConstraintAR])
         //self.currentTimeView.addConstraints(internalCurrentTimeViewH+clockImageViewV+timeTextV)
         
         //Size font in title to fit
@@ -347,8 +394,31 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         }
     }
     
+    func forwardsTimeBigUnit(sender:UIButton) {
+        //Here, sample a number from distribution for number that decay at every time step within
+        //this big step and then randomly choose from active nuclei that many specific nuclei to
+        //decay.
+        //We need to sample from the distribution of N(t) given N(0) (we will always use N(1) 
+        //and N(0). N(t) = N(0)exp-lt gives expectation of this distribution right?
+        
+        //Sample from poisson distribution to find how many to decay (mean, mu is N*p=N*lambda)
+        if decayNuclei?.activeNuclei.count > 0 {
+            println("ForwardsBigStep at currentTime = \(currentTime)")
+            //Call method to deal update the nuclei in collectionView
+            decayNuclei?.forwardLargeTimeStep(currentTime)
+            //Update the time counter
+            currentTime += 60
+            //Call function to update current time display (converting to big unit as well)
+            updateCurrentTimeView()
+            println("Updated currentTime to = \(currentTime)")
+        }
+        
+    }
+    
     func backwardsTimeSmallUnit(sender:UIButton) {
         //Only go backwards if not yet at first time-step
+        println("Going backwards starting at currentTime = \(currentTime)")
+        
         if currentTime > 0 {
             decayNuclei?.backwardTimeStep(currentTime)
             currentTime -= 1
@@ -361,10 +431,43 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         self.navigationController?.pushViewController(resultsTableVC, animated: true)
     }
     
+    func goToResultsGraph(sender:UIButton) {
+        if decayNuclei != nil {
+            if decayNuclei!.numberCount.count > 1 {
+                var resultsGraphVC:resultsGraph = resultsGraph(plotYData: decayNuclei!.numberCount)
+                self.navigationController?.pushViewController(resultsGraphVC, animated: true)
+            } else {
+                //No decays have occured yet, so tell user to create some before plotting:
+                let alertController = UIAlertController(title: "No decays yet", message: "Decay some atoms first!", preferredStyle: .Alert)
+                let okButton = UIAlertAction(title: "OK", style: .Default)
+                    {(action) in
+                        //Completion handler for what to do if teacher is clicked
+                        //Run returnTeacher function that sends back choice to server
+                        alertController.removeFromParentViewController()
+                }
+                alertController.addAction(okButton)
+                self.presentViewController(alertController, animated: true) {
+                }
+            }
+        }
+    }
+    
+    func goToIsotopeEncyclopedia(sender:UIButton) {
+        var isotopeEncyclopediaVC:IsotopeEncyclopedia = IsotopeEncyclopedia()
+        self.navigationController?.pushViewController(isotopeEncyclopediaVC, animated: true)
+    }
+    
+    func submitAnswer(sender:UIButton) {
+        //Check whether currently active pickerView choice equals the correct isotope, and if so
+        //then give popup saying correct and call a function to reset and give another isotope 
+        //as question. If not then give popup saying wrong.
+    }
+    
     
     //Updates currentTimeView text (small+big unit) given the currentTime in smallest Unit
     func updateCurrentTimeView() {
         currentTimeView.text = "\(currentTime/60)m \(currentTime%60)s"
+        currentTimeView.sizeToFit()
     }
 
     //Delegate methods for UICollectionView
@@ -412,6 +515,12 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     //Delegate methods
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         return isotopesDic[row][0] as! String
+    }
+    
+    func halfLifeToProb(halfLife: Double) -> Double {
+        //Calculate the probability of decay over one timestep given half-life
+        var lambda = log(2.0)/halfLife
+        return lambda
     }
     
     

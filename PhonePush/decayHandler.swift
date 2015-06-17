@@ -87,7 +87,8 @@ class decayHandler: NSObject, UITableViewDataSource {
     }
     
     //Decay nuclei and update relevant arrays for one large timestep forwards
-    func forwardLargeTimeStep(currentTime:Int) {
+    func forwardLargeTimeStep(currentTime:Int) -> Int {
+        println("FORWARDLARGETIMESTEP")
         //First check whether any of the small timesteps between now and now +largeTimeStep
         //are already filled in, and if so then deal decays from then on by poisson sampling
         
@@ -117,30 +118,43 @@ class decayHandler: NSObject, UITableViewDataSource {
         
         if lowestExistingValueInRange < currentTime+60 {
             for timeToCalcFor in lowestExistingValueInRange+1...currentTime+60 {
-                println("Will run calculation for filling in dic at \(timeToCalcFor)")
-                //Get a random number to decay this timestep according to Poisson distribution
-                var numToDecay = poissonRandomNum(decayProb*Double(activeNuclei.count))
-                //Assign timeDic value for this new (small)timestep.
-                timeDic[timeToCalcFor] = [Int]?()
-                //Randomly (uniformly) choose this many active nuclei to decay this timestep
-                if numToDecay > 0 {
-                    timeDic[timeToCalcFor] = []
-                    for jj in 1...numToDecay {
-                        var decayNucleiWithThisArrayIndex = Int(round(randomNum(0,Double(activeNuclei.count-1))))
-                        var nucleusToDecay:Int = activeNuclei[decayNucleiWithThisArrayIndex]
-                        nucleiArray[nucleusToDecay].image = UIImage(named: "nucleus_fade")
-                        timeDic[timeToCalcFor]!!.append(nucleusToDecay)
-                        activeNuclei.removeAtIndex(decayNucleiWithThisArrayIndex)
-                        
+                
+                if activeNuclei.count > 0 {
+                    
+                    println("Will run calculation for filling in dic at \(timeToCalcFor)")
+                    println("This is \(timeToCalcFor - currentTime - 1) seconds since last calc")
+                    println(activeNuclei.count)
+                    //Get a random number to decay this timestep according to Poisson distribution
+                    var numToDecay = poissonRandomNum(decayProb*Double(activeNuclei.count))
+                    //Assign timeDic value for this new (small)timestep.
+                    timeDic[timeToCalcFor] = [Int]?()
+                    //Randomly (uniformly) choose this many active nuclei to decay this timestep
+                    if numToDecay > 0 {
+                        timeDic[timeToCalcFor] = []
+                        for jj in 1...numToDecay {
+                            var decayNucleiWithThisArrayIndex = Int(round(randomNum(0,Double(activeNuclei.count-1))))
+                            var nucleusToDecay:Int = activeNuclei[decayNucleiWithThisArrayIndex]
+                            nucleiArray[nucleusToDecay].image = UIImage(named: "nucleus_fade")
+                            timeDic[timeToCalcFor]!!.append(nucleusToDecay)
+                            activeNuclei.removeAtIndex(decayNucleiWithThisArrayIndex)
+                            
+                        }
                     }
+                    //If there is no decays then timeDic entry will remain as [Int]? nil value
+                    
+                    //Update the numberCount for this new number of decayed nuclei at a timestep
+                    numberCount.append(activeNuclei.count)
+                    
+                    println("New timeDic at \(timeToCalcFor) is \(timeDic[timeToCalcFor])")
+                        
+                } else {
+                    println("Returning \(timeToCalcFor - currentTime - 1)")
+                    return timeToCalcFor - currentTime - 1
                 }
-                //If there is no decays then timeDic entry will remain as [Int]? nil value
-                
-                //Update the numberCount for this new number of decayed nuclei at a timestep
-                numberCount.append(activeNuclei.count)
-                
-                println("New timeDic at \(timeToCalcFor) is \(timeDic[timeToCalcFor])")
             }
+            return 60
+        } else {
+            return 60
         }
         
         /*

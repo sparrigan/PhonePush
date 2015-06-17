@@ -405,9 +405,9 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         if decayNuclei?.activeNuclei.count > 0 {
             println("ForwardsBigStep at currentTime = \(currentTime)")
             //Call method to deal update the nuclei in collectionView
-            decayNuclei?.forwardLargeTimeStep(currentTime)
+            var timeToProgress = decayNuclei?.forwardLargeTimeStep(currentTime)
             //Update the time counter
-            currentTime += 60
+            currentTime += timeToProgress!
             //Call function to update current time display (converting to big unit as well)
             updateCurrentTimeView()
             println("Updated currentTime to = \(currentTime)")

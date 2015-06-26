@@ -53,7 +53,7 @@ class resultsGraph: UIViewController {
         
         graphHostView = graph.hostView as UIView
         
-        graphHostView.backgroundColor = UIColor.redColor()
+        graphHostView.backgroundColor = UIColor.whiteColor()
         
         self.view.addSubview(graphHostView)
         

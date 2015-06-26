@@ -15,7 +15,7 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var checkViewAppearedForFirstTime = 0
     var textResizer:findTextSize?
-    var Natoms = 100
+    var Natoms = 800
     var collectionView:UICollectionView?
     var layout: atomCVLayout = atomCVLayout()
     var nucleusImage = UIImage(named: "nucleus")
@@ -41,11 +41,12 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
     var questionView = UIView(frame: CGRectMake(10,80,350,50))
     var timerView = UIView(frame: CGRectMake(10,80,350,50))
     var pickerView = UIPickerView(frame: CGRectMake(0,0,100,100))
-    var isotopesDic:Array<[AnyObject]> = [["Carbon-15",2.45], ["Carbon-10",19.29], ["Nobelium-253",97], ["Fluorine-18", 6.586E3], ["Erbium-165", 37.3E3]]
+    var isotopesDic:Array<[AnyObject]> = [["Carbon-15",2.45]]
+    //var isotopesDic:Array<[AnyObject]> = [["Carbon-15",2.45], ["Carbon-10",19.29], ["Nobelium-253",97], ["Fluorine-18", 6.586E3], ["Erbium-165", 37.3E3]]
     var nucleiArray:[UIImageView] = []
     //Instance of decayHandler
     var decayNuclei:decayHandler?
-    var decayProb:Double = 0.03
+    var lambda:Double = 0.03
     //Counts current time in smallest unit used
     var currentTime:Int = 0
     var currentIsotope: [AnyObject]?
@@ -83,14 +84,15 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //Remove isotope from unusedanswerIsotopes as it is now 'used'
         unusedAnswerIsotopes.removeAtIndex(currentUnusedIsotopeIndex)
         //Set decay probability according to currentIsotope
-        decayProb = halfLifeToProb(isotopesDic[currentIsotopeDicIndex][1] as! Double)
+        lambda = halfLifeToLambda(isotopesDic[currentIsotopeDicIndex][1] as! Double)
         //Set small and big units according to half-life of isotope
         
-        
+        /*
         println("currentUnusedIsotopeIndex \(currentUnusedIsotopeIndex)")
         println("currentIsotopeDicIndex \(currentIsotopeDicIndex)")
-        println("decayProb \(decayProb)")
+        println("lambda \(lambda)")
         println("Current isotope info: \(isotopesDic[currentIsotopeDicIndex])")
+        */
     }
     
     /*
@@ -112,6 +114,7 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //questionText.editable = true
         //questionText.font = UIFont(name: questionText.font.fontName, size: CGFloat(newSize[questionText]!))
         //questionText.editable = false
+        
         checkViewAppearedForFirstTime = 1
         
     }
@@ -121,9 +124,9 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //Initialise decayHandler only when collectionView has laid out all nuclei
         //and only once.
         if collectionView != nil && nucleiArray.count == Natoms && decayNuclei == nil {
-            println("==FOR COLLECTION VIEW: \(collectionView!.numberOfItemsInSection(0))")
-            println(nucleiArray.count)
-            decayNuclei = decayHandler(nucleiArray: nucleiArray,decayProb: decayProb)
+            //println("==FOR COLLECTION VIEW: \(collectionView!.numberOfItemsInSection(0))")
+            //println(nucleiArray.count)
+            decayNuclei = decayHandler(nucleiArray: nucleiArray,lambda: lambda)
         }
         
         //Need this first check to prevent crashes (orientation doesn't exist at start?)
@@ -386,9 +389,9 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         //Only continue if there are any nuclei left to decay
         if decayNuclei?.activeNuclei.count > 0 {
             //Call method to deal update the nuclei in collectionView
-            decayNuclei?.forwardTimeStep(currentTime)
+            var timeToProgress = decayNuclei?.forwardTime(currentTime, timeForward: 1)
             //Update the time counter
-            currentTime += 1
+            currentTime += timeToProgress!
             //Call function to update current time display (converting to big unit as well)
             updateCurrentTimeView()
         }
@@ -403,19 +406,21 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         
         //Sample from poisson distribution to find how many to decay (mean, mu is N*p=N*lambda)
         if decayNuclei?.activeNuclei.count > 0 {
-            println("ForwardsBigStep at currentTime = \(currentTime)")
+            //println("ForwardsBigStep at currentTime = \(currentTime)")
             //Call method to deal update the nuclei in collectionView
-            var timeToProgress = decayNuclei?.forwardLargeTimeStep(currentTime)
+            var timeToProgress = decayNuclei?.forwardTime(currentTime, timeForward: 60)
             //Update the time counter
             currentTime += timeToProgress!
             //Call function to update current time display (converting to big unit as well)
             updateCurrentTimeView()
-            println("Updated currentTime to = \(currentTime)")
+            //println("Updated currentTime to = \(currentTime)")
         }
         
     }
     
     func backwardsTimeSmallUnit(sender:UIButton) {
+      
+        /*
         //Only go backwards if not yet at first time-step
         println("Going backwards starting at currentTime = \(currentTime)")
         
@@ -424,17 +429,21 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
             currentTime -= 1
             updateCurrentTimeView()
         }
+        */
     }
     
     func goToResultsTable(sender:UIButton) {
+        decayNuclei!.generatePlottingArray()
         var resultsTableVC:resultsTable = resultsTable(tViewDataSource: decayNuclei!)
         self.navigationController?.pushViewController(resultsTableVC, animated: true)
     }
     
     func goToResultsGraph(sender:UIButton) {
         if decayNuclei != nil {
-            if decayNuclei!.numberCount.count > 1 {
-                var resultsGraphVC:resultsGraph = resultsGraph(plotYData: decayNuclei!.numberCount)
+            if decayNuclei!.timeDic.count > 0 {
+                decayNuclei?.generatePlottingArray()
+                //println("plotting graph with plotDataArray of size \(decayNuclei!.plotDataArray.count)")
+                var resultsGraphVC:resultsGraph = resultsGraph(plotYData: decayNuclei!.plotDataArray)
                 self.navigationController?.pushViewController(resultsGraphVC, animated: true)
             } else {
                 //No decays have occured yet, so tell user to create some before plotting:
@@ -517,7 +526,7 @@ class guessIsotope: UIViewController, UICollectionViewDataSource, UICollectionVi
         return isotopesDic[row][0] as! String
     }
     
-    func halfLifeToProb(halfLife: Double) -> Double {
+    func halfLifeToLambda(halfLife: Double) -> Double {
         //Calculate the probability of decay over one timestep given half-life
         var lambda = log(2.0)/halfLife
         return lambda

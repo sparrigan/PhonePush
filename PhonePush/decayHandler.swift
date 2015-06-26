@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Nicholas Harrigan. All rights reserved.
 //
 
+//PROB IS THAT ARE NOT UPDATING UP UNTIL ALL CALCULATED TIMES IN TABLE ALWAYS ONE SEOND BELOW CURRENT (AS DISPLAYED BY IMAGES)
+
 import UIKit
 
 class decayHandler: NSObject, UITableViewDataSource {
@@ -15,24 +17,168 @@ class decayHandler: NSObject, UITableViewDataSource {
     //Stores integer values used to refer to active elements of nucleiArray
     var activeNuclei:[Int] = []
     //Stores which nuclei decayed at each time-step
-    var timeDic = Dictionary<Int, [Int]?>()
-    var decayProb:Double
+    var timeDic = Dictionary<Int, [Int]>()
     var numberCount:[Int] = []
+    var highestCalculatedTime = 0
+    var lambda:Double
+    var orderedDecayTimes:[Int] = []
+    var plotDataArray:[Int]
     
     //Initialise with reference to array of nuclei UIImageViews that are in UICollectionView
-    init(nucleiArray:[UIImageView],decayProb:Double) {
+    init(nucleiArray:[UIImageView], lambda: Double) {
         self.nucleiArray = nucleiArray
         //Initialise activeNuclei array with all nuclei to begin with
         for ii in 0...(nucleiArray.count-1) {activeNuclei.append(ii)}
-        self.decayProb = decayProb
         //Add the total number active at time zero
         numberCount.append(nucleiArray.count)
+        self.lambda = lambda
+        //Initialise plotDataArray (contains number of nuclei at each timestep
+        plotDataArray = [nucleiArray.count]
+        //plotDataArray = []
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    
+    //PROBLEM!!!! GET CORRECT STATISTICS WHEN JUMP FORWARDS IN SECONDS, BUT NOT WHEN JUMP
+    //FORWARDS IN MINUTES (HALF LIFE COMES OUT ABOUT 1 SECOND TOO LONG!
+    
+    func forwardTime(currentTime:Int, timeForward:Int) -> Int {
+        //First will check whether we have any existing entries that we should go ahead to between currentTime and finalTime
+        var finalTime = currentTime+timeForward
+        
+        //println("finalTime = \(finalTime)")
+        //println("highestCalculatedTime = \(highestCalculatedTime)")
+        //Check whether highestTime is above start of this currenTime before try and look for any entries
+        
+        if highestCalculatedTime > currentTime {
+            //There has been a calc above this - check for entries in timeDic
+            for (time,entry) in timeDic {
+                if time > currentTime && time <= finalTime {
+                    //Kill the nuclei at specified locations
+                    killNuclei(entry)
+                }
+            }
+        }
+        
+
+        //Only carry on if there are any nuclei left after updating for previously stored timeDic values
+        if activeNuclei.count > 0 {
+            
+            //Now check that highestTime is not beyond our current range - if so then any remaining timesteps must be blanks.
+            if highestCalculatedTime < finalTime {
+    
+                //There are some elements that need to be calculated (don't need to worry about highestTime < currentTime - can't happen as we start at currentTime)
+                //Remaining time
+                var remainingTimeSpan = finalTime - highestCalculatedTime
+                
+                //Calculate decayProb over time period (lambda should be in /s)
+                var decayProbSec = 1 - exp(-lambda)
+                var decayProbRemainingTimeSpan = 1 - exp(-lambda*Double(remainingTimeSpan))
+                
+                //Find number that need to decay in remaining time interval via poisson
+                var numberToDecay = poissonRandomNum(Double(activeNuclei.count)*decayProbRemainingTimeSpan)
+                
+                //Make sure that number to decay does not exceed the number of nuclei remaining
+                if numberToDecay > activeNuclei.count { numberToDecay = activeNuclei.count }
+                
+                //Temporary array to store decaying times before ordering them
+                var tempDecayTimes:[Int] = []
+                
+                //Loop through and choose this many nuclei to decay over the time interval
+                if numberToDecay > 0 {
+                    for ii in 1...numberToDecay {
+                        //Choose which nuclei to decay from activeNuclei array (uniform dist.)
+                        var nucleiToDecayActiveNucleiIndex = Int(round(randomNum(0.0,Double(activeNuclei.count-1))))
+                        var nucleiToDecay = activeNuclei[nucleiToDecayActiveNucleiIndex]
+                        
+                        //Choose time at which time they will decay by sampling from geom. dist. (normalised by Bayes over interval)
+                        var timeNucleiDecays = geomRandomNum(decayProbSec, Double(remainingTimeSpan))+highestCalculatedTime
+                        //println("Time of decay is: \(timeNucleiDecays)")
+                        
+                        //Safety check - shouldn't ever be called:
+                        if timeNucleiDecays > finalTime { timeNucleiDecays = finalTime }
+                        //Update timeDic key for this time (checking whether it already exists first and if so then appending)
+                        
+                        if timeDic[timeNucleiDecays] != nil {
+                            timeDic[timeNucleiDecays]!.append(nucleiToDecay)
+                        } else {
+                            timeDic[timeNucleiDecays] = [nucleiToDecay]
+                            //Only add decay time if it hasn't been added before
+                            tempDecayTimes.append(timeNucleiDecays)
+                            
+                        }
+                        
+                        //Kill this nuclei
+                        killNuclei([nucleiToDecay],listofActiveNucleiIndiciesToKill: [nucleiToDecayActiveNucleiIndex])
+                    }
+                }
+            
+                //Sort the new decay times and add to main orderedDecayTimes array
+                if tempDecayTimes.count > 0 {
+                    tempDecayTimes.sort() {$0<$1}
+                    orderedDecayTimes += tempDecayTimes
+                }
+                
+                //Update highestTime to either finalTime - or if all decay, last decay time
+                if activeNuclei.count > 0 {
+                    highestCalculatedTime = finalTime
+                } else {
+                    //Unwrap optional 'last' value of array - nil if array is empty
+                    if let highestTimeAllDecayed = orderedDecayTimes.last {
+                        //Note that +1 since will also be a 'zero' value following
+                        //orderDecayTimes.last and want results table to loop to this high
+                        highestCalculatedTime = highestTimeAllDecayed + 1
+                    } else {
+                        highestCalculatedTime = 0
+                    }
+
+                }
+                
+            }
+                
+        }
+        //Return the amount of time we actually progressed, to be displayed on UI
+        return highestCalculatedTime - currentTime
+        
+    }
+    
+    
+    
+    
+    
+    
+    //Function that removes a list of nuclei from activeNuclei and changes their images accordingly
+    //Optionally also pass list of activeNuclei indicies in correspondence with listToKill entries. Saves computation
+    func killNuclei(listToKill:[Int], listofActiveNucleiIndiciesToKill: [Int] = []) {
+       
+        
+        for ii in listToKill {
+            nucleiArray[ii].image = UIImage(named: "nucleus_fade")
+        }
+        
+        if listofActiveNucleiIndiciesToKill.count > 0 {
+            for arrayIndex in listofActiveNucleiIndiciesToKill {
+                activeNuclei.removeAtIndex(arrayIndex)
+            }
+        } else {
+            for ii in listToKill {
+                activeNuclei = activeNuclei.filter {$0 != ii}
+            }
+        }
+    }
+
+    
+    
+    
+    
+    
+    //OLD FORWARDS TIME STEP FUNCTIONS
+/*
     //Method for updating nuclei for next time-step - pass time in smallest unit used
     func forwardTimeStep(currentTime:Int) {
         //Check whether already have a dictionary element for the time we want to move to
@@ -72,19 +218,7 @@ class decayHandler: NSObject, UITableViewDataSource {
         }
     }
     
-    //Method for updating nuclei for previous time-step - pass time in smallest unit used
-    func backwardTimeStep(currentTime:Int) {
-        //Only deal with nuclei if the dic entry for the time-step that erased them is non-nil
-        if let deadNuclei = timeDic[currentTime]!  {
-            for ii in deadNuclei {
-                //Bring nuclei back that were erased in current time-step.
-                nucleiArray[ii].image = UIImage(named:"nucleus")
-                //Update the active array to include these as now being active again
-                activeNuclei.append(ii)
-            }
-            
-        }
-    }
+   
     
     //Decay nuclei and update relevant arrays for one large timestep forwards
     func forwardLargeTimeStep(currentTime:Int) -> Int {
@@ -168,8 +302,27 @@ class decayHandler: NSObject, UITableViewDataSource {
         */
 
     }
+*/
+
+
     
+    /*
+    //Method for updating nuclei for previous time-step - pass time in smallest unit used
+    func backwardTimeStep(currentTime:Int) {
+        //Only deal with nuclei if the dic entry for the time-step that erased them is non-nil
+        if let deadNuclei = timeDic[currentTime]  {
+            for ii in deadNuclei {
+                //Bring nuclei back that were erased in current time-step.
+                nucleiArray[ii].image = UIImage(named:"nucleus")
+                //Update the active array to include these as now being active again
+                activeNuclei.append(ii)
+            }
+            
+        }
+    }
+    */
     
+    /*
     //Returns a list of currently active nuclei that should decay given currently active nuclei
     //and decay probability for this element. Returns nil if no nuclei decayed.
     func decayWithProb() -> [Int]? {
@@ -189,7 +342,7 @@ class decayHandler: NSObject, UITableViewDataSource {
         }
         return returnArray
     }
-    
+    */
     /*
     func randomNum() -> Double {
         return Double(Float(arc4random()) / 0xFFFFFFFF)
@@ -210,14 +363,63 @@ class decayHandler: NSObject, UITableViewDataSource {
     
     //Tells the tableview how many rows we have in a given section (only 1 section here)
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+        //println("!!!!! - \(highestCalculatedTime)")
+        //println("PLOTDATARAY SIZE: \(plotDataArray.count)")
+        //Determine number of points to plot in chosen unit
+        return highestCalculatedTime + 1
+        
+        /*
         if timeDic.count != 0 {
             return timeDic.count
         } else {
             //If haven't decayed any yet then still include the time = 0 full count
             return 1
         }
+        */
     }
+
+    var totalSubtracted:Int = 0
+    
+    func generatePlottingArray() {
+        
+        //BETTER WAY TO DO THIS: 
+        //FOR TABLE - BUILD ARRAY BY USING PREVIOUS INDEXPATH.ROW VALUES (WHEN NO NEW VALUE) AND POPULATING ARRAY ONLY AS THE CELLS ARE CALLED FOR (I.E. AS USER SCROLLS)
+        //FOR GRAPH: STILL NEED A FUNCTION LIKE THIS, BUT IT TAKES THIS FUNCTION GETS PASSED THE SMALLEST UNIT TO USE AND CALCULATES ARRAY RELEVANT FOR THIS.
+        
+
+        if highestCalculatedTime > plotDataArray.count-1 {
+            for ii in plotDataArray.count...highestCalculatedTime {
+                //Check whether this time has a new decay and if so then subtract decayed nuclei from count
+                
+                if timeDic[ii-1] != nil {
+                    //println("plotDataArray[ii-1] = \(plotDataArray[ii-1])")
+                    //println("timeDic[ii-1]!.count = \(timeDic[ii]!.count)")
+                    plotDataArray.append(plotDataArray[ii-1] - timeDic[ii-1]!.count)
+                    
+                    totalSubtracted += timeDic[ii-1]!.count
+                
+                } else {
+                    //if no decays then number of nuclei stays the same
+                    plotDataArray.append(plotDataArray[ii-1])
+                }
+            }
+        }
+        
+        /*
+        var tempSumTimeDic = 0
+        for (iii,data) in enumerate(timeDic) {
+            //NEED TO LOOP OVER DICTIONARY HERE
+            tempSumTimeDic += data.1.count
+            //println("!!At time = \(data.0)")
+            //println(data.1)
+        }
+        println("New plotDataArray count is \(plotDataArray.count)")
+        println("plotDataArray = \(plotDataArray)")
+        println("TOTAL NUMBER OF DECAYS IN TIMEDIC = \(tempSumTimeDic)")
+        */
+        
+    }
+
     
     //Method called to pass tavbleview data for requested index
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -233,9 +435,13 @@ class decayHandler: NSObject, UITableViewDataSource {
         */
         // At this point, we definitely have a cell -- either dequeued or newly created,
         // so let's force unwrap the optional into a UITableViewCell
+        //println("Size of plotDataArray is \(plotDataArray.count)")
+        //println("Trying to get ploDataArray contents at \(indexPath.row)")
+        //println("Last elementy of plotDataArray is \(plotDataArray.last)")
         cell!.isotopeName.text = String(indexPath.row)
         cell!.isotopeName.font = UIFont(name: "Arial", size: 50)
-        cell!.isotopeData.text = String(numberCount[indexPath.row])
+        cell!.isotopeData.text = String(plotDataArray[indexPath.row])
+        cell!.isotopeData.text = String(plotDataArray[indexPath.row])
         cell!.isotopeData.font = UIFont(name: "Arial", size: 30)
         //cell!.textLabel!.text = self.tableData[indexPath.row]
         //cell!.textLabel!.font = UIFont(name: "Arial", size: 50)
